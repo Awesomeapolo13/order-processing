@@ -1,5 +1,3 @@
-version: "3.8"
-
 networks:
   order-processing:
     name: order-processing
@@ -7,7 +5,7 @@ networks:
 
 services:
   php-fpm:
-    container_name: php-fpm
+    container_name: order-proc-fpm
     networks:
       - order-processing
     build:
@@ -24,7 +22,7 @@ services:
       - ./../../:/var/www/order-processing
 
   nginx:
-    container_name: nginx
+    container_name: order-proc-nginx
     networks:
       - order-processing
     build:
@@ -44,7 +42,7 @@ services:
       - php-fpm
 
   postgres:
-    container_name: postgres
+    container_name: order-proc-postgres
     networks:
       - order-processing
     build:
