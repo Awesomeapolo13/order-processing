@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Basket;
-use App\Domain\ValueObject\BasketRepositoryInterface;
+use App\Domain\Repository\BasketRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
