@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject;
 
-readonly class Cost
+readonly class Weight
 {
     public function __construct(
-        private string $cost,
+        private string $weight,
     ) {
     }
 
-    public function getCost(): string
+    public function getWeight(): string
     {
-        return $this->cost;
+        return $this->weight;
     }
 }

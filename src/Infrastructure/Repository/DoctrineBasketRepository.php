@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<Basket>
  */
-class BasketRepository extends ServiceEntityRepository implements BasketRepositoryInterface
+class DoctrineBasketRepository extends ServiceEntityRepository implements BasketRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
