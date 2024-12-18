@@ -16,8 +16,6 @@ class Basket
     private int $id;
 
     public function __construct(
-        private ?int $userId = null,
-        private ?int $shopNum = null,
         private Region $region,
         private BasketType $type,
         private DateTimeInterface $orderDate,
@@ -28,6 +26,8 @@ class Basket
         private Cost $totalDiscountCost,
         private Weight $weight,
         private int $totalBonus = 0,
+        private ?int $userId = null,
+        private ?int $shopNum = null,
     ) {
     }
 
