@@ -1,8 +1,8 @@
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
->
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
     <entity
             name="App\Domain\Entity\Basket"
             table="basket"
@@ -10,21 +10,20 @@
     >
 
         <id name="id" type="integer" length="11">
-            <generator strategy="AUTO" />
+            <generator strategy="AUTO"/>
         </id>
 
         <field name="userId" column="user_id" type="integer" length="11" nullable="true"/>
         <field name="shopNum" column="shop_num" type="integer" length="11" nullable="true"/>
-        <embedded name="region" use-column-prefix="false" class="App\Domain\ValueObject\Region" />
-        <embedded name="type" use-column-prefix="false" class="App\Domain\ValueObject\BasketType" />
-        <field name="orderDate" column="order_date" type="datetime" length="11" />
-        <field name="createdAt" column="created_at" type="datetime" length="11" />
-        <field name="updatedAt" column="updated_at" type="datetime" length="11" />
-        <embedded name="slicingCost" class="App\Domain\ValueObject\Cost" column-prefix="slicing_" />
-        <embedded name="totalCost" class="App\Domain\ValueObject\Cost" column-prefix="total_" />
-        <embedded name="totalDiscountCost" class="App\Domain\ValueObject\Cost" column-prefix="total_discount_" />
-        <embedded name="weight" class="App\Domain\ValueObject\Weight" use-column-prefix="false" />
-        <embedded name="weight" use-column-prefix="false" class="App\Domain\ValueObject\Weight" />
+        <embedded name="region" use-column-prefix="false" class="App\Domain\ValueObject\Region"/>
+        <embedded name="type" use-column-prefix="false" class="App\Domain\ValueObject\BasketType"/>
+        <field name="orderDate" column="order_date" type="datetime" length="11"/>
+        <field name="createdAt" column="created_at" type="datetime" length="11"/>
+        <field name="updatedAt" column="updated_at" type="datetime" length="11"/>
+        <embedded name="slicingCost" class="App\Domain\ValueObject\Cost" column-prefix="slicing_"/>
+        <embedded name="totalCost" class="App\Domain\ValueObject\Cost" column-prefix="total_"/>
+        <embedded name="totalDiscountCost" class="App\Domain\ValueObject\Cost" column-prefix="total_discount_"/>
+        <embedded name="weight" use-column-prefix="false" class="App\Domain\ValueObject\Weight"/>
         <field name="totalBonus" column="total_bonus" type="integer" length="11">
             <options>
                 <option name="default">0</option>
