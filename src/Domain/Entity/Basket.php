@@ -15,6 +15,8 @@ class Basket
 {
     private int $id;
 
+    private ?BasketDelivery $basketDelivery = null;
+
     public function __construct(
         private Region $region,
         private BasketType $type,
@@ -169,6 +171,18 @@ class Basket
     public function setTotalBonus(int $totalBonus): Basket
     {
         $this->totalBonus = $totalBonus;
+
+        return $this;
+    }
+
+    public function getBasketDelivery(): ?BasketDelivery
+    {
+        return $this->basketDelivery;
+    }
+
+    public function setBasketDelivery(?BasketDelivery $basketDelivery): Basket
+    {
+        $this->basketDelivery = $basketDelivery;
 
         return $this;
     }
