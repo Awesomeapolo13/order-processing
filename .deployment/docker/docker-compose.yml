@@ -39,7 +39,7 @@ services:
     volumes:
       - ./../../:/var/www/order-processing:rw
     depends_on:
-      - php-fpm
+      - order-proc-fpm
 
   order-proc-postgres:
     container_name: order-proc-postgres
