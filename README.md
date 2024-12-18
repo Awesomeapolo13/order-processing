@@ -12,7 +12,7 @@
 2) Заполнить поля в `.env` файле. Для примера можно взять данные ниже:
 - docker
 ```dotenv
-COMPOSE_PROJECT_NAME=example
+COMPOSE_PROJECT_NAME=order-processing
 
 ###> php-fpm ###
 PUID=1000
@@ -21,14 +21,14 @@ INSTALL_XDEBUG=true
 ###< php-fpm ###
 
 ###> nginx ###
-PHP_UPSTREAM_CONTAINER=php-fpm
+PHP_UPSTREAM_CONTAINER=order-proc-fpm
 PHP_UPSTREAM_PORT=9000
 NGINX_HOST_HTTP_PORT=80
 ###< nginx ###
 
 ###> postgres ###
-POSTGRES_DB_HOST=postgres
-POSTGRES_DB_NAME=homework
+POSTGRES_DB_HOST=order-proc-postgres
+POSTGRES_DB_NAME=order-proc-db
 POSTGRES_PORT=5432
 POSTGRES_USER=apps
 POSTGRES_PASSWORD=apps
@@ -43,7 +43,7 @@ APP_SECRET=vcdcfshjmnbgvfdcsf
 ###< symfony/framework-bundle ###
 
 ###> doctrine/doctrine-bundle ###
-DATABASE_URL="postgresql://apps:apps@postgres:5432/homework?serverVersion=16&charset=utf8"
+DATABASE_URL="postgresql://apps:apps@order-proc-postgres:5432/order-proc-db?serverVersion=16&charset=utf8"
 ###< doctrine/doctrine-bundle ###
 ```
 
