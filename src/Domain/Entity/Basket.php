@@ -15,7 +15,7 @@ class Basket
 {
     private int $id;
 
-    private ?BasketDelivery $basketDelivery = null;
+    private ?BasketDelivery $delivery = null;
 
     public function __construct(
         private Region $region,
@@ -175,14 +175,14 @@ class Basket
         return $this;
     }
 
-    public function getBasketDelivery(): ?BasketDelivery
+    public function getDelivery(): ?BasketDelivery
     {
-        return $this->basketDelivery;
+        return $this->delivery;
     }
 
-    public function setBasketDelivery(?BasketDelivery $basketDelivery): Basket
+    public function setDelivery(?BasketDelivery $delivery): Basket
     {
-        $this->basketDelivery = $basketDelivery;
+        $this->delivery = $delivery;
 
         return $this;
     }
