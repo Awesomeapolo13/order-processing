@@ -1,0 +1,26 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity
+            name="App\Domain\Entity\BasketDelivery"
+            table="basket_delivery"
+            repository-class="App\Infrastructure\Repository\DoctrineBasketDeliveryRepository"
+    >
+
+        <id name="id" type="integer" length="11">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <embedded name="slot" use-column-prefix="false" class="App\Domain\ValueObject\DeliverySlot"/>
+        <field name="isFromUserShop" column="is_from_user_shop" type="boolean">
+            <options>
+                <option name="default">false</option>
+            </options>
+        </field>
+        <embedded name="distance" use-column-prefix="false" class="App\Domain\ValueObject\Distance"/>
+        <embedded name="deliveryCost" class="App\Domain\ValueObject\Cost" column-prefix="delivery_"/>
+        <embedded name="deliveryDiscountCost" class="App\Domain\ValueObject\Cost" column-prefix="delivery_discount_"/>
+    </entity>
+</doctrine-mapping>
