@@ -10,12 +10,17 @@ use App\Domain\ValueObject\Region;
 use App\Domain\ValueObject\Weight;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class Basket
 {
     private int $id;
-
     private ?BasketDelivery $delivery = null;
+    /**
+     * @var Collection<BasketItem>
+     */
+    private Collection $basketItems;
 
     public function __construct(
         private Region $region,
@@ -31,6 +36,7 @@ class Basket
         private ?int $userId = null,
         private ?int $shopNum = null,
     ) {
+        $this->basketItems = new ArrayCollection();
     }
 
     public function getId(): int
@@ -183,6 +189,32 @@ class Basket
     public function setDelivery(?BasketDelivery $delivery): Basket
     {
         $this->delivery = $delivery;
+
+        return $this;
+    }
+
+    /**
+     * @return  Collection<BasketItem>
+     */
+    public function getBasketItems(): Collection
+    {
+        return $this->basketItems;
+    }
+
+    public function addBasketItem(BasketItem $basketItem): Basket
+    {
+        if (!$this->basketItems->contains($basketItem)) {
+            $this->basketItems->add($basketItem);
+        }
+
+        return $this;
+    }
+
+    public function removeBasketItem(BasketItem $basketItem): Basket
+    {
+        if ($this->basketItems->contains($basketItem)) {
+            $this->basketItems->removeElement($basketItem);
+        }
 
         return $this;
     }

@@ -17,9 +17,9 @@
         <field name="shopNum" column="shop_num" type="integer" length="11" nullable="true"/>
         <embedded name="region" use-column-prefix="false" class="App\Domain\ValueObject\Region"/>
         <embedded name="type" use-column-prefix="false" class="App\Domain\ValueObject\BasketType"/>
-        <field name="orderDate" column="order_date" type="datetime" length="11"/>
-        <field name="createdAt" column="created_at" type="datetime" length="11"/>
-        <field name="updatedAt" column="updated_at" type="datetime" length="11"/>
+        <field name="orderDate" column="order_date" type="datetime"/>
+        <field name="createdAt" column="created_at" type="datetime"/>
+        <field name="updatedAt" column="updated_at" type="datetime"/>
         <embedded name="slicingCost" class="App\Domain\ValueObject\Cost" column-prefix="slicing_"/>
         <embedded name="totalCost" class="App\Domain\ValueObject\Cost" column-prefix="total_"/>
         <embedded name="totalDiscountCost" class="App\Domain\ValueObject\Cost" column-prefix="total_discount_"/>
@@ -34,5 +34,9 @@
             <cascade><cascade-remove /></cascade>
             <join-column name="delivery_id" referenced-column-name="id" on-delete="CASCADE"/>
         </one-to-one>
+
+        <one-to-many field="basketItems" target-entity="App\Domain\Entity\BasketItem" mapped-by="basket">
+            <cascade><cascade-remove /></cascade>
+        </one-to-many>
     </entity>
 </doctrine-mapping>
