@@ -32,6 +32,7 @@ class BasketItem
         Basket $basket,
     )
     {
+        $this->basket = $basket;
         $basket->addBasketItem($this);
     }
 
