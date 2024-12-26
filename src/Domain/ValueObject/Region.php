@@ -23,6 +23,11 @@ readonly class Region
         return $this->regionCode;
     }
 
+    public function isSame(Region $region): bool
+    {
+        return $this->regionCode === $region->getRegionCode();
+    }
+
     private function assertRegionCode(int $regionCode): void
     {
         if (!in_array($regionCode, RegionCodeEnum::cases(), true)) {

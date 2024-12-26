@@ -18,4 +18,18 @@ class DoctrineBasketRepository extends ServiceEntityRepository implements Basket
     {
         parent::__construct($registry, Basket::class);
     }
+
+    public function findBasketByUserId(int $userId): Basket
+    {
+        return $this
+            ->createQueryBuilder('b')
+            ->addSelect('d', 'bi')
+            ->leftJoin('b.delivery', 'd')
+            ->leftJoin('b.basketItems', 'bi')
+            ->where('bi.userId = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

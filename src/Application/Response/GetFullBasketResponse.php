@@ -22,8 +22,8 @@ readonly class GetFullBasketResponse
         public string $totalDiscountCost,
         public string $weight,
         public int $totalBonus,
-        public DeliveryResponse $delivery,
-        public array $basketItems,
+        public ?DeliveryResponse $delivery = null,
+        public array $basketItems = [],
     ) {
     }
 }
