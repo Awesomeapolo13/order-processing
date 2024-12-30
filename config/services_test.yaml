@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    public: true
+    autowire: true
+    autoconfigure: true
+
+  App\Application\Assembler\Response\GetFullBasketResponseAssembler:
+    public: true
