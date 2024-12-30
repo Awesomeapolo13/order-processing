@@ -30,7 +30,7 @@ readonly class Region
 
     private function assertRegionCode(int $regionCode): void
     {
-        if (!in_array($regionCode, RegionCodeEnum::cases(), true)) {
+        if (RegionCodeEnum::tryFrom($regionCode) === null) {
             throw new InvalidArgumentException('Неизвестный регион ' . $regionCode);
         }
     }
