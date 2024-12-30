@@ -15,7 +15,7 @@
 
         <field name="supCode" column="sup_code" type="string"/>
         <many-to-one field="basket" target-entity="App\Domain\Entity\Basket">
-            <join-column name="basket_id" referenced-column-name="id" nullable="false"/>
+            <join-column name="basket_id" referenced-column-name="id" nullable="false" on-delete="CASCADE"/>
         </many-to-one>
 
         <embedded name="perItemPrice" class="App\Domain\ValueObject\Price" column-prefix="per_item_"/>
@@ -44,7 +44,7 @@
                 <option name="default">true</option>
             </options>
         </field>
-        <field name="createdAt" column="created_at" type="datetime" length="11"/>
-        <field name="updatedAt" column="updated_at" type="datetime" length="11"/>
+        <field name="createdAt" column="created_at" type="datetime_immutable" length="11"/>
+        <field name="updatedAt" column="updated_at" type="datetime_immutable" length="11"/>
     </entity>
 </doctrine-mapping>
