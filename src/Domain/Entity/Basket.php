@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\Collection;
 
 class Basket
 {
-    private int $id;
+    private ?int $id = null;
     private ?BasketDelivery $delivery = null;
     /**
      * @var Collection<BasketItem>
@@ -39,9 +39,14 @@ class Basket
         $this->basketItems = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getUserId(): ?int
@@ -205,6 +210,7 @@ class Basket
     {
         if (!$this->basketItems->contains($basketItem)) {
             $this->basketItems->add($basketItem);
+            $basketItem->setBasket($this);
         }
 
         return $this;
@@ -212,8 +218,8 @@ class Basket
 
     public function removeBasketItem(BasketItem $basketItem): Basket
     {
-        if ($this->basketItems->contains($basketItem)) {
-            $this->basketItems->removeElement($basketItem);
+        if ($this->basketItems->removeElement($basketItem)) {
+            $basketItem->setBasket(null);
         }
 
         return $this;

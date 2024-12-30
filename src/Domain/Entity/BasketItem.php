@@ -11,9 +11,9 @@ use DateTimeImmutable;
 
 class BasketItem
 {
-    private int $id;
+    private ?int $id = null;
 
-    private Basket $basket;
+    private ?Basket $basket = null;
 
     public function __construct(
         private string $supCode,
@@ -29,21 +29,29 @@ class BasketItem
         private bool $isAvailableForOrder,
         private readonly ?DateTimeImmutable $createdAt,
         private ?DateTimeImmutable $updatedAt,
-        Basket $basket,
-    )
-    {
-        $this->basket = $basket;
-        $basket->addBasketItem($this);
+    ) {
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getBasket(): Basket
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getBasket(): ?Basket
     {
         return $this->basket;
+    }
+
+    public function setBasket(?Basket $basket): self
+    {
+        $this->basket = $basket;
+
+        return $this;
     }
 
     public function getSupCode(): string

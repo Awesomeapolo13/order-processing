@@ -10,7 +10,7 @@ use App\Domain\ValueObject\Distance;
 
 class BasketDelivery
 {
-    private int $id;
+    private ?int $id = null;
 
     public function __construct(
         private DeliverySlot $slot,
@@ -21,9 +21,14 @@ class BasketDelivery
     ) {
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getSlot(): DeliverySlot
