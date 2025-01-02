@@ -1,0 +1,14 @@
+{
+  "The regions are the same": [
+    {
+      "regionCode": 52
+    },
+    true
+  ],
+  "The regions are not the same": [
+    {
+      "regionCode": 77
+    },
+    false
+  ]
+}

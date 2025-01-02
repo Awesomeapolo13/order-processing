@@ -10,12 +10,13 @@ use App\Application\Response\GetFullBasketResponse;
 use App\Domain\Entity\Basket;
 use App\Tests\Tools\TestDataSerializerTrait;
 use JsonException;
+use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class GetFullBasketResponseAssemblerTest extends KernelTestCase
 {
-    private const PROVIDER_FILE_NAME = 'get_full_basket_unit_test_provider.json';
+    private const string PROVIDER_FILE_NAME = 'get_full_basket_unit_test_provider.json';
 
     private ResponseAssemblerInterface $responseAssembler;
     private SerializerInterface $serializer;
@@ -33,6 +34,7 @@ class GetFullBasketResponseAssemblerTest extends KernelTestCase
 
     /**
      * @throws JsonException
+     * @throws ReflectionException
      */
     public function testResponseAccordingEntity(): void
     {
