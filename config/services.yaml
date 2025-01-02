@@ -12,3 +12,7 @@ services:
             - '../src/Domain/Entity/'
             - '../src/Domain/ValueObject/'
             - '../src/Kernel.php'
+
+    App\Application\UseCase\GetFullBasketUseCase:
+        arguments:
+            $responseAssembler: '@App\Application\Assembler\Response\GetFullBasketResponseAssembler'

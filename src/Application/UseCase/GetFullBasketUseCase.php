@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\UseCase;
 
+use App\Application\Assembler\ResponseAssemblerInterface;
 use App\Application\Request\GetFullBasketRequest;
 use App\Application\Response\GetFullBasketResponse;
 use App\Domain\Entity\Basket;
@@ -19,7 +20,8 @@ use Doctrine\ORM\NonUniqueResultException;
 final class GetFullBasketUseCase
 {
     public function __construct(
-        private readonly BasketRepositoryInterface $basketRepository
+        private readonly BasketRepositoryInterface $basketRepository,
+        private readonly ResponseAssemblerInterface $responseAssembler,
     ) {
     }
 
@@ -53,16 +55,6 @@ final class GetFullBasketUseCase
             //  удалить корзину сразу или же помечать корзины их на удаление и сносить кроной.
         }
 
-        return new GetFullBasketResponse(
-            1,
-            true,
-            true,
-            new DateTime(),
-            '',
-            '',
-            '',
-            '',
-            0,
-        );
+        return $this->responseAssembler->createResponse($basket);
     }
 }
