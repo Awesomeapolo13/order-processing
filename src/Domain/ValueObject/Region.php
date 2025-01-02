@@ -31,7 +31,7 @@ readonly class Region
     private function assertRegionCode(int $regionCode): void
     {
         if (RegionCodeEnum::tryFrom($regionCode) === null) {
-            throw new InvalidArgumentException('Неизвестный регион ' . $regionCode);
+            throw new InvalidArgumentException('Unsupported region ' . $regionCode);
         }
     }
 }
