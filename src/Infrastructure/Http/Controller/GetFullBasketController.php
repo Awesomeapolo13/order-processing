@@ -8,6 +8,8 @@ use App\Application\Request\GetFullBasketRequest;
 use App\Application\UseCase\GetFullBasketUseCase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -20,7 +22,7 @@ class GetFullBasketController extends AbstractController
     }
 
     public function __invoke(
-        #[MapRequestPayload] GetFullBasketRequest $request,
+        #[MapQueryString] GetFullBasketRequest $request,
     ): Response {
         return $this->json(($this->getFullBasketUseCase)($request));
     }

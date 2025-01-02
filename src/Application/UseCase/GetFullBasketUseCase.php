@@ -16,6 +16,7 @@ use App\Domain\ValueObject\Weight;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 final class GetFullBasketUseCase
 {
@@ -30,7 +31,7 @@ final class GetFullBasketUseCase
         $region = new Region($dto->regionCode);
         try {
             $basket = $this->basketRepository->findBasketByUserId($dto->userId);
-        } catch (NonUniqueResultException $exception) {
+        } catch (NoResultException $exception) {
             // ToDo: Logg the error
             $basket = new Basket(
                 new Region($dto->regionCode),
@@ -46,6 +47,9 @@ final class GetFullBasketUseCase
                 $dto->userId,
                 null,
             );
+        } catch (NonUniqueResultException $exception) {
+            // ToDo: Logg the error
+            // ToDo: Handle a double of the basket
         }
 
         if (!$basket->getRegion()->isSame($region)) {
