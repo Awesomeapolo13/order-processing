@@ -20,6 +20,7 @@
         <field name="orderDate" column="order_date" type="datetime"/>
         <field name="createdAt" column="created_at" type="datetime_immutable"/>
         <field name="updatedAt" column="updated_at" type="datetime_immutable"/>
+        <field name="deletedAt" column="deleted_at" type="datetime_immutable" nullable="true"/>
         <embedded name="slicingCost" class="App\Domain\ValueObject\Cost" column-prefix="slicing_"/>
         <embedded name="totalCost" class="App\Domain\ValueObject\Cost" column-prefix="total_"/>
         <embedded name="totalDiscountCost" class="App\Domain\ValueObject\Cost" column-prefix="total_discount_"/>
@@ -29,6 +30,7 @@
                 <option name="default">0</option>
             </options>
         </field>
+        <field name="version" type="integer" version="true"/>
 
         <one-to-one field="delivery" target-entity="App\Domain\Entity\BasketDelivery">
             <cascade>

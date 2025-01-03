@@ -33,8 +33,10 @@ class Basket
         private Cost $totalDiscountCost,
         private Weight $weight,
         private int $totalBonus = 0,
+        private int $version = 1,
         private ?int $userId = null,
         private ?int $shopNum = null,
+        private ?DateTimeImmutable $deletedAt = null,
     ) {
         $this->basketItems = new ArrayCollection();
     }
@@ -186,6 +188,18 @@ class Basket
         return $this;
     }
 
+    public function getVersion(): int
+    {
+        return $this->version;
+    }
+
+    public function setVersion(int $version): Basket
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
     public function getDelivery(): ?BasketDelivery
     {
         return $this->delivery;
@@ -221,6 +235,18 @@ class Basket
         if ($this->basketItems->removeElement($basketItem)) {
             $basketItem->setBasket(null);
         }
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?DateTimeImmutable
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?DateTimeImmutable $deletedAt): Basket
+    {
+        $this->deletedAt = $deletedAt;
 
         return $this;
     }
