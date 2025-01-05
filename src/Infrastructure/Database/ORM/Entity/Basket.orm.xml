@@ -35,7 +35,7 @@
         <one-to-one field="delivery" target-entity="App\Domain\Entity\BasketDelivery">
             <cascade>
                 <cascade-persist/>
-                <cascade-remove />
+                <cascade-remove/>
             </cascade>
             <join-column name="delivery_id" referenced-column-name="id" on-delete="CASCADE"/>
         </one-to-one>
@@ -43,8 +43,22 @@
         <one-to-many field="basketItems" target-entity="App\Domain\Entity\BasketItem" mapped-by="basket">
             <cascade>
                 <cascade-persist/>
-                <cascade-remove />
+                <cascade-remove/>
             </cascade>
         </one-to-many>
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="preRemove" method="markAsDeleted"/>
+            <lifecycle-callback type="preUpdate" method="updateTimestamps"/>
+        </lifecycle-callbacks>
+
+        <indexes>
+            <index name="UNIQ_ACTIVE_BASKET_IDX" columns="user_id">
+                <options>
+                    <option name="where">deleted_at IS NULL</option>
+                    <option name="unique">true</option>
+                </options>
+            </index>
+        </indexes>
     </entity>
 </doctrine-mapping>
