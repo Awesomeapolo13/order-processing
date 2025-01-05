@@ -52,4 +52,9 @@ readonly class BasketType
     {
         return $this->hasAlcohol && $this->isDelivery;
     }
+
+    public static function default(): self
+    {
+        return new self(false, true, false);
+    }
 }
