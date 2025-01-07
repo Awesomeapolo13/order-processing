@@ -8,5 +8,7 @@ use App\Domain\Entity\Basket;
 
 interface BasketRepositoryInterface
 {
-    public function findBasketByUserId(int $userId): ?Basket;
+    public function findActiveBasketByUserId(int $userId): ?Basket;
+
+    public function setBasketDeleted(int $userId): void;
 }

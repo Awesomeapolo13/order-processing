@@ -6,7 +6,10 @@ namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Basket;
 use App\Domain\Repository\BasketRepositoryInterface;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\LockMode;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,16 +22,36 @@ class DoctrineBasketRepository extends ServiceEntityRepository implements Basket
         parent::__construct($registry, Basket::class);
     }
 
-    public function findBasketByUserId(int $userId): ?Basket
+    public function findActiveBasketByUserId(int $userId): ?Basket
     {
         return $this
-            ->createQueryBuilder('b')
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('b')
+            ->from(Basket::class, 'b')
             ->addSelect('d', 'bi')
             ->leftJoin('b.delivery', 'd')
             ->leftJoin('b.basketItems', 'bi')
             ->where('b.userId = :userId')
+            ->andWhere('b.deletedAt IS NULL')
             ->setParameter('userId', $userId)
             ->getQuery()
-            ->getSingleResult();
+            ->getOneOrNullResult();
+    }
+
+    public function setBasketDeleted(int $userId): void
+    {
+        $this
+            ->getEntityManager()
+            ->createQuery(
+                'UPDATE App\Domain\Entity\Basket b'
+                . ' SET b.deletedAt = :now'
+                . ' WHERE b.userId = :userId AND b.deletedAt IS NULL'
+            )
+            ->setParameters([
+                'now' => new DateTimeImmutable(),
+                'userId' => $userId
+            ])
+            ->execute();
     }
 }
