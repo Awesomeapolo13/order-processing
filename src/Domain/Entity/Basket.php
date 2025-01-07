@@ -16,6 +16,8 @@ use Doctrine\Common\Collections\Collection;
 class Basket
 {
     private ?int $id = null;
+    private int $version = 1;
+    private ?DateTimeImmutable $deletedAt = null;
     private ?BasketDelivery $delivery = null;
     /**
      * @var Collection<BasketItem>
@@ -33,10 +35,8 @@ class Basket
         private Cost $totalDiscountCost,
         private Weight $weight,
         private int $totalBonus = 0,
-        private int $version = 1,
         private ?int $userId = null,
         private ?int $shopNum = null,
-        private ?DateTimeImmutable $deletedAt = null,
     ) {
         $this->basketItems = new ArrayCollection();
     }
@@ -249,5 +249,20 @@ class Basket
         $this->deletedAt = $deletedAt;
 
         return $this;
+    }
+
+    public function markAsDeleted(): void
+    {
+        $this->deletedAt = new DateTimeImmutable();
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deletedAt !== null;
+    }
+
+    public function updateTimestamps(): void
+    {
+        $this->updatedAt = new DateTimeImmutable();
     }
 }
