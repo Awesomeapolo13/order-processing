@@ -8,8 +8,6 @@ use App\Domain\Entity\Basket;
 use App\Domain\Repository\BasketRepositoryInterface;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\DBAL\LockMode;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -53,5 +51,11 @@ class DoctrineBasketRepository extends ServiceEntityRepository implements Basket
                 'userId' => $userId
             ])
             ->execute();
+    }
+
+    public function save(Basket $basket): void
+    {
+        $this->getEntityManager()->persist($basket);
+        $this->getEntityManager()->flush();
     }
 }
