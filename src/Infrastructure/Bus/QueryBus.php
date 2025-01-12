@@ -14,8 +14,9 @@ class QueryBus implements QueryBusInterface
     use HandleTrait;
 
     public function __construct(
-        private MessageBusInterface $queryBus,
+        MessageBusInterface $queryBus,
     ) {
+        $this->messageBus = $queryBus;
     }
 
     public function execute(QueryInterface $query): mixed
