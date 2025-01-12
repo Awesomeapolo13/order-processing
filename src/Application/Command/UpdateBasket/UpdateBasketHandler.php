@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Command\UpdateBasket;
 
 use App\Application\Command\CommandHandlerInterface;
+use App\Application\Database\EntityManager\TransactionalEntityManagerInterface;
 use App\Domain\Entity\Basket;
 use App\Domain\Exception\BasketConcurrentModificationException;
 use App\Domain\Exception\BasketForUpdatingNotFoundException;
@@ -12,7 +13,6 @@ use App\Domain\Factory\BasketFactory;
 use App\Domain\Repository\BasketRepositoryInterface;
 use App\Domain\ValueObject\Region;
 use Doctrine\DBAL\LockMode;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -22,7 +22,7 @@ class UpdateBasketHandler implements CommandHandlerInterface
     public function __construct(
         private readonly BasketRepositoryInterface $basketRepository,
         private readonly BasketFactory $basketFactory,
-        private readonly EntityManagerInterface $entityManager,
+        private readonly TransactionalEntityManagerInterface $entityManager,
         private readonly LoggerInterface $logger,
     ) {
     }
