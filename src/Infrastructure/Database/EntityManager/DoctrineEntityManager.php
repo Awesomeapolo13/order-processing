@@ -24,7 +24,7 @@ class DoctrineEntityManager implements TransactionalEntityManagerInterface
     /**
      * @throws OptimisticLockException
      */
-    public function lock(object $entity, int $lockMode, DateTimeInterface|int|null $lockVersion): void
+    public function lock(object $entity, int $lockMode, DateTimeInterface|int|null $lockVersion = null): void
     {
         $this->entityManager->lock($entity, $lockMode, $lockVersion);
     }
