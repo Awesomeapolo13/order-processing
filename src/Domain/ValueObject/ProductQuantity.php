@@ -18,6 +18,95 @@ readonly class ProductQuantity
     ) {
     }
 
+    public static function piece(int $quantity, bool $isPack = false, ?Weight $packWeight = null): self
+    {
+        $productQuantity = new self(
+            type: ProductType::PIECE,
+            quantity: $quantity,
+            weight: null,
+            isPack: $isPack,
+            packWeight: $packWeight
+        );
+
+        $productQuantity->assertQuantity();
+
+        return $productQuantity;
+    }
+
+    public static function weight(Weight $weight): self
+    {
+        $productQuantity = new self(
+            type: ProductType::WEIGHT,
+            quantity: null,
+            weight: $weight,
+            isPack: false
+        );
+
+        $productQuantity->assertQuantity();
+
+        return $productQuantity;
+    }
+
+    public static function mixed(int $quantity, Weight $weight): self
+    {
+        $productQuantity = new self(
+            type: ProductType::MIXED,
+            quantity: $quantity,
+            weight: $weight,
+            isPack: false
+        );
+
+        $productQuantity->assertQuantity();
+
+        return $productQuantity;
+    }
+
+    public static function fromOrm(
+        ProductType $type,
+        ?int $quantity,
+        ?Weight $weight,
+        bool $isPack,
+        ?Weight $packWeight
+    ): self {
+        return new self($type, $quantity, $weight, $isPack, $packWeight);
+    }
+
+    public static function fromProduct(
+        ?int $quantity,
+        ?string $weight,
+        bool $isPack,
+        ProductInterface $product,
+    ): self {
+        if ($product->isPiece() && $quantity === null) {
+            throw new InvalidArgumentException('Quantity is required for piece products');
+        }
+
+        if ($product->isWeight() && $weight === null) {
+            throw new InvalidArgumentException('Weight is required for weight products');
+        }
+
+        if ($product->isMixed() && ($quantity === null || $weight === null)) {
+            throw new InvalidArgumentException('Both quantity and weight are required for mixed products');
+        }
+
+        if ($isPack && !$product->hasPackWeight()) {
+            throw new InvalidArgumentException('Product does not support pack purchase');
+        }
+
+        return match (true) {
+            $product->isPiece() => self::piece(
+                quantity: $quantity,
+                isPack: $isPack,
+                packWeight: $isPack ? $product->getPackWeight() : null
+            ),
+            $product->isWeight() => self::weight(Weight::fromString($weight)),
+            default => self::mixed(
+                quantity: $quantity,
+                weight: Weight::fromString($weight)
+            ),
+        };
+    }
+
     public function getType(): ProductType
     {
         return $this->type;
@@ -58,7 +147,7 @@ readonly class ProductQuantity
         return $this->type === ProductType::MIXED;
     }
 
-    private function assertQuantity(): void
+    public function assertQuantity(): void
     {
         match ($this->type) {
             ProductType::PIECE => $this->assertPieceTypeQuantity(),
