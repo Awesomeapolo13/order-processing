@@ -28,12 +28,7 @@
                 <option name="default">false</option>
             </options>
         </field>
-        <embedded name="weight" use-column-prefix="false" class="App\Domain\ValueObject\Weight"/>
-        <field name="quantity" type="integer" length="11" nullable="true">
-            <options>
-                <option name="default">NULL</option>
-            </options>
-        </field>
+        <embedded name="quantity" use-column-prefix="false" class="App\Domain\ValueObject\ProductQuantity"/>
         <field name="addedBonus" column="added_bonus" type="integer" length="11">
             <options>
                 <option name="default">0</option>

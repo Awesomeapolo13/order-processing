@@ -6,7 +6,7 @@ namespace App\Domain\Entity;
 
 use App\Domain\ValueObject\Cost;
 use App\Domain\ValueObject\Price;
-use App\Domain\ValueObject\Weight;
+use App\Domain\ValueObject\ProductQuantity;
 use DateTimeImmutable;
 
 class BasketItem
@@ -23,8 +23,7 @@ class BasketItem
         private Cost $totalCost,
         private Cost $totalDiscountCost,
         private bool $isSlicing,
-        private Weight $weight,
-        private ?int $quantity,
+        private ProductQuantity $quantity,
         private int $addedBonus,
         private bool $isAvailableForOrder,
         private readonly ?DateTimeImmutable $createdAt,
@@ -138,24 +137,12 @@ class BasketItem
         return $this;
     }
 
-    public function getWeight(): Weight
-    {
-        return $this->weight;
-    }
-
-    public function setWeight(Weight $weight): BasketItem
-    {
-        $this->weight = $weight;
-
-        return $this;
-    }
-
-    public function getQuantity(): ?int
+    public function getQuantity(): ProductQuantity
     {
         return $this->quantity;
     }
 
-    public function setQuantity(?int $quantity): BasketItem
+    public function setQuantity(ProductQuantity $quantity): BasketItem
     {
         $this->quantity = $quantity;
 
