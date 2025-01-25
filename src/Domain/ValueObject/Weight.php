@@ -9,7 +9,7 @@ use InvalidArgumentException;
 readonly class Weight
 {
     public function __construct(
-        private string $weight,
+        private ?string $weight,
     ) {
         $this->assertWeight();
     }
@@ -19,13 +19,22 @@ readonly class Weight
         return $this->weight;
     }
 
+    public function isNull(): bool
+    {
+        return !$this->weight === null;
+    }
+
     public static function zero(): self
     {
         return new self('0.000');
     }
 
-    public static function fromString(string $weight): self
+    public static function fromStringNullable(?string $weight): self
     {
+        if ($weight === null) {
+            return new self($weight);
+        }
+
         if ('' === $weight) {
             return self::zero();
         }
@@ -37,7 +46,7 @@ readonly class Weight
 
     private function assertWeight(): void
     {
-        if (!preg_match('/^\d+\.\d{3}$/', $this->weight)) {
+        if ($this->weight !== null && !preg_match('/^\d+\.\d{3}$/', $this->weight)) {
             throw new InvalidArgumentException(
                 'Weight must be in format "0.000", got: ' . $this->weight
             );
