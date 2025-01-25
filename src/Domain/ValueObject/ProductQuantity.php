@@ -12,18 +12,18 @@ readonly class ProductQuantity
     private function __construct(
         private ProductType $type,
         private ?int $quantity,
-        private ?Weight $weight,
+        private Weight $weight,
         private bool $isPack,
-        private ?Weight $packWeight = null,
+        private Weight $packWeight,
     ) {
     }
 
-    public static function piece(int $quantity, bool $isPack = false, ?Weight $packWeight = null): self
+    public static function piece(int $quantity, Weight $packWeight, bool $isPack = false): self
     {
         $productQuantity = new self(
             type: ProductType::PIECE,
             quantity: $quantity,
-            weight: null,
+            weight: Weight::fromStringNullable(null),
             isPack: $isPack,
             packWeight: $packWeight
         );
@@ -39,7 +39,8 @@ readonly class ProductQuantity
             type: ProductType::WEIGHT,
             quantity: null,
             weight: $weight,
-            isPack: false
+            isPack: false,
+            packWeight: Weight::fromStringNullable(null),
         );
 
         $productQuantity->assertQuantity();
@@ -53,7 +54,8 @@ readonly class ProductQuantity
             type: ProductType::MIXED,
             quantity: $quantity,
             weight: $weight,
-            isPack: false
+            isPack: false,
+            packWeight: Weight::fromStringNullable(null),
         );
 
         $productQuantity->assertQuantity();
@@ -64,9 +66,9 @@ readonly class ProductQuantity
     public static function fromOrm(
         ProductType $type,
         ?int $quantity,
-        ?Weight $weight,
+        Weight $weight,
         bool $isPack,
-        ?Weight $packWeight
+        Weight $packWeight
     ): self {
         return new self($type, $quantity, $weight, $isPack, $packWeight);
     }
@@ -96,13 +98,13 @@ readonly class ProductQuantity
         return match (true) {
             $product->isPiece() => self::piece(
                 quantity: $quantity,
+                packWeight: $isPack ? $product->getPackWeight() : null,
                 isPack: $isPack,
-                packWeight: $isPack ? $product->getPackWeight() : null
             ),
-            $product->isWeight() => self::weight(Weight::fromString($weight)),
+            $product->isWeight() => self::weight(Weight::fromStringNullable($weight)),
             default => self::mixed(
                 quantity: $quantity,
-                weight: Weight::fromString($weight)
+                weight: Weight::fromStringNullable($weight)
             ),
         };
     }
@@ -117,7 +119,7 @@ readonly class ProductQuantity
         return $this->quantity;
     }
 
-    public function getWeight(): ?Weight
+    public function getWeight(): Weight
     {
         return $this->weight;
     }
@@ -127,7 +129,7 @@ readonly class ProductQuantity
         return $this->isPack;
     }
 
-    public function getPackWeight(): ?Weight
+    public function getPackWeight(): Weight
     {
         return $this->packWeight;
     }
@@ -162,18 +164,18 @@ readonly class ProductQuantity
             throw new InvalidArgumentException('Piece product must be a positive integer');
         }
 
-        if ($this->weight !== null && $this->isPack) {
+        if (!$this->weight->isNull() && $this->isPack) {
             throw new InvalidArgumentException('Piece product can not have weight unless it is pack');
         }
 
-        if ($this->isPack && $this->packWeight === null) {
+        if ($this->isPack && $this->packWeight->isNull()) {
             throw new InvalidArgumentException('Piece product with pack must have pack weight');
         }
     }
 
     private function assertWeightTypeQuantity(): void
     {
-        if ($this->weight === null) {
+        if ($this->weight->isNull()) {
             throw new InvalidArgumentException('Weight product must have weight');
         }
 
@@ -188,7 +190,7 @@ readonly class ProductQuantity
             throw new InvalidArgumentException('Mixed product must have positive quantity');
         }
 
-        if ($this->weight === null) {
+        if ($this->weight->isNull()) {
             throw new InvalidArgumentException('Mixed product must have weight');
         }
     }
