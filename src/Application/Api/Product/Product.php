@@ -21,6 +21,7 @@ readonly class Product implements ProductInterface
         public ?int $minimumQuantity,
         public ?Weight $minimumWeight,
         public ?Weight $packWeight,
+        public ?Weight $averageWeight,
         public bool $isAvailableForOrder,
     ) {
     }
@@ -93,5 +94,10 @@ readonly class Product implements ProductInterface
     public function getMinimumQuantity(): ?int
     {
         return $this->minimumQuantity;
+    }
+
+    public function getAverageWeight(): ?Weight
+    {
+        return $this->averageWeight;
     }
 }

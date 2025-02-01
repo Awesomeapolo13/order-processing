@@ -8,7 +8,7 @@ use App\Domain\ValueObject\ProductInterface;
 
 interface ProductApiInterface
 {
-    public function findProduct(FindProductDTO $request): ProductInterface;
+    public function findProduct(FindProductDTO $request): ?ProductInterface;
 
     /**
      * @return ProductInterface[]

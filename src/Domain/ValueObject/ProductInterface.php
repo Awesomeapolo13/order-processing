@@ -23,4 +23,6 @@ interface ProductInterface
     public function getPackWeight(): ?Weight;
     public function getMinimumWeight(): ?Weight;
     public function getMinimumQuantity(): ?int;
+
+    public function getAverageWeight(): ?Weight;
 }
