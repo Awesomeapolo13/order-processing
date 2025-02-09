@@ -222,7 +222,14 @@ class Basket
 
     public function addBasketItem(BasketItem $basketItem): Basket
     {
-        if (!$this->basketItems->contains($basketItem)) {
+        $supCode = $basketItem->getSupCode();
+        $isAlreadyExists = $this->basketItems->exists(
+            function (BasketItem $basketItem) use ($supCode) {
+                return $basketItem->getSupCode() === $supCode;
+            }
+        );
+
+        if (!$isAlreadyExists || !$this->basketItems->contains($basketItem)) {
             $this->basketItems->add($basketItem);
             $basketItem->setBasket($this);
         }
