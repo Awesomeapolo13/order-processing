@@ -11,6 +11,7 @@ use App\Application\Api\Product\ProductApiInterface;
 use App\Domain\Enum\ProductType;
 use App\Domain\ValueObject\Price;
 use App\Domain\ValueObject\ProductInterface;
+use App\Domain\ValueObject\Weight;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class SymfonyClientProductApi implements ProductApiInterface
@@ -26,13 +27,16 @@ class SymfonyClientProductApi implements ProductApiInterface
         return new Product(
             '',
             ProductType::PIECE,
-            new Price(),
-            new Price(),
+            Price::zero(),
+            Price::zero(),
+            Price::zero(),
             5,
             null,
             1,
             null,
             null,
+            new Weight('0.100'),
+            true,
             true,
         );
     }

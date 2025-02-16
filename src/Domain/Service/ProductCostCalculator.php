@@ -17,7 +17,6 @@ class ProductCostCalculator
      * Store more places for middle calculations to avoid errors with rounding.
      */
     private const COST_CALC_SCALE = 6;
-    private const WEIGHT_CALC_SCALE = 3;
     private const RESULT_SCALE = 2;
 
     public function calculateCost(

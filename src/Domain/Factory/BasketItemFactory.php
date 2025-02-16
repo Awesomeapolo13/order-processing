@@ -54,7 +54,7 @@ class BasketItemFactory
             slicingCost: Cost::zero(),
             totalCost: $totalCost,
             totalDiscountCost: $totalDiscountCost,
-            isSlicing: false,
+            isSlicing: !$product->getSlicingPrice()->isZero(),
             quantity: $productQuantity,
             addedBonus: 0,
             isAvailableForOrder: $product->isAvailableForOrder(),

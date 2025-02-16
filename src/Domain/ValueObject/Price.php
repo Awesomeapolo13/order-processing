@@ -11,8 +11,18 @@ readonly class Price
     ) {
     }
 
+    public static function zero(): self
+    {
+        return new self('0.00');
+    }
+
     public function getPrice(): string
     {
         return $this->price;
+    }
+
+    public function isZero(): bool
+    {
+        return $this->price === '0.00';
     }
 }
