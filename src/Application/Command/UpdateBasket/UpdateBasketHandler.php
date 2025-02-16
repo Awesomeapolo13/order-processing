@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Command\UpdateBasket;
 
 use App\Application\Api\Product\FindProductsDTO;
+use App\Application\Api\Product\Product;
 use App\Application\Api\Product\ProductApiInterface;
 use App\Application\Command\CommandHandlerInterface;
 use App\Application\Database\EntityManager\TransactionalEntityManagerInterface;
@@ -22,6 +23,7 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\OptimisticLockException;
 use Psr\Log\LoggerInterface;
 use Throwable;
+use function PHPUnit\Framework\containsOnlyInstancesOf;
 
 class UpdateBasketHandler implements CommandHandlerInterface
 {
@@ -106,6 +108,8 @@ class UpdateBasketHandler implements CommandHandlerInterface
 
     private function updateCosts(Basket $basket): void
     {
+        $oldTotalCost = $basket->getTotalCost();
+        $oldTotalDiscountCost = $basket->getTotalCost();
         $supCodes = array_map(
             static fn (BasketItem $basketItem) => $basketItem->getSupCode(),
             $basket->getBasketItems()->toArray()
@@ -117,51 +121,92 @@ class UpdateBasketHandler implements CommandHandlerInterface
                 $supCodes
             )
         );
+        $products = array_combine(
+            array_map(static fn(Product $product) => $product->getSupCode(), $products),
+            $products
+        );
         $basketTotalCost = Cost::zero();
         $basketTotalDiscountCost = Cost::zero();
 
-        $basket->getBasketItems()->map(
+        $basket->getBasketItems()->forAll(
             function (BasketItem $basketItem) use ($products,  &$basketTotalCost,  &$basketTotalDiscountCost) {
-                foreach ($products as $product) {
-                    if ($basketItem->getSupCode() !== $product->getSupCode() || !$basketItem->isAvailableForOrder()) {
-                        continue;
-                    }
+                $product = $products[$basketItem->getSupCode()] ?? null;
+                if (!isset($product) || !$product->isAvailableForOrder()) {
+                    $basketItem->setAvailableForOrder(false);
 
-                    $isSlicing = !$product->getSlicingPrice()->isZero();
-                    $slicingCost = Cost::zero();
-                    $totalCost = $this->costCalculator->calculateCost(
-                        priceByQuant: $product->getPrice(),
-                        quantity: $basketItem->getQuantity(),
-                        weightQuant: $product->getMinimumWeight(),
-                        averageWeight: $product->getAverageWeight(),
-                    );
-                    $totalDiscountCost = $this->costCalculator->calculateCost(
-                        priceByQuant: $product->getDiscountPrice(),
-                        quantity: $basketItem->getQuantity(),
-                        weightQuant: $product->getMinimumWeight(),
-                        averageWeight: $product->getAverageWeight(),
-                    );
-
-                    $basketItem
-                        ->setPerItemPrice($product->getPrice())
-                        ->setTotalCost($totalCost)
-                        ->setTotalDiscountCost($totalDiscountCost)
-                        ->setSlicing($isSlicing)
-                        ->setSlicingCost($slicingCost)
-                    ;
-
-                    if ($isSlicing) {
-                        $slicingCost = $this->slicingCostCalculator->calculateCost($product->getSlicingPrice(), $product->getCutCount());
-                        $basketItem->setSlicingCost($slicingCost);
-                    }
-
-                    $basketTotalCost = $basketTotalCost->add($totalCost)->add($slicingCost);
-                    $basketTotalDiscountCost = $basketTotalDiscountCost->add($totalDiscountCost)->add($slicingCost);
+                    return $basketItem;
                 }
 
-                return $basketItem;
+                $basketItem->setAvailableForOrder(true);
+                $isSlicing = !$product->getSlicingPrice()->isZero();
+                $slicingCost = Cost::zero();
+                $totalCost = $this->costCalculator->calculateCost(
+                    priceByQuant: $product->getPrice(),
+                    quantity: $basketItem->getQuantity(),
+                    weightQuant: $product->getMinimumWeight(),
+                    averageWeight: $product->getAverageWeight(),
+                );
+                $totalDiscountCost = $this->costCalculator->calculateCost(
+                    priceByQuant: $product->getDiscountPrice(),
+                    quantity: $basketItem->getQuantity(),
+                    weightQuant: $product->getMinimumWeight(),
+                    averageWeight: $product->getAverageWeight(),
+                );
+
+                if (!$basketItem->getTotalCost()->equals($totalCost)) {
+                    $this->logger->info('Basket item total cost updated', [
+                        'basket_id' => $basketItem->getBasket()?->getId(),
+                        'item_id' => $basketItem->getId(),
+                        'old_cost' => $basketItem->getTotalCost()->getCost(),
+                        'new_cost' => $totalCost->getCost()
+                    ]);
+                }
+                if (!$basketItem->getTotalDiscountCost()->equals($totalDiscountCost)) {
+                    $this->logger->info('Basket item total discount cost updated', [
+                        'basket_id' => $basketItem->getBasket()?->getId(),
+                        'item_id' => $basketItem->getId(),
+                        'old_cost' => $basketItem->getTotalDiscountCost()->getCost(),
+                        'new_cost' => $totalDiscountCost->getCost()
+                    ]);
+                }
+
+                $basketItem
+                    ->setPerItemPrice($product->getPrice())
+                    ->setTotalCost($totalCost)
+                    ->setTotalDiscountCost($totalDiscountCost)
+                    ->setSlicing($isSlicing)
+                    ->setSlicingCost($slicingCost);
+
+                if ($isSlicing) {
+                    $slicingCost = $this->slicingCostCalculator->calculateCost($product->getSlicingPrice(), $product->getCutCount());
+                    $basketItem->setSlicingCost($slicingCost);
+                }
+
+                $basketTotalCost = $basketTotalCost
+                    ->add($totalCost)
+                    ->add($slicingCost);
+                $basketTotalDiscountCost = $basketTotalDiscountCost
+                    ->add($totalDiscountCost)
+                    ->add($slicingCost);
+
+                return true;
             }
         );
+
+        if (!$basket->getTotalCost()->equals($oldTotalCost)) {
+            $this->logger->info('Basket total cost updated', [
+                'basket_id' => $basket->getId(),
+                'old_cost' => $oldTotalCost->getCost(),
+                'new_cost' => $basket->getTotalCost()->getCost()
+            ]);
+        }
+        if (!$basket->getTotalDiscountCost()->equals($oldTotalDiscountCost)) {
+            $this->logger->info('Basket total discount cost updated', [
+                'basket_id' => $basket->getId(),
+                'old_cost' => $oldTotalDiscountCost->getCost(),
+                'new_cost' => $basket->getTotalDiscountCost()->getCost()
+            ]);
+        }
 
         $basket->setTotalCost($basketTotalCost);
         $basket->setTotalDiscountCost($basketTotalDiscountCost);
