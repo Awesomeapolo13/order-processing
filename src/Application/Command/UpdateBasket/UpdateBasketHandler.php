@@ -23,7 +23,6 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\OptimisticLockException;
 use Psr\Log\LoggerInterface;
 use Throwable;
-use function PHPUnit\Framework\containsOnlyInstancesOf;
 
 class UpdateBasketHandler implements CommandHandlerInterface
 {
