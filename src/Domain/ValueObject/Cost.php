@@ -14,11 +14,6 @@ readonly class Cost
         $this->assertCost();
     }
 
-    public function getCost(): string
-    {
-        return $this->cost;
-    }
-
     public static function zero(): self
     {
         return new self('0.00');
@@ -33,6 +28,18 @@ readonly class Cost
         $formattedCost = number_format((float) $cost, 2, '.', '');
 
         return new self($formattedCost);
+    }
+
+    public function getCost(): string
+    {
+        return $this->cost;
+    }
+
+    public function add(Cost $cost): self
+    {
+        $newCost = bcadd($this->cost, $cost->getCost());
+
+        return self::fromString($newCost);
     }
 
     private function assertCost(): void
