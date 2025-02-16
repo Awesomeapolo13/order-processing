@@ -8,6 +8,8 @@ use InvalidArgumentException;
 
 readonly class Cost
 {
+    private const RESULT_SCALE = 2;
+
     public function __construct(
         private string $cost,
     ) {
@@ -37,9 +39,14 @@ readonly class Cost
 
     public function add(Cost $cost): self
     {
-        $newCost = bcadd($this->cost, $cost->getCost());
+        $newCost = bcadd($this->cost, $cost->getCost(), self::RESULT_SCALE);
 
         return self::fromString($newCost);
+    }
+
+    public function equals(Cost $cost): bool
+    {
+        return bccomp($this->cost, $cost->getCost(), self::RESULT_SCALE) === 0;
     }
 
     private function assertCost(): void
