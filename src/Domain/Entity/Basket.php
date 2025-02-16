@@ -234,6 +234,8 @@ class Basket
             $basketItem->setBasket($this);
         }
 
+        // ToDo: Added an event right here and release it into save method of BasketRepository.
+
         return $this;
     }
 
