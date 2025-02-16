@@ -48,6 +48,7 @@ class AddProductFromCatalogHandler implements CommandHandlerInterface
         $basket->updateTimestamps();
         $this->basketRepository->save($basket);
 
+        // FixMe: Store event into the Aggregate
         $this->eventBus->execute(
             new ProductAddedToBasketFromCatalogEvent(
                 userId: $basket->getUserId(),
