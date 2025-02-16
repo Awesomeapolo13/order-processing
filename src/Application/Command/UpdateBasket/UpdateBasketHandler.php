@@ -4,13 +4,19 @@ declare(strict_types=1);
 
 namespace App\Application\Command\UpdateBasket;
 
+use App\Application\Api\Product\FindProductsDTO;
+use App\Application\Api\Product\ProductApiInterface;
 use App\Application\Command\CommandHandlerInterface;
 use App\Application\Database\EntityManager\TransactionalEntityManagerInterface;
 use App\Domain\Entity\Basket;
+use App\Domain\Entity\BasketItem;
 use App\Domain\Exception\BasketConcurrentModificationException;
 use App\Domain\Exception\BasketForUpdatingNotFoundException;
 use App\Domain\Factory\BasketFactory;
 use App\Domain\Repository\BasketRepositoryInterface;
+use App\Domain\Service\ProductCostCalculator;
+use App\Domain\Service\SlicingCostCalculator;
+use App\Domain\ValueObject\Cost;
 use App\Domain\ValueObject\Region;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\OptimisticLockException;
@@ -23,6 +29,9 @@ class UpdateBasketHandler implements CommandHandlerInterface
         private readonly BasketRepositoryInterface $basketRepository,
         private readonly BasketFactory $basketFactory,
         private readonly TransactionalEntityManagerInterface $entityManager,
+        private readonly ProductApiInterface $productApi,
+        private readonly ProductCostCalculator $costCalculator,
+        private readonly SlicingCostCalculator $slicingCostCalculator,
         private readonly LoggerInterface $logger,
     ) {
     }
@@ -51,7 +60,7 @@ class UpdateBasketHandler implements CommandHandlerInterface
                 throw new BasketForUpdatingNotFoundException();
             }
 
-            $this->entityManager->lock($basket, LockMode::OPTIMISTIC);
+            $this->entityManager->lock($basket, LockMode::OPTIMISTIC, $basket->getVersion());
 
             if (!$basket->getRegion()->isSame($region)) {
                 $this->logger->info('Region mismatch, recreating basket', [
@@ -61,6 +70,8 @@ class UpdateBasketHandler implements CommandHandlerInterface
                 ]);
                 $basket = $this->recreateBasketWithNewRegion($userId, $region);
             }
+
+            $this->updateCosts($basket);
 
             $this->entityManager->flush();
             $this->entityManager->commit();
@@ -91,5 +102,68 @@ class UpdateBasketHandler implements CommandHandlerInterface
         $this->entityManager->persist($newBasket);
 
         return $newBasket;
+    }
+
+    private function updateCosts(Basket $basket): void
+    {
+        $supCodes = array_map(
+            static fn (BasketItem $basketItem) => $basketItem->getSupCode(),
+            $basket->getBasketItems()->toArray()
+        );
+        $products = $this->productApi->findProducts(
+            new FindProductsDTO(
+                $basket->getShopNum(),
+                $basket->getRegion(),
+                $supCodes
+            )
+        );
+        $basketTotalCost = Cost::zero();
+        $basketTotalDiscountCost = Cost::zero();
+
+        $basket->getBasketItems()->map(
+            function (BasketItem $basketItem) use ($products,  &$basketTotalCost,  &$basketTotalDiscountCost) {
+                foreach ($products as $product) {
+                    if ($basketItem->getSupCode() !== $product->getSupCode() || !$basketItem->isAvailableForOrder()) {
+                        continue;
+                    }
+
+                    $isSlicing = !$product->getSlicingPrice()->isZero();
+                    $slicingCost = Cost::zero();
+                    $totalCost = $this->costCalculator->calculateCost(
+                        priceByQuant: $product->getPrice(),
+                        quantity: $basketItem->getQuantity(),
+                        weightQuant: $product->getMinimumWeight(),
+                        averageWeight: $product->getAverageWeight(),
+                    );
+                    $totalDiscountCost = $this->costCalculator->calculateCost(
+                        priceByQuant: $product->getDiscountPrice(),
+                        quantity: $basketItem->getQuantity(),
+                        weightQuant: $product->getMinimumWeight(),
+                        averageWeight: $product->getAverageWeight(),
+                    );
+
+                    $basketItem
+                        ->setPerItemPrice($product->getPrice())
+                        ->setTotalCost($totalCost)
+                        ->setTotalDiscountCost($totalDiscountCost)
+                        ->setSlicing($isSlicing)
+                        ->setSlicingCost($slicingCost)
+                    ;
+
+                    if ($isSlicing) {
+                        $slicingCost = $this->slicingCostCalculator->calculateCost($product->getSlicingPrice(), $product->getCutCount());
+                        $basketItem->setSlicingCost($slicingCost);
+                    }
+
+                    $basketTotalCost = $basketTotalCost->add($totalCost)->add($slicingCost);
+                    $basketTotalDiscountCost = $basketTotalDiscountCost->add($totalDiscountCost)->add($slicingCost);
+                }
+
+                return $basketItem;
+            }
+        );
+
+        $basket->setTotalCost($basketTotalCost);
+        $basket->setTotalDiscountCost($basketTotalDiscountCost);
     }
 }
