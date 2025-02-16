@@ -16,6 +16,8 @@ readonly class Product implements ProductInterface
         public ProductType $type,
         public Price $price,
         public Price $discountPrice,
+        public Price $slicingPrice,
+        public int $cutCount,
         public int $stockQuantity,
         public ?Weight $stockWeight,
         public ?int $minimumQuantity,
@@ -44,6 +46,16 @@ readonly class Product implements ProductInterface
     public function getDiscountPrice(): Price
     {
         return $this->discountPrice;
+    }
+
+    public function getSlicingPrice(): Price
+    {
+        return $this->slicingPrice;
+    }
+
+    public function getCutCount(): int
+    {
+        return $this->cutCount;
     }
 
     public function getStockQuantity(): int

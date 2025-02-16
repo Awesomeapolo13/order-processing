@@ -12,8 +12,11 @@ interface ProductInterface
     public function getType(): ProductType;
     public function getPrice(): Price;
     public function getDiscountPrice(): Price;
+    public function getSlicingPrice(): Price;
     public function getStockQuantity(): int;
     public function getStockWeight(): ?Weight;
+
+    public function getCutCount(): int;
 
     public function isAvailableForOrder(): bool;
     public function isPiece(): bool;
