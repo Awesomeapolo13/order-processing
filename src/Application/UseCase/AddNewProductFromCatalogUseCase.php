@@ -10,13 +10,16 @@ use App\Application\Query\FindShortBasket\FindShortBasketQuery;
 use App\Application\Query\QueryBusInterface;
 use App\Application\Request\AddNewProductFromCatalogRequest;
 use App\Application\Response\ShortBasketResponse;
+use App\Domain\Exception\BasketNotFoundException;
 use App\Domain\ValueObject\Region;
+use Psr\Log\LoggerInterface;
 
 final class AddNewProductFromCatalogUseCase
 {
     public function __construct(
         private readonly CommandBusInterface $commandBus,
         private readonly QueryBusInterface $queryBus,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -33,11 +36,23 @@ final class AddNewProductFromCatalogUseCase
             )
         );
 
-        return $this->queryBus->execute(
+        $shortBasket = $this->queryBus->execute(
             new FindShortBasketQuery(
                 $request->userId,
                 $request->regionCode,
             )
         );
+
+        if ($shortBasket === null) {
+            $this->logger->error('Tried to add product without basket', [
+                'userId' => $request->userId,
+                'regionCode' => $request->regionCode,
+                'supCode' => $request->supCode,
+            ]);
+
+            throw new BasketNotFoundException($request->userId);
+        }
+
+        return $shortBasket;
     }
 }
