@@ -50,7 +50,10 @@ final class AddNewProductFromCatalogUseCase
                 'supCode' => $request->supCode,
             ]);
 
-            throw new BasketNotFoundException($request->userId);
+            throw new BasketNotFoundException($request->userId, [
+                'userId' => $request->userId,
+                'regionCode' => $request->regionCode,
+            ]);
         }
 
         return $shortBasket;

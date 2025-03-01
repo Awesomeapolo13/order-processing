@@ -20,21 +20,17 @@ class AddProductFromCatalogHandler implements CommandHandlerInterface
         private readonly BasketRepositoryInterface $basketRepository,
         private readonly ProductApiInterface $productApi,
         private readonly BasketItemFactory $basketItemFactory,
-        private readonly EventBusInterface $eventBus,
     ) {
     }
 
     public function __invoke(AddProductFromCatalogCommand $command): void
     {
-        /**
-         * ToDO: Нельзя добавлять продукт если:
-         * - нет корзины;
-         * - в корзине не установлен магазин (при корзине на самовывоз);
-         * - в корзине не установлен слот доставки (если корзина на доставку).
-         */
         $basket = $this->basketRepository->findActiveBasketByUserId($command->userId);
         if ($basket === null) {
-            throw new BasketNotFoundException($command->userId);
+            throw new BasketNotFoundException($command->userId, [
+                'userId' => $command->userId,
+                'region' => $command->region->getRegionCode(),
+            ]);
         }
 
         $product = $this->productApi->findProduct(
@@ -53,19 +49,5 @@ class AddProductFromCatalogHandler implements CommandHandlerInterface
         $basket->addBasketItem($basketItem);
         $basket->updateTimestamps();
         $this->basketRepository->save($basket);
-
-        // FixMe: Store event into the Aggregate
-        $this->eventBus->execute(
-            new ProductAddedToBasketFromCatalogEvent(
-                userId: $basket->getUserId(),
-                basketId: $basket->getId(),
-                basketItemId: $basketItem->getId(),
-                supCode: $command->supCode,
-                region: $basket->getRegion()->getRegionCode(),
-                weight: $command->weight,
-                quantity: $command->quantity,
-                isPack: $command->isPack,
-            )
-        );
     }
 }
