@@ -26,6 +26,12 @@ class AddProductFromCatalogHandler implements CommandHandlerInterface
 
     public function __invoke(AddProductFromCatalogCommand $command): void
     {
+        /**
+         * ToDO: Нельзя добавлять продукт если:
+         * - нет корзины;
+         * - в корзине не установлен магазин (при корзине на самовывоз);
+         * - в корзине не установлен слот доставки (если корзина на доставку).
+         */
         $basket = $this->basketRepository->findActiveBasketByUserId($command->userId);
         if ($basket === null) {
             throw new BasketNotFoundException($command->userId);
