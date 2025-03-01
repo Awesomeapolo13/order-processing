@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Application\Response;
 
-use DateTime;
-
 readonly class ShortBasketResponse
 {
     /**
@@ -15,7 +13,8 @@ readonly class ShortBasketResponse
         public int $id,
         public bool $isExpress,
         public bool $isDelivery,
-        public DateTime $orderDate,
+        public bool $hasAlco,
+        public \DateTimeImmutable $orderDate,
         public string $totalDiscountCost,
         public array $basketItems = [],
     ) {

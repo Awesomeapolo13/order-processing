@@ -29,3 +29,7 @@ services:
     App\Application\UseCase\GetFullBasketUseCase:
         arguments:
             $responseAssembler: '@App\Application\Assembler\Response\GetFullBasketResponseAssembler'
+
+    App\Application\Query\FindShortBasket\FindShortBasketQueryHandler:
+        arguments:
+            $shortBasketResponseAssembler: '@App\Application\Assembler\Response\ShortBasketResponseAssembler'

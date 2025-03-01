@@ -11,9 +11,6 @@ readonly class BasketItemShortResponse
         public string $supCode,
         public string $totalCost,
         public string $totalDiscountCost,
-        public string $weight,
-        public ?int $quantity,
-        public int $type,
     ) {
     }
 }
