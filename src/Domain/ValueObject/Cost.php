@@ -27,7 +27,7 @@ readonly class Cost
             return self::zero();
         }
 
-        $formattedCost = number_format((float) $cost, 2, '.', '');
+        $formattedCost = number_format((float)$cost, 2, '.', '');
 
         return new self($formattedCost);
     }
