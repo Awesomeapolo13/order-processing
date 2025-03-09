@@ -2,7 +2,7 @@
 
 ## Стек
 
-- Symfony 7.0;
+- Symfony 7.1;
 - Doctrine orm 3.1;
 - PHP-8.2.
 
