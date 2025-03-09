@@ -63,16 +63,6 @@ readonly class ProductQuantity
         return $productQuantity;
     }
 
-    public static function fromOrm(
-        ProductType $type,
-        ?int $quantity,
-        Weight $weight,
-        bool $isPack,
-        Weight $packWeight
-    ): self {
-        return new self($type, $quantity, $weight, $isPack, $packWeight);
-    }
-
     public static function fromProduct(
         ?int $quantity,
         ?string $weight,
