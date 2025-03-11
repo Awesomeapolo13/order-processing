@@ -7,8 +7,10 @@ namespace App\Domain\Entity;
 use App\Domain\Event\EventInterface;
 use App\Domain\Event\ProductAddedToBasketFromCatalogEvent;
 use App\Domain\Exception\EmptyBasketSetupDataException;
+use App\Domain\Factory\BasketItemFactory;
 use App\Domain\ValueObject\BasketType;
 use App\Domain\ValueObject\Cost;
+use App\Domain\ValueObject\ProductInterface;
 use App\Domain\ValueObject\Region;
 use App\Domain\ValueObject\Weight;
 use DateTimeImmutable;
@@ -225,8 +227,13 @@ class Basket
         return $this->basketItems;
     }
 
-    public function addBasketItem(BasketItem $basketItem): Basket
-    {
+    public function addProductFromCatalog(
+        ProductInterface $product,
+        ?int             $quantity,
+        ?string          $weight,
+        bool             $isPack,
+        BasketItemFactory $basketItemFactory,
+    ): void {
         if (
             $this->shopNum === null
             || $this->orderDate === null
@@ -240,17 +247,21 @@ class Basket
             ]);
         }
 
-        $supCode = $basketItem->getSupCode();
+        $supCode = $product->getSupCode();
         $isAlreadyExists = $this->basketItems->exists(
             function (BasketItem $basketItem) use ($supCode) {
                 return $basketItem->getSupCode() === $supCode;
             }
         );
 
-        if (!$isAlreadyExists || !$this->basketItems->contains($basketItem)) {
-            $this->basketItems->add($basketItem);
-            $basketItem->setBasket($this);
+        if ($isAlreadyExists) {
+            return;
         }
+
+        $basketItem = $basketItemFactory->createByProductFromCatalog($product, $quantity, $weight, $isPack);
+        $this->basketItems->add($basketItem);
+        $basketItem->setBasket($this);
+        $this->updateTimestamps();
 
         $this->domainEvents->add(
             new ProductAddedToBasketFromCatalogEvent(
@@ -264,8 +275,6 @@ class Basket
                 $basketItem->getQuantity()->isPack()
             )
         );
-
-        return $this;
     }
 
     public function removeBasketItem(BasketItem $basketItem): Basket
