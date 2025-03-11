@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Repository;
 
+use App\Application\Event\EventBusInterface;
 use App\Domain\Entity\Basket;
 use App\Domain\Repository\BasketRepositoryInterface;
 use DateTimeImmutable;
@@ -15,8 +16,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class DoctrineBasketRepository extends ServiceEntityRepository implements BasketRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        private readonly EventBusInterface $eventBus,
+        ManagerRegistry $registry
+    ) {
         parent::__construct($registry, Basket::class);
     }
 
@@ -57,5 +60,6 @@ class DoctrineBasketRepository extends ServiceEntityRepository implements Basket
     {
         $this->getEntityManager()->persist($basket);
         $this->getEntityManager()->flush();
+        $this->eventBus->execute($basket->releaseEvents());
     }
 }

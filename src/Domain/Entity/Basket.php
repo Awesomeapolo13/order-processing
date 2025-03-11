@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Entity;
 
+use App\Domain\Event\EventInterface;
+use App\Domain\Event\ProductAddedToBasketFromCatalogEvent;
+use App\Domain\Exception\EmptyBasketSetupDataException;
 use App\Domain\ValueObject\BasketType;
 use App\Domain\ValueObject\Cost;
 use App\Domain\ValueObject\Region;
@@ -23,6 +26,7 @@ class Basket
      * @var Collection<BasketItem>
      */
     private Collection $basketItems;
+    private Collection $domainEvents;
 
     public function __construct(
         private Region $region,
@@ -39,6 +43,7 @@ class Basket
         private ?int $shopNum = null,
     ) {
         $this->basketItems = new ArrayCollection();
+        $this->domainEvents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -222,10 +227,43 @@ class Basket
 
     public function addBasketItem(BasketItem $basketItem): Basket
     {
-        if (!$this->basketItems->contains($basketItem)) {
+        if (
+            $this->shopNum === null
+            || $this->orderDate === null
+            || ($this->type->isDelivery() && $this->delivery?->getSlot() === null)
+        ) {
+            throw new EmptyBasketSetupDataException([
+                'id' => $this->id,
+                'isDelivery' => $this->type->isDelivery(),
+                'shopNum' => $this->shopNum,
+                'orderDate' => $this->orderDate->format(DateTimeInterface::RFC3339),
+            ]);
+        }
+
+        $supCode = $basketItem->getSupCode();
+        $isAlreadyExists = $this->basketItems->exists(
+            function (BasketItem $basketItem) use ($supCode) {
+                return $basketItem->getSupCode() === $supCode;
+            }
+        );
+
+        if (!$isAlreadyExists || !$this->basketItems->contains($basketItem)) {
             $this->basketItems->add($basketItem);
             $basketItem->setBasket($this);
         }
+
+        $this->domainEvents->add(
+            new ProductAddedToBasketFromCatalogEvent(
+                $this->userId,
+                $this->region->getRegionCode(),
+                $this->id,
+                $basketItem->getId(),
+                $basketItem->getSupCode(),
+                $basketItem->getQuantity()->getQuantity(),
+                $basketItem->getQuantity()->getWeight()->getWeight(),
+                $basketItem->getQuantity()->isPack()
+            )
+        );
 
         return $this;
     }
@@ -251,6 +289,17 @@ class Basket
         return $this;
     }
 
+    /**
+     * @return EventInterface[]
+     */
+    public function releaseEvents(): array
+    {
+        $events = $this->domainEvents->toArray();
+        $this->domainEvents->clear();
+
+        return $events;
+    }
+
     public function markAsDeleted(): void
     {
         $this->deletedAt = new DateTimeImmutable();
@@ -264,5 +313,10 @@ class Basket
     public function updateTimestamps(): void
     {
         $this->updatedAt = new DateTimeImmutable();
+    }
+
+    protected function recordEvent(EventInterface $event): void
+    {
+        $this->domainEvents->add($event);
     }
 }

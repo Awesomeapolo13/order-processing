@@ -10,6 +10,5 @@ interface BasketRepositoryInterface
 {
     public function findActiveBasketByUserId(int $userId): ?Basket;
     public function setBasketDeleted(int $userId): void;
-
     public function save(Basket $basket): void;
 }

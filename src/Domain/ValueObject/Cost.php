@@ -8,15 +8,12 @@ use InvalidArgumentException;
 
 readonly class Cost
 {
+    private const RESULT_SCALE = 2;
+
     public function __construct(
         private string $cost,
     ) {
         $this->assertCost();
-    }
-
-    public function getCost(): string
-    {
-        return $this->cost;
     }
 
     public static function zero(): self
@@ -30,9 +27,26 @@ readonly class Cost
             return self::zero();
         }
 
-        $formattedCost = number_format((float) $cost, 2, '.', '');
+        $formattedCost = number_format((float)$cost, 2, '.', '');
 
         return new self($formattedCost);
+    }
+
+    public function getCost(): string
+    {
+        return $this->cost;
+    }
+
+    public function add(Cost $cost): self
+    {
+        $newCost = bcadd($this->cost, $cost->getCost(), self::RESULT_SCALE);
+
+        return self::fromString($newCost);
+    }
+
+    public function equals(Cost $cost): bool
+    {
+        return bccomp($this->cost, $cost->getCost(), self::RESULT_SCALE) === 0;
     }
 
     private function assertCost(): void
