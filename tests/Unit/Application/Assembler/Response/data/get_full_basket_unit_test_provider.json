@@ -1,0 +1,324 @@
+{
+  "Get full basket response assembling from basket entity with delivery and items": [
+    {
+      "id": 1,
+      "region" : {
+        "regionCode": 52
+      },
+      "type":  {
+        "isExpress": true,
+        "isDelivery": true,
+        "hasAlcohol": false
+      },
+      "orderDate": "2024-12-26T13:00:00.000+03:00",
+      "createdAt": "2024-12-26T09:00:00.000+03:00",
+      "updatedAt": "2024-12-26T10:00:00.000+03:00",
+      "slicingCost": {
+        "cost": "0.00"
+      },
+      "totalCost": {
+        "cost": "300.00"
+      },
+      "totalDiscountCost": {
+        "cost": "210.00"
+      },
+      "weight": {
+        "weight": "2.5"
+      },
+      "totalBonus": 100,
+      "userId": 10,
+      "shopNum": 20,
+      "delivery_id": 1,
+      "delivery": {
+        "id": 1,
+        "slot": {
+          "slotNumber": 12
+        },
+        "isFromUserShop": true,
+        "distance": {
+          "distance": "51.345",
+          "longDistance": true,
+          "longDuration": false
+        },
+        "deliveryCost": {
+          "cost": "100.00"
+        },
+        "deliveryDiscountCost": {
+          "cost": "0.00"
+        }
+      },
+      "basketItems": [
+        {
+          "id": 1,
+          "supCode": "7842940",
+          "perItemPrice": {
+            "price": "100.00"
+          },
+          "discountPrice": {
+            "price": "50.00"
+          },
+          "slicingCost": {
+            "cost": "0.00"
+          },
+          "totalCost": {
+            "cost": "300.00"
+          },
+          "totalDiscountCost": {
+            "cost": "210.00"
+          },
+          "isSlicing": false,
+          "weight": {
+            "weight": "1.000"
+          },
+          "quantity": 3,
+          "addedBonus": 100,
+          "isAvailableForOrder": true,
+          "createdAt": "2024-12-26T09:00:00.000+03:00",
+          "updatedAt": "2024-12-26T10:00:00.000+03:00"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "isExpress": true,
+      "isDelivery": true,
+      "orderDate": "2024-12-26T13:00:00.000+03:00",
+      "slicingCost": "0.00",
+      "totalCost": "300.00",
+      "totalDiscountCost": "210.00",
+      "weight": "2.5",
+      "totalBonus": 100,
+      "delivery": {
+        "slot": 12,
+        "isFromUserShop": true,
+        "distance": "51.345",
+        "deliveryCost": "100.00",
+        "deliveryDiscountCost": "0.00"
+      },
+      "basketItems": [
+        {
+          "id": 1,
+          "supCode": "7842940",
+          "perItemPrice": "100.00",
+          "discountPrice": "50.00",
+          "slicingCost": "0.00",
+          "totalCost": "300.00",
+          "totalDiscountCost": "210.00",
+          "isSlicing": false,
+          "weight": "1.000",
+          "quantity": 3,
+          "addedBonus": 100,
+          "isAvailableForOrder": true
+        }
+      ]
+    }
+  ],
+  "Get full basket response assembling from basket entity without delivery and items": [
+    {
+      "id": 1,
+      "region" : {
+        "regionCode": 52
+      },
+      "type":  {
+        "isExpress": true,
+        "isDelivery": false,
+        "hasAlcohol": false
+      },
+      "orderDate": "2024-12-26T13:00:00.000+03:00",
+      "createdAt": "2024-12-26T09:00:00.000+03:00",
+      "updatedAt": "2024-12-26T10:00:00.000+03:00",
+      "slicingCost": {
+        "cost": "0.00"
+      },
+      "totalCost": {
+        "cost": "300.00"
+      },
+      "totalDiscountCost": {
+        "cost": "210.00"
+      },
+      "weight": {
+        "weight": "2.5"
+      },
+      "totalBonus": 100,
+      "userId": 10,
+      "shopNum": 20,
+      "delivery_id": 1,
+      "delivery": null,
+      "basketItems": []
+    },
+    {
+      "id": 1,
+      "isExpress": true,
+      "isDelivery": false,
+      "orderDate": "2024-12-26T13:00:00.000+03:00",
+      "slicingCost": "0.00",
+      "totalCost": "300.00",
+      "totalDiscountCost": "210.00",
+      "weight": "2.5",
+      "totalBonus": 100,
+      "delivery": null,
+      "basketItems": []
+    }
+  ],
+  "Get full basket response assembling from basket entity with delivery, without items": [
+    {
+      "id": 1,
+      "region" : {
+        "regionCode": 52
+      },
+      "type":  {
+        "isExpress": true,
+        "isDelivery": true,
+        "hasAlcohol": false
+      },
+      "orderDate": "2024-12-26T13:00:00.000+03:00",
+      "createdAt": "2024-12-26T09:00:00.000+03:00",
+      "updatedAt": "2024-12-26T10:00:00.000+03:00",
+      "slicingCost": {
+        "cost": "0.00"
+      },
+      "totalCost": {
+        "cost": "300.00"
+      },
+      "totalDiscountCost": {
+        "cost": "210.00"
+      },
+      "weight": {
+        "weight": "2.5"
+      },
+      "totalBonus": 100,
+      "userId": 10,
+      "shopNum": 20,
+      "delivery_id": 1,
+      "delivery": {
+        "id": 1,
+        "slot": {
+          "slotNumber": 12
+        },
+        "isFromUserShop": true,
+        "distance": {
+          "distance": "51.345",
+          "longDistance": true,
+          "longDuration": false
+        },
+        "deliveryCost": {
+          "cost": "100.00"
+        },
+        "deliveryDiscountCost": {
+          "cost": "0.00"
+        }
+      },
+      "basketItems": []
+    },
+    {
+      "id": 1,
+      "isExpress": true,
+      "isDelivery": true,
+      "orderDate": "2024-12-26T13:00:00.000+03:00",
+      "slicingCost": "0.00",
+      "totalCost": "300.00",
+      "totalDiscountCost": "210.00",
+      "weight": "2.5",
+      "totalBonus": 100,
+      "delivery": {
+        "slot": 12,
+        "isFromUserShop": true,
+        "distance": "51.345",
+        "deliveryCost": "100.00",
+        "deliveryDiscountCost": "0.00"
+      },
+      "basketItems": []
+    }
+  ],
+  "Get full basket response assembling from basket entity without delivery and with items": [
+    {
+      "id": 1,
+      "region" : {
+        "regionCode": 52
+      },
+      "type":  {
+        "isExpress": true,
+        "isDelivery": true,
+        "hasAlcohol": false
+      },
+      "orderDate": "2024-12-26T13:00:00.000+03:00",
+      "createdAt": "2024-12-26T09:00:00.000+03:00",
+      "updatedAt": "2024-12-26T10:00:00.000+03:00",
+      "slicingCost": {
+        "cost": "0.00"
+      },
+      "totalCost": {
+        "cost": "300.00"
+      },
+      "totalDiscountCost": {
+        "cost": "210.00"
+      },
+      "weight": {
+        "weight": "2.5"
+      },
+      "totalBonus": 100,
+      "userId": 10,
+      "shopNum": 20,
+      "delivery_id": 1,
+      "delivery": null,
+      "basketItems": [
+        {
+          "id": 1,
+          "supCode": "7842940",
+          "perItemPrice": {
+            "price": "100.00"
+          },
+          "discountPrice": {
+            "price": "50.00"
+          },
+          "slicingCost": {
+            "cost": "0.00"
+          },
+          "totalCost": {
+            "cost": "300.00"
+          },
+          "totalDiscountCost": {
+            "cost": "210.00"
+          },
+          "isSlicing": false,
+          "weight": {
+            "weight": "1.000"
+          },
+          "quantity": 3,
+          "addedBonus": 100,
+          "isAvailableForOrder": true,
+          "createdAt": "2024-12-26T09:00:00.000+03:00",
+          "updatedAt": "2024-12-26T10:00:00.000+03:00"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "isExpress": true,
+      "isDelivery": true,
+      "orderDate": "2024-12-26T13:00:00.000+03:00",
+      "slicingCost": "0.00",
+      "totalCost": "300.00",
+      "totalDiscountCost": "210.00",
+      "weight": "2.5",
+      "totalBonus": 100,
+      "delivery": null,
+      "basketItems": [
+        {
+          "id": 1,
+          "supCode": "7842940",
+          "perItemPrice": "100.00",
+          "discountPrice": "50.00",
+          "slicingCost": "0.00",
+          "totalCost": "300.00",
+          "totalDiscountCost": "210.00",
+          "isSlicing": false,
+          "weight": "1.000",
+          "quantity": 3,
+          "addedBonus": 100,
+          "isAvailableForOrder": true
+        }
+      ]
+    }
+  ]
+}

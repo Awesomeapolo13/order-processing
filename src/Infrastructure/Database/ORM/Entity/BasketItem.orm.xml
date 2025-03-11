@@ -1,0 +1,45 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity
+            name="App\Domain\Entity\BasketItem"
+            table="basket_item"
+            repository-class="App\Infrastructure\Repository\DoctrineBasketItemRepository"
+    >
+
+        <id name="id" type="integer" length="11">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="supCode" column="sup_code" type="string"/>
+        <many-to-one field="basket" target-entity="App\Domain\Entity\Basket">
+            <join-column name="basket_id" referenced-column-name="id" nullable="false" on-delete="CASCADE"/>
+        </many-to-one>
+
+        <embedded name="perItemPrice" class="App\Domain\ValueObject\Price" column-prefix="per_item_"/>
+        <embedded name="discountPrice" class="App\Domain\ValueObject\Price" column-prefix="discount_"/>
+        <embedded name="slicingCost" class="App\Domain\ValueObject\Cost" column-prefix="slicing_"/>
+        <embedded name="totalCost" class="App\Domain\ValueObject\Cost" column-prefix="total_"/>
+        <embedded name="totalDiscountCost" class="App\Domain\ValueObject\Cost" column-prefix="total_discount_"/>
+        <field name="isSlicing" column="is_slicing" type="boolean">
+            <options>
+                <option name="default">false</option>
+            </options>
+        </field>
+        <embedded name="quantity" use-column-prefix="false" class="App\Domain\ValueObject\ProductQuantity"/>
+        <field name="addedBonus" column="added_bonus" type="integer" length="11">
+            <options>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="isAvailableForOrder" column="is_available_for_order" type="boolean">
+            <options>
+                <option name="default">true</option>
+            </options>
+        </field>
+        <field name="createdAt" column="created_at" type="datetime_immutable" length="11"/>
+        <field name="updatedAt" column="updated_at" type="datetime_immutable" length="11"/>
+    </entity>
+</doctrine-mapping>

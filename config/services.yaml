@@ -12,3 +12,24 @@ services:
             - '../src/Domain/Entity/'
             - '../src/Domain/ValueObject/'
             - '../src/Kernel.php'
+
+    _instanceof:
+        # all services implementing the CommandHandlerInterface
+        # will be registered on the command.bus bus
+        App\Application\Command\CommandHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: command.bus }
+
+        # while those implementing QueryHandlerInterface will be
+        # registered on the query.bus bus
+        App\Application\Query\QueryHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: query.bus }
+
+    App\Application\UseCase\GetFullBasketUseCase:
+        arguments:
+            $responseAssembler: '@App\Application\Assembler\Response\GetFullBasketResponseAssembler'
+
+    App\Application\Query\FindShortBasket\FindShortBasketQueryHandler:
+        arguments:
+            $shortBasketResponseAssembler: '@App\Application\Assembler\Response\ShortBasketResponseAssembler'

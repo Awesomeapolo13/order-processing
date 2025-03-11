@@ -1,0 +1,64 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity
+            name="App\Domain\Entity\Basket"
+            table="basket"
+            repository-class="App\Infrastructure\Repository\DoctrineBasketRepository"
+    >
+
+        <id name="id" type="integer" length="11">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="userId" column="user_id" type="integer" length="11" nullable="true"/>
+        <field name="shopNum" column="shop_num" type="integer" length="11" nullable="true"/>
+        <embedded name="region" use-column-prefix="false" class="App\Domain\ValueObject\Region"/>
+        <embedded name="type" use-column-prefix="false" class="App\Domain\ValueObject\BasketType"/>
+        <field name="orderDate" column="order_date" type="datetime"/>
+        <field name="createdAt" column="created_at" type="datetime_immutable"/>
+        <field name="updatedAt" column="updated_at" type="datetime_immutable"/>
+        <field name="deletedAt" column="deleted_at" type="datetime_immutable" nullable="true"/>
+        <embedded name="slicingCost" class="App\Domain\ValueObject\Cost" column-prefix="slicing_"/>
+        <embedded name="totalCost" class="App\Domain\ValueObject\Cost" column-prefix="total_"/>
+        <embedded name="totalDiscountCost" class="App\Domain\ValueObject\Cost" column-prefix="total_discount_"/>
+        <embedded name="weight" use-column-prefix="false" class="App\Domain\ValueObject\Weight"/>
+        <field name="totalBonus" column="total_bonus" type="integer" length="11">
+            <options>
+                <option name="default">0</option>
+            </options>
+        </field>
+        <field name="version" type="integer" version="true"/>
+
+        <one-to-one field="delivery" target-entity="App\Domain\Entity\BasketDelivery">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+            <join-column name="delivery_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </one-to-one>
+
+        <one-to-many field="basketItems" target-entity="App\Domain\Entity\BasketItem" mapped-by="basket">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="preRemove" method="markAsDeleted"/>
+            <lifecycle-callback type="preUpdate" method="updateTimestamps"/>
+        </lifecycle-callbacks>
+
+        <indexes>
+            <index name="UNIQ_ACTIVE_BASKET_IDX" columns="user_id">
+                <options>
+                    <option name="where">deleted_at IS NULL</option>
+                    <option name="unique">true</option>
+                </options>
+            </index>
+        </indexes>
+    </entity>
+</doctrine-mapping>

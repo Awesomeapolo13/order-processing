@@ -1,13 +1,11 @@
-version: "3.8"
-
 networks:
   order-processing:
     name: order-processing
     driver: bridge
 
 services:
-  php-fpm:
-    container_name: php-fpm
+  order-proc-fpm:
+    container_name: order-proc-fpm
     networks:
       - order-processing
     build:
@@ -23,8 +21,8 @@ services:
     volumes:
       - ./../../:/var/www/order-processing
 
-  nginx:
-    container_name: nginx
+  order-proc-nginx:
+    container_name: order-proc-nginx
     networks:
       - order-processing
     build:
@@ -41,14 +39,14 @@ services:
     volumes:
       - ./../../:/var/www/order-processing:rw
     depends_on:
-      - php-fpm
+      - order-proc-fpm
 
-  postgres:
-    container_name: postgres
+  order-proc-postgres:
+    container_name: order-proc-postgres
     networks:
       - order-processing
     build:
-      context: postgres
+      context: ./postgres
       dockerfile: ./Dockerfile
     ports:
       - ${POSTGRES_PORT}:5432
