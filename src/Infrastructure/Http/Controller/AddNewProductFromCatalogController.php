@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: '/api/v1/basket/add/catalog', name: 'app.basket.add')]
+#[Route(path: '/api/v1/basket/add/catalog', name: 'app.basket.catalog.add')]
 final class AddNewProductFromCatalogController extends AbstractController
 {
     public function __construct(
