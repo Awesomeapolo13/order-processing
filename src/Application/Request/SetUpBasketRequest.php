@@ -9,6 +9,7 @@ readonly class SetUpBasketRequest
     public function __construct(
         public int $regionCode,
         public int $userId,
+        public \DateTimeInterface $orderDate,
         public bool $isDelivery,
         public int $shopNumber,
         public ?int $slotNumber = null
