@@ -17,6 +17,9 @@ COPY ./.deployment/docker/php-fpm/xdebug.ini /usr/local/etc/php/conf.d/xdebug.in
 RUN apk add --no-cache libpq-dev \
     && docker-php-ext-install pdo_pgsql
 
+# Other libs
+RUN docker-php-ext-install bcmath
+
 ## Configure non-root user
 ARG PUID
 ENV PUID $PUID
