@@ -14,7 +14,22 @@ class DeliveryCostCalculator
     private const string LONG_DURATION_COST = '200.00';
     private const string LONG_DISTANCE_PER_KM_COST = '100.00';
 
-    public function calculateDeliveryCost(Cost $totalDiscountCost, Distance $distance): Cost
+    public function calculateDeliveryFactCost(Distance $distance): Cost
+    {
+        $cost = $this->getDefaultDeliveryCost();
+
+        if ($distance->isLongDistance()) {
+            $cost = $cost->add($this->getRemainingLongDistanceCost($distance));
+        }
+
+        if ($distance->isLongDuration()) {
+            $cost = $cost->add($this->getLongDurationCost());
+        }
+
+        return $cost;
+    }
+
+    public function calculateDeliveryCostWithDiscount(Cost $totalDiscountCost, Distance $distance): Cost
     {
         $cost = Cost::zero();
         $freeDeliveryThresholdCost = Cost::fromString(self::FREE_DELIVERY_COST_THRESHOLD);

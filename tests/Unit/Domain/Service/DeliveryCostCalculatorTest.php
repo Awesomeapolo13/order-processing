@@ -22,9 +22,9 @@ class DeliveryCostCalculatorTest extends KernelTestCase
     }
 
     #[DataProvider('provide')]
-    public function testCalculation(Cost $totalDiscountCost, Distance $distance, Cost $expectedCost): void
+    public function testCostWithDiscountCalculation(Cost $totalDiscountCost, Distance $distance, Cost $expectedCost): void
     {
-        $deliveryCost = $this->deliveryCostCalculator->calculateDeliveryCost($totalDiscountCost, $distance);
+        $deliveryCost = $this->deliveryCostCalculator->calculateDeliveryCostWithDiscount($totalDiscountCost, $distance);
 
         self::assertSame(
             $expectedCost->getCost(),

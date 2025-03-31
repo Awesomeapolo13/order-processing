@@ -44,6 +44,16 @@ readonly class Cost
         return self::fromString($newCost);
     }
 
+    public function subtract(Cost $cost): self
+    {
+        if ($this->lessThan($cost)) {
+            return self::zero();
+        }
+        $newCost = bcsub($this->cost, $cost->getCost(), self::RESULT_SCALE);
+
+        return self::fromString($newCost);
+    }
+
     public function equals(Cost $cost): bool
     {
         return bccomp($this->cost, $cost->getCost(), self::RESULT_SCALE) === 0;

@@ -28,6 +28,7 @@ class BasketItem
         private bool $isAvailableForOrder,
         private readonly ?DateTimeImmutable $createdAt,
         private ?DateTimeImmutable $updatedAt,
+        private bool $isAlcohol,
     ) {
     }
 
@@ -186,6 +187,18 @@ class BasketItem
     public function setUpdatedAt(?DateTimeImmutable $updatedAt): BasketItem
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function isAlcohol(): bool
+    {
+        return $this->isAlcohol;
+    }
+
+    public function setIsAlcohol(bool $isAlcohol): BasketItem
+    {
+        $this->isAlcohol = $isAlcohol;
 
         return $this;
     }

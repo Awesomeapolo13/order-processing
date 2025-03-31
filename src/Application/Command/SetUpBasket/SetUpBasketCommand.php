@@ -14,7 +14,9 @@ readonly class SetUpBasketCommand implements CommandInterface
         public \DateTimeInterface $orderDate,
         public bool $isDelivery,
         public int $shopNumber,
-        public ?int $slotNumber = null
+        public ?int $slotNumber = null,
+        public ?string $distance = null,
+        public ?bool $longDuration = null,
     ) {
     }
 }

@@ -6,3 +6,6 @@ services:
 
   App\Application\Assembler\Response\GetFullBasketResponseAssembler:
     public: true
+
+  App\Domain\Service\DeliveryCostCalculator:
+    public: true

@@ -11,8 +11,10 @@ readonly class SetUpBasketRequest
         public int $userId,
         public \DateTimeInterface $orderDate,
         public bool $isDelivery,
-        public int $shopNumber,
-        public ?int $slotNumber = null
+        public ?int $shopNumber,
+        public ?int $slotNumber = null,
+        public ?string $distance = null,
+        public ?bool $longDuration = null,
     ) {
     }
 }

@@ -41,5 +41,6 @@
         </field>
         <field name="createdAt" column="created_at" type="datetime_immutable" length="11"/>
         <field name="updatedAt" column="updated_at" type="datetime_immutable" length="11"/>
+        <field name="isAlcohol" column="is_alcohol" type="boolean"/>
     </entity>
 </doctrine-mapping>
