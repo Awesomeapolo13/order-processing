@@ -49,6 +49,16 @@ readonly class Cost
         return bccomp($this->cost, $cost->getCost(), self::RESULT_SCALE) === 0;
     }
 
+    public function moreThan(Cost $cost): bool
+    {
+        return bccomp($this->cost, $cost->getCost(), self::RESULT_SCALE) === 1;
+    }
+
+    public function lessThan(Cost $cost): bool
+    {
+        return bccomp($this->cost, $cost->getCost(), self::RESULT_SCALE) === -1;
+    }
+
     private function assertCost(): void
     {
         if (!preg_match('/^\d+\.\d{2}$/', $this->cost)) {
