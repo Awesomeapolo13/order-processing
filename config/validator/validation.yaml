@@ -1,0 +1,43 @@
+App\Application\Request\SetUpBasketRequest:
+  properties:
+    regionCode:
+      - NotNull:
+          message: 'Region code is required'
+
+    userId:
+      - NotNull:
+          message: 'User id required'
+
+    orderDate:
+      - NotNull:
+          message: 'Order date required'
+      - DateTime:
+          format: 'Y-m-d\TH:i:sP'
+          message: 'Incorrect date time format'
+      - LessThan:
+          value: now
+          message: 'Order date can not be in the past'
+
+    isDelivery:
+      - NotNull:
+          message: 'Region code is required'
+
+    shopNumber:
+      - Expression:
+          expression: "(this.isDelivery === false & this.shopNumber !== null) | (this.isDelivery === true & (this.shopNumber === null | this.shopNumber !== null))"
+          message: 'Shop number is required for pick up orders'
+
+    slotNumber:
+      - Expression:
+          expression: "(this.isDelivery === false & (this.slotNumber === null | this.slotNumber !== null)) | (this.isDelivery === true & this.shopNumber !== null)"
+          message: 'Slot number is required for delivery orders'
+
+    distance:
+      - Expression:
+          expression: "(this.isDelivery === false & (this.distance === null | this.distance !== null)) | (this.isDelivery === true & this.distance !== null)"
+          message: 'Distance parameter is required for delivery orders'
+
+    longDuration:
+      - Expression:
+          expression: "(this.isDelivery === false & (this.longDuration === null | this.longDuration !== null)) | (this.isDelivery === true & this.longDuration !== null)"
+          message: 'Long duration parameter is required for delivery orders'
