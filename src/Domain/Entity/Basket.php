@@ -267,7 +267,7 @@ class Basket
         $basketItem->setBasket($this);
         $this->updateTimestamps();
 
-        $this->domainEvents->add(
+        $this->recordEvent(
             new ProductAddedToBasketFromCatalogEvent(
                 $this->userId,
                 $this->region->getRegionCode(),
@@ -317,7 +317,7 @@ class Basket
         $this->shopNum = null;
         $this->delivery = $deliveryFactory->create($this->totalDiscountCost, $slot, $setUpData->isFromUserShop, $setUpData->distance);
 
-        $this->domainEvents->add(
+        $this->recordEvent(
             new BasketSettingsChangedEvent(
                 $this->userId,
                 $this->region->getRegionCode(),
