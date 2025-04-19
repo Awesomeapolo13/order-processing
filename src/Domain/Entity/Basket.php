@@ -284,7 +284,7 @@ class Basket
     public function setUpBasket(BasketSetUpDomainData $setUpData, BasketDeliveryFactory $deliveryFactory): void
     {
         $isDelivery = $setUpData->isDelivery;
-        $slot = $setUpData->slot;
+        $slot = $setUpData->deliverySlot;
         $shopNum = $setUpData->shopNumber;
 
         if ($isDelivery && $slot === null) {
