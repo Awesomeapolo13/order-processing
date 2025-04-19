@@ -11,7 +11,7 @@ readonly class SetUpBasketCommand implements CommandInterface
     public function __construct(
         public int $userId,
         public int $regionCode,
-        public \DateTimeInterface $orderDate,
+        public \DateTimeImmutable $orderDate,
         public bool $isDelivery,
         public int $shopNumber,
         public ?int $slotNumber = null,
