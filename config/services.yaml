@@ -41,3 +41,10 @@ services:
     App\Application\Query\FindShortBasket\FindShortBasketQueryHandler:
         arguments:
             $shortBasketResponseAssembler: '@App\Application\Assembler\Response\ShortBasketResponseAssembler'
+
+    # HTTP API
+    App\Infrastructure\Http\Api\SymfonyClientShopApi:
+        class: App\Infrastructure\Http\Api\SymfonyClientShopApi
+        arguments:
+            $validStatuses: [ 200 ]
+            $options: '%config_shop_api%'

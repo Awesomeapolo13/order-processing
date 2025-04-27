@@ -8,5 +8,5 @@ use App\Domain\ValueObject\ShopInterface;
 
 interface ShopApiInterface
 {
-    public function findShop(int $shopNumber): ?ShopInterface;
+    public function findShop(FindShopDTO $dto): ?ShopInterface;
 }
