@@ -13,16 +13,16 @@ class ShopAssembler
 {
     public function createShopFromArray(array $data): ShopInterface
     {
-        if (!isset($data['shopNumber'], $data['regionCode'], $data['openDateTime'], $data['closeDateTime'])) {
+        if (!isset($data['shopNumber'], $data['region'], $data['openTime'], $data['closeTime'])) {
             throw new InvalidShopDataException();
         }
 
         try {
             return new Shop(
                 (int)$data['shopNumber'],
-                new Region($data['regionCode']),
-                new \DateTimeImmutable($data['openDateTime']),
-                new \DateTimeImmutable($data['closeDateTime'])
+                new Region($data['region']),
+                new \DateTimeImmutable($data['openTime']),
+                new \DateTimeImmutable($data['closeTime'])
             );
         } catch (\DateMalformedStringException $exception) {
             throw new InvalidShopDataException();

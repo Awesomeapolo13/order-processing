@@ -22,10 +22,6 @@ class SymfonyHttpClient
 
     public function __construct(
         protected HttpClientInterface $httpClient,
-//        private int $timeout = self::DEFAULT_TIMEOUT_IN_SECONDS,
-//        private ?string $version = null,
-//        private ?string $apiKey = null,
-//        private array $endpoints = [],
         protected array $options = [],
         protected array $validStatuses = [],
     ) {
@@ -33,6 +29,7 @@ class SymfonyHttpClient
 
     public function sendRequest(string $url, string $method, array $data = []): array
     {
+        $data = $method === self::METHOD_GET ? ['query' => $data] : ['data' => $data];
         $data = array_merge($this->options, $data);
         try {
             $response = $this->getResponse($url, $method, $data);
@@ -43,8 +40,8 @@ class SymfonyHttpClient
                 $result = [$response->getContent(false)];
             }
 
-            if (in_array($response->getStatusCode(), $this->validStatuses, true)) {
-                throw new HttpStatusException($response->getStatusCode(), $result['message'], $result);
+            if (!in_array($response->getStatusCode(), $this->validStatuses, true)) {
+                throw new HttpStatusException($response->getStatusCode(), $result['message'] ?? '', $result);
             }
 
             $result = [
