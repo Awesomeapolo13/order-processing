@@ -15,6 +15,8 @@ services:
         PUID: ${PUID}
         PGID: ${PGID}
         INSTALL_XDEBUG: ${INSTALL_XDEBUG}
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
     environment:
       PUID: ${PUID}
       PGID: ${PGID}
