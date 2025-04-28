@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Application\Command\SetUpBasket;
 
+use App\Application\Api\Shop\FindShopDTO;
+use App\Application\Api\Shop\ShopApiInterface;
 use App\Application\Command\CommandHandlerInterface;
 use App\Domain\Command\BasketSetUpDomainData;
 use App\Domain\Exception\BasketNotFoundException;
@@ -19,6 +21,7 @@ class SetUpBasketCommandHandler implements CommandHandlerInterface
     public function __construct(
         private readonly BasketRepositoryInterface $basketRepository,
         private readonly BasketDeliveryFactory $basketDeliveryFactory,
+        private readonly ShopApiInterface $shopApi,
     ) {
     }
 
@@ -27,14 +30,16 @@ class SetUpBasketCommandHandler implements CommandHandlerInterface
         /**
          * @TODO:
          *  1) Реализовать API для получения слота
-         *  2) Реализовать API для получения магазина (или модуль)
-         *  3) Составить логику определения, является ли корзина экспресс (через статический фабричный метод)
+         *  2) Составить логику определения, является ли корзина экспресс (через статический фабричный метод)
          */
 
         $region = new Region($command->regionCode);
-        $deliverySLot = new DeliverySlot($command->slotNumber);
-        $distance = Distance::create($command->distance, $command->longDuration);
+        $deliverySLot = isset($command->slotNumber) ? new DeliverySlot($command->slotNumber) : null;
+        $distance = isset($command->distance, $command->longDuration)
+            ? Distance::create($command->distance, $command->longDuration)
+            : null;
         $orderDate = OrderDate::create($command->orderDate);
+        $shop = $this->shopApi->findShop(new FindShopDTO($command->shopNumber, (string)$command->regionCode));
         $basket = $this->basketRepository->findActiveBasketByUserId($command->userId);
 
         if ($basket === null) {
@@ -47,7 +52,7 @@ class SetUpBasketCommandHandler implements CommandHandlerInterface
         $setUpData = new BasketSetUpDomainData(
             isDelivery: $command->isDelivery,
             orderDate: $orderDate,
-            shopNumber: $command->shopNumber,
+            shop: $shop,
             deliverySlot: $deliverySLot,
             distance: $distance,
             isFromUserShop: false

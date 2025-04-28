@@ -285,13 +285,13 @@ class Basket
     {
         $isDelivery = $setUpData->isDelivery;
         $slot = $setUpData->deliverySlot;
-        $shopNum = $setUpData->shopNumber;
+        $shop = $setUpData->shop;
 
         if ($isDelivery && $slot === null) {
             throw new EmptyBasketSetupDataException([]);
         }
 
-        if (!$isDelivery && $shopNum === null) {
+        if (!$isDelivery && $shop === null) {
             throw new WrongPickUpSetUpDataException();
         }
 
@@ -299,7 +299,7 @@ class Basket
             && $this->basketItems->findFirst(static fn (BasketItem $basketItem) => $basketItem->isAlcohol()) !== null;
 
         $type = BasketType::create($isDelivery, $hasAlcohol, $setUpData->orderDate->getOrderDate());
-        $this->shopNum = $shopNum;
+        $this->shopNum = $shop->getNumber();
         $this->type = $type;
 //        ToDO: Replace orderDate to value object
         $this->orderDate = $setUpData->orderDate->getOrderDate();
