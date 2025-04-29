@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Application\Command\SetUpBasket;
 
+use App\Application\Api\DeliverySlot\DeliverySlotApiInterface;
+use App\Application\Api\DeliverySlot\FindDeliverySlotDTO;
 use App\Application\Api\Shop\FindShopDTO;
 use App\Application\Api\Shop\ShopApiInterface;
 use App\Application\Command\CommandHandlerInterface;
@@ -22,6 +24,7 @@ class SetUpBasketCommandHandler implements CommandHandlerInterface
         private readonly BasketRepositoryInterface $basketRepository,
         private readonly BasketDeliveryFactory $basketDeliveryFactory,
         private readonly ShopApiInterface $shopApi,
+        private readonly DeliverySlotApiInterface $deliverySlotApi,
     ) {
     }
 
@@ -29,17 +32,16 @@ class SetUpBasketCommandHandler implements CommandHandlerInterface
     {
         /**
          * @TODO:
-         *  1) Реализовать API для получения слота
-         *  2) Составить логику определения, является ли корзина экспресс (через статический фабричный метод)
+         *  1) Составить логику определения, является ли корзина экспресс (через статический фабричный метод)
          */
 
         $region = new Region($command->regionCode);
-        $deliverySLot = isset($command->slotNumber) ? new DeliverySlot($command->slotNumber) : null;
         $distance = isset($command->distance, $command->longDuration)
             ? Distance::create($command->distance, $command->longDuration)
             : null;
         $orderDate = OrderDate::create($command->orderDate);
         $shop = $this->shopApi->findShop(new FindShopDTO($command->shopNumber, (string)$command->regionCode));
+        $deliverySLot = $this->deliverySlotApi->findSlot(new FindDeliverySlotDTO($command->slotNumber, (string)$command->regionCode));
         $basket = $this->basketRepository->findActiveBasketByUserId($command->userId);
 
         if ($basket === null) {
