@@ -13,7 +13,6 @@ use App\Domain\Command\BasketSetUpDomainData;
 use App\Domain\Exception\BasketNotFoundException;
 use App\Domain\Factory\BasketDeliveryFactory;
 use App\Domain\Repository\BasketRepositoryInterface;
-use App\Domain\ValueObject\DeliverySlot;
 use App\Domain\ValueObject\Distance;
 use App\Domain\ValueObject\OrderDate;
 use App\Domain\ValueObject\Region;
