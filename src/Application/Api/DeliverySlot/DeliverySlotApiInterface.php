@@ -8,5 +8,5 @@ use App\Domain\ValueObject\DeliverySlot;
 
 interface DeliverySlotApiInterface
 {
-    public function findSlot(int $slotNumber): ?DeliverySlot;
+    public function findSlot(FindDeliverySlotDTO $dto): ?DeliverySlot;
 }

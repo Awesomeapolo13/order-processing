@@ -48,3 +48,9 @@ services:
         arguments:
             $validStatuses: [ 200 ]
             $options: '%config_shop_api%'
+
+    App\Infrastructure\Http\Api\SymfonyClientDeliverySlotApi:
+        class: App\Infrastructure\Http\Api\SymfonyClientDeliverySlotApi
+        arguments:
+            $validStatuses: [ 200 ]
+            $options: '%config_delivery_slop_api%'
