@@ -32,6 +32,6 @@ class SymfonyClientShopApi extends SymfonyHttpClient implements ShopApiInterface
        ];
        $result = $this->sendRequest(self::FIND_SHOP_API_ENDPOINT, self::METHOD_GET, $data)['data'];
 
-       return $this->shopAssembler->createShopFromArray($result);
+       return $result !== [] ? $this->shopAssembler->createShopFromArray($result) : null;
     }
 }
