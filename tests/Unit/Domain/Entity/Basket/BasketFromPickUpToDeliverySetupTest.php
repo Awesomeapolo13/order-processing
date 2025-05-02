@@ -8,6 +8,7 @@ use App\Domain\Command\BasketSetUpDomainData;
 use App\Domain\Entity\Basket;
 use App\Domain\Entity\BasketDelivery;
 use App\Domain\Event\BasketSettingsChangedEvent;
+use App\Domain\Exception\WrongDeliverySetUpDataException;
 use App\Domain\Factory\BasketDeliveryFactory;
 use App\Domain\ValueObject\BasketType;
 use App\Domain\ValueObject\Cost;
@@ -23,6 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 class BasketFromPickUpToDeliverySetupTest extends TestCase
 {
+    private const string WRONG_DELIVERY_SET_UP_DATA = 'Invalid data for basket setup: no delivery slot';
     private Basket $basket;
     private BasketDeliveryFactory|MockObject $basketDeliveryFactory;
 
@@ -99,5 +101,58 @@ class BasketFromPickUpToDeliverySetupTest extends TestCase
         $events = $basket->releaseEvents();
         $this::assertCount(1, $events);
         $this::assertInstanceOf(BasketSettingsChangedEvent::class, $events[0], 'Wrong domain event type');
+    }
+
+    public function testWrongDeliverySetUpDataExceptionEmptySlotAndDistance(): void
+    {
+        $domainData = new BasketSetUpDomainData(
+            isDelivery: true,
+            orderDate: OrderDate::create(new DateTimeImmutable('now +6 hours')),
+            shop: null,
+            distance: null,
+            deliverySlot: null,
+            isFromUserShop:  true,
+        );
+
+        $this->expectException(WrongDeliverySetUpDataException::class);
+        $this->expectExceptionMessage(self::WRONG_DELIVERY_SET_UP_DATA);
+
+        $this->basket->setUpBasket($domainData, $this->basketDeliveryFactory);
+    }
+
+    public function testWrongDeliverySetUpDataExceptionEmptySlot(): void
+    {
+        $distance = Distance::create('20.000', false);
+        $domainData = new BasketSetUpDomainData(
+            isDelivery: true,
+            orderDate: OrderDate::create(new DateTimeImmutable('now +6 hours')),
+            shop: null,
+            distance: $distance,
+            deliverySlot: null,
+            isFromUserShop:  true,
+        );
+
+        $this->expectException(WrongDeliverySetUpDataException::class);
+        $this->expectExceptionMessage(self::WRONG_DELIVERY_SET_UP_DATA);
+
+        $this->basket->setUpBasket($domainData, $this->basketDeliveryFactory);
+    }
+
+    public function testWrongDeliverySetUpDataExceptionEmptyDistance(): void
+    {
+        $slot = new DeliverySlot(11);
+        $domainData = new BasketSetUpDomainData(
+            isDelivery: true,
+            orderDate: OrderDate::create(new DateTimeImmutable('now +6 hours')),
+            shop: null,
+            distance: null,
+            deliverySlot: $slot,
+            isFromUserShop:  true,
+        );
+
+        $this->expectException(WrongDeliverySetUpDataException::class);
+        $this->expectExceptionMessage(self::WRONG_DELIVERY_SET_UP_DATA);
+
+        $this->basket->setUpBasket($domainData, $this->basketDeliveryFactory);
     }
 }

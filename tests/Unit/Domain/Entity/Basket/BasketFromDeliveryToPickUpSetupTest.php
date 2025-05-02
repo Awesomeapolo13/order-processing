@@ -9,6 +9,7 @@ use App\Domain\Command\BasketSetUpDomainData;
 use App\Domain\Entity\Basket;
 use App\Domain\Entity\BasketDelivery;
 use App\Domain\Event\BasketSettingsChangedEvent;
+use App\Domain\Exception\WrongPickUpSetUpDataException;
 use App\Domain\Factory\BasketDeliveryFactory;
 use App\Domain\ValueObject\BasketType;
 use App\Domain\ValueObject\Cost;
@@ -24,6 +25,7 @@ use PHPUnit\Framework\TestCase;
 
 class BasketFromDeliveryToPickUpSetupTest extends TestCase
 {
+    private const string WRONG_PICK_UP_SET_UP_DATA = 'Invalid data for basket setup: no shop number';
     private Basket $basket;
     private BasketDeliveryFactory|MockObject $basketDeliveryFactory;
 
@@ -94,5 +96,22 @@ class BasketFromDeliveryToPickUpSetupTest extends TestCase
         $events = $basket->releaseEvents();
         $this::assertCount(1, $events);
         $this::assertInstanceOf(BasketSettingsChangedEvent::class, $events[0], 'Wrong domain event type');
+    }
+
+    public function testWrongPickUpSetUpDataExceptionEmptyShop(): void
+    {
+        $domainData = new BasketSetUpDomainData(
+            isDelivery: false,
+            orderDate: OrderDate::create(new DateTimeImmutable('now +6 hours')),
+            shop: null,
+            distance: null,
+            deliverySlot: null,
+            isFromUserShop:  true,
+        );
+
+        $this->expectException(WrongPickUpSetUpDataException::class);
+        $this->expectExceptionMessage(self::WRONG_PICK_UP_SET_UP_DATA);
+
+        $this->basket->setUpBasket($domainData, $this->basketDeliveryFactory);
     }
 }
