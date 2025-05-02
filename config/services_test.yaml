@@ -9,3 +9,5 @@ services:
 
   App\Domain\Service\DeliveryCostCalculator:
     public: true
+  App\Domain\Factory\BasketDeliveryFactory:
+    public: true

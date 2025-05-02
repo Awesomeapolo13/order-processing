@@ -8,7 +8,8 @@ use App\Domain\Command\BasketSetUpDomainData;
 use App\Domain\Event\BasketSettingsChangedEvent;
 use App\Domain\Event\EventInterface;
 use App\Domain\Event\ProductAddedToBasketFromCatalogEvent;
-use App\Domain\Exception\EmptyBasketSetupDataException;
+use App\Domain\Exception\WrongDeliveryBasketSetUpDataException;
+use App\Domain\Exception\WrongDeliverySetUpDataException;
 use App\Domain\Exception\WrongPickUpSetUpDataException;
 use App\Domain\Factory\BasketDeliveryFactory;
 use App\Domain\Factory\BasketItemFactory;
@@ -288,34 +289,32 @@ class Basket
         $shop = $setUpData->shop;
 
         if ($isDelivery && $slot === null) {
-            throw new EmptyBasketSetupDataException([]);
+            throw new WrongDeliverySetUpDataException(['isDelivery' => $isDelivery, 'slot' => $slot]);
         }
 
         if (!$isDelivery && $shop === null) {
-            throw new WrongPickUpSetUpDataException();
+            throw new WrongPickUpSetUpDataException(['shop' => $shop]);
         }
 
         $hasAlcohol = !$isDelivery
             && $this->basketItems->findFirst(static fn (BasketItem $basketItem) => $basketItem->isAlcohol()) !== null;
 
         $type = BasketType::create($isDelivery, $hasAlcohol, $setUpData->orderDate->getOrderDate());
-        $this->shopNum = $shop->getNumber();
+        $this->shopNum = $shop?->getNumber();
         $this->type = $type;
 //        ToDO: Replace orderDate to value object
         $this->orderDate = $setUpData->orderDate->getOrderDate();
 
-        if (!$isDelivery) {
+        if ($isDelivery) {
+            $this->shopNum = null;
+            $this->delivery = $deliveryFactory->create($this->totalDiscountCost, $slot, $setUpData->isFromUserShop, $setUpData->distance);
+        } else {
             $delivery = $this->delivery;
             $this->totalCost = $this->totalDiscountCost->subtract($delivery->getDeliveryCost());
             $this->totalDiscountCost = $this->totalDiscountCost->subtract($delivery->getDeliveryDiscountCost());
             $this->delivery = null;
             $this->updateTimestamps();
-
-            return;
         }
-
-        $this->shopNum = null;
-        $this->delivery = $deliveryFactory->create($this->totalDiscountCost, $slot, $setUpData->isFromUserShop, $setUpData->distance);
 
         $this->recordEvent(
             new BasketSettingsChangedEvent(
