@@ -269,14 +269,14 @@ class Basket
 
         $this->recordEvent(
             new ProductAddedToBasketFromCatalogEvent(
-                $this->userId,
-                $this->region->getRegionCode(),
-                $this->id,
-                $basketItem->getId(),
-                $basketItem->getSupCode(),
-                $basketItem->getQuantity()->getQuantity(),
-                $basketItem->getQuantity()->getWeight()->getWeight(),
-                $basketItem->getQuantity()->isPack()
+                userId: $this->userId,
+                region: $this->region->getRegionCode(),
+                basketId: $this->id,
+                basketItemId: $basketItem->getId(),
+                supCode: $basketItem->getSupCode(),
+                quantity: $basketItem->getPieceQuantity(),
+                weight: $basketItem->getWeight()->getWeight(),
+                isPack: $basketItem->getQuantity()->isPack()
             )
         );
     }

@@ -7,6 +7,7 @@ namespace App\Domain\Entity;
 use App\Domain\ValueObject\Cost;
 use App\Domain\ValueObject\Price;
 use App\Domain\ValueObject\ProductQuantity;
+use App\Domain\ValueObject\Weight;
 use DateTimeImmutable;
 
 class BasketItem
@@ -141,6 +142,16 @@ class BasketItem
     public function getQuantity(): ProductQuantity
     {
         return $this->quantity;
+    }
+
+    public function getPieceQuantity(): ?int
+    {
+        return $this->quantity->getQuantity();
+    }
+
+    public function getWeight(): Weight
+    {
+        return $this->quantity->getWeight();
     }
 
     public function setQuantity(ProductQuantity $quantity): BasketItem

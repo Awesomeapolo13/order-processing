@@ -57,18 +57,18 @@ class GetFullBasketResponseAssembler implements ResponseAssemblerInterface
     private function createBasketItem(BasketItem $basketItem): BasketItemFullResponse
     {
         return new BasketItemFullResponse(
-            $basketItem->getId(),
-            $basketItem->getSupCode(),
-            $basketItem->getPerItemPrice()->getPrice(),
-            $basketItem->getDiscountPrice()->getPrice(),
-            $basketItem->getSlicingCost()->getCost(),
-            $basketItem->getTotalCost()->getCost(),
-            $basketItem->getTotalDiscountCost()->getCost(),
-            $basketItem->isSlicing(),
-            $basketItem->getWeight()->getWeight(),
-            $basketItem->getQuantity(),
-            $basketItem->getAddedBonus(),
-            $basketItem->isAvailableForOrder(),
+            id: $basketItem->getId(),
+            supCode: $basketItem->getSupCode(),
+            perItemPrice: $basketItem->getPerItemPrice()->getPrice(),
+            discountPrice: $basketItem->getDiscountPrice()->getPrice(),
+            slicingCost: $basketItem->getSlicingCost()->getCost(),
+            totalCost: $basketItem->getTotalCost()->getCost(),
+            totalDiscountCost: $basketItem->getTotalDiscountCost()->getCost(),
+            isSlicing: $basketItem->isSlicing(),
+            weight: $basketItem->getWeight()->getWeight(),
+            quantity: $basketItem->getPieceQuantity(),
+            addedBonus: $basketItem->getAddedBonus(),
+            isAvailableForOrder: $basketItem->isAvailableForOrder(),
         );
     }
 }
