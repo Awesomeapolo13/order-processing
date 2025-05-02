@@ -11,7 +11,7 @@ readonly class SetUpBasketRequest
         public int $userId,
         public string $orderDate,
         public bool $isDelivery,
-        public ?int $shopNumber,
+        public ?int $shopNumber = null,
         public ?int $slotNumber = null,
         public ?string $distance = null,
         public ?bool $longDuration = null,

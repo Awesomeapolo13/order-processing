@@ -13,7 +13,7 @@ readonly class SetUpBasketCommand implements CommandInterface
         public int $regionCode,
         public \DateTimeImmutable $orderDate,
         public bool $isDelivery,
-        public int $shopNumber,
+        public ?int $shopNumber = null,
         public ?int $slotNumber = null,
         public ?string $distance = null,
         public ?bool $longDuration = null,

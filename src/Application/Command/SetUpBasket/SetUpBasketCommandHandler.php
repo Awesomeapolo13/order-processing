@@ -29,17 +29,12 @@ class SetUpBasketCommandHandler implements CommandHandlerInterface
 
     public function __invoke(SetUpBasketCommand $command): void
     {
-        /**
-         * @TODO:
-         *  1) Составить логику определения, является ли корзина экспресс (через статический фабричный метод)
-         */
-
         $region = new Region($command->regionCode);
         $distance = isset($command->distance, $command->longDuration)
             ? Distance::create($command->distance, $command->longDuration)
             : null;
         $orderDate = OrderDate::create($command->orderDate);
-        $shop = $this->shopApi->findShop(new FindShopDTO($command->shopNumber, (string)$command->regionCode));
+        $shop = isset($command->shopNumber) ? $this->shopApi->findShop(new FindShopDTO($command->shopNumber, (string)$command->regionCode)) : null;
         $deliverySLot = $this->deliverySlotApi->findSlot(new FindDeliverySlotDTO($command->slotNumber, (string)$command->regionCode));
         $basket = $this->basketRepository->findActiveBasketByUserId($command->userId);
 
