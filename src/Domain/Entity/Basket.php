@@ -288,7 +288,7 @@ class Basket
         $slot = $setUpData->deliverySlot;
         $shop = $setUpData->shop;
 
-        if ($isDelivery && $slot === null) {
+        if ($isDelivery && ($slot === null || $setUpData->distance === null)) {
             throw new WrongDeliverySetUpDataException(['isDelivery' => $isDelivery, 'slot' => $slot]);
         }
 
