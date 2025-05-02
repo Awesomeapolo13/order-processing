@@ -82,55 +82,55 @@ class SetUpBasketValidationTest extends WebTestCase
         $pastDate = (new \DateTime())->modify('-1 day')->format('Y-m-d\TH:i:sP');
 
         return [
-            "Empty orderDate" => [
+            'Empty orderDate' => [
                 [
-                    "regionCode" => 77,
-                    "userId" => 3,
-                    "isDelivery" => false,
-                    "shopNumber" => 3,
+                    'regionCode' => 77,
+                    'userId' => 3,
+                    'isDelivery' => false,
+                    'shopNumber' => 3,
                 ],
                 [
-                    "title" => "Incorrect request data",
-                    "errors" => [
+                    'title' => 'Incorrect request data',
+                    'errors' => [
                         [
-                            "name" => "orderDate",
-                            "message" => "This value should be of type string.",
+                            'name' => 'orderDate',
+                            'message' => 'This value should be of type string.',
                         ],
                     ],
                 ],
             ],
-            "Wrong orderDate type" => [
+            'Wrong orderDate type' => [
                 [
-                    "regionCode" => 77,
-                    "userId" => 3,
-                    "orderDate" => 777,
-                    "isDelivery" => false,
-                    "shopNumber" => 3,
+                    'regionCode' => 77,
+                    'userId' => 3,
+                    'orderDate' => 777,
+                    'isDelivery' => false,
+                    'shopNumber' => 3,
                 ],
                 [
-                    "title" => "Incorrect request data",
-                    "errors" => [
+                    'title' => 'Incorrect request data',
+                    'errors' => [
                         [
-                            "name" => "orderDate",
-                            "message" => "This value should be of type string.",
+                            'name' => 'orderDate',
+                            'message' => 'This value should be of type string.',
                         ],
                     ],
                 ],
             ],
-            "Wrong orderDate format" => [
+            'Wrong orderDate format' => [
                 [
-                    "regionCode" => 77,
-                    "userId" => 3,
-                    "orderDate" => (new \DateTime())->modify('+1 day')->format('Y-m-d'),
-                    "isDelivery" => false,
-                    "shopNumber" => 3,
+                    'regionCode' => 77,
+                    'userId' => 3,
+                    'orderDate' => (new \DateTime())->modify('+1 day')->format('Y-m-d'),
+                    'isDelivery' => false,
+                    'shopNumber' => 3,
                 ],
                 [
-                    "title" => "Incorrect request data",
-                    "errors" => [
+                    'title' => 'Incorrect request data',
+                    'errors' => [
                         [
-                            "name" => "orderDate",
-                            "message" => "Incorrect date time format.",
+                            'name' => 'orderDate',
+                            'message' => 'Incorrect date time format.',
                         ],
                     ],
                 ],
