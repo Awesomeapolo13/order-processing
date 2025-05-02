@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Functional\Validation;
+namespace Functional\SetUpBasket\Validation;
 
 use App\Tests\Tools\TestDataSerializerTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
