@@ -7,7 +7,7 @@ namespace App\Application\Command\CreateBasket;
 use App\Application\Command\CommandInterface;
 use App\Domain\ValueObject\Region;
 
-readonly class CreateBasketCommand  implements CommandInterface
+readonly class CreateBasketCommand implements CommandInterface
 {
     public function __construct(
         public int $userId,

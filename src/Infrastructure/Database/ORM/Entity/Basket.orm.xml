@@ -50,6 +50,7 @@
         <lifecycle-callbacks>
             <lifecycle-callback type="preRemove" method="markAsDeleted"/>
             <lifecycle-callback type="preUpdate" method="updateTimestamps"/>
+            <lifecycle-callback type="postLoad" method="initializeDomainEvents"/>
         </lifecycle-callbacks>
 
         <indexes>

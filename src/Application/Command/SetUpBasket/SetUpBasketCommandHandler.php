@@ -13,9 +13,11 @@ use App\Domain\Command\BasketSetUpDomainData;
 use App\Domain\Exception\BasketNotFoundException;
 use App\Domain\Factory\BasketDeliveryFactory;
 use App\Domain\Repository\BasketRepositoryInterface;
+use App\Domain\ValueObject\DeliverySlot;
 use App\Domain\ValueObject\Distance;
 use App\Domain\ValueObject\OrderDate;
 use App\Domain\ValueObject\Region;
+use App\Domain\ValueObject\ShopInterface;
 
 class SetUpBasketCommandHandler implements CommandHandlerInterface
 {
@@ -34,8 +36,8 @@ class SetUpBasketCommandHandler implements CommandHandlerInterface
             ? Distance::create($command->distance, $command->longDuration)
             : null;
         $orderDate = OrderDate::create($command->orderDate);
-        $shop = isset($command->shopNumber) ? $this->shopApi->findShop(new FindShopDTO($command->shopNumber, (string)$command->regionCode)) : null;
-        $deliverySLot = $this->deliverySlotApi->findSlot(new FindDeliverySlotDTO($command->slotNumber, (string)$command->regionCode));
+        $shop = $this->findShop($command->shopNumber, $command->regionCode);
+        $deliverySLot = $this->findSlot($command->slotNumber, $command->regionCode);
         $basket = $this->basketRepository->findActiveBasketByUserId($command->userId);
 
         if ($basket === null) {
@@ -54,5 +56,19 @@ class SetUpBasketCommandHandler implements CommandHandlerInterface
             isFromUserShop: false
         );
         $basket->setUpBasket($setUpData, $this->basketDeliveryFactory);
+    }
+
+    private function findSlot(?int $slotNumber, int $regionCode): ?DeliverySlot
+    {
+        return isset($slotNumber)
+            ? $this->deliverySlotApi->findSlot(new FindDeliverySlotDTO($slotNumber, (string)$regionCode))
+            : null;
+    }
+
+    private function findShop(?int $shopNumber, int $regionCode): ?ShopInterface
+    {
+        return isset($shopNumber)
+            ? $this->shopApi->findShop(new FindShopDTO($shopNumber, (string)$regionCode))
+            : null;
     }
 }

@@ -72,7 +72,9 @@ class UpdateBasketHandler implements CommandHandlerInterface
                 $basket = $this->recreateBasketWithNewRegion($userId, $region);
             }
 
-            $this->updateCosts($basket);
+            if (!$basket->getBasketItems()->isEmpty()) {
+                $this->updateCosts($basket);
+            }
 
             $this->entityManager->flush();
             $this->entityManager->commit();

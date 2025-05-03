@@ -50,7 +50,7 @@ class Basket
         private ?int $shopNum = null,
     ) {
         $this->basketItems = new ArrayCollection();
-        $this->domainEvents = new ArrayCollection();
+        $this->initializeDomainEvents();
     }
 
     public function getId(): ?int
@@ -307,12 +307,14 @@ class Basket
 
         if ($isDelivery) {
             $this->shopNum = null;
-            $this->delivery = $deliveryFactory->create($this->totalDiscountCost, $slot, $setUpData->isFromUserShop, $setUpData->distance);
+            $this->setDelivery($deliveryFactory->create($this->totalDiscountCost, $slot, $setUpData->isFromUserShop, $setUpData->distance));
         } else {
             $delivery = $this->delivery;
-            $this->totalCost = $this->totalDiscountCost->subtract($delivery->getDeliveryCost());
-            $this->totalDiscountCost = $this->totalDiscountCost->subtract($delivery->getDeliveryDiscountCost());
-            $this->delivery = null;
+            if ($delivery !== null) {
+                $this->totalCost = $this->totalDiscountCost->subtract($delivery->getDeliveryCost());
+                $this->totalDiscountCost = $this->totalDiscountCost->subtract($delivery->getDeliveryDiscountCost());
+                $this->setDelivery(null);
+            }
             $this->updateTimestamps();
         }
 
@@ -354,6 +356,11 @@ class Basket
         $this->domainEvents->clear();
 
         return $events;
+    }
+
+    public function initializeDomainEvents(): void
+    {
+        $this->domainEvents = new ArrayCollection();
     }
 
     public function markAsDeleted(): void
