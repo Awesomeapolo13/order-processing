@@ -1,0 +1,264 @@
+{
+  "Empty region": [
+    {
+      "userId": 3,
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": false,
+      "shopNumber": 3
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "regionCode",
+          "message": "This value should be of type int."
+        }
+      ]
+    }
+  ],
+  "Wrong region type": [
+    {
+      "regionCode": "77",
+      "userId": 3,
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": false,
+      "shopNumber": 3
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "regionCode",
+          "message": "This value should be of type int."
+        }
+      ]
+    }
+  ],
+  "Wrong region code": [
+    {
+      "regionCode": 500,
+      "userId": 3,
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": false,
+      "shopNumber": 3
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "regionCode",
+          "message": "Unknown region 500."
+        }
+      ]
+    }
+  ],
+  "Empty userId": [
+    {
+      "regionCode": 77,
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": false,
+      "shopNumber": 3
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "userId",
+          "message": "This value should be of type int."
+        }
+      ]
+    }
+  ],
+  "Wrong userId type": [
+    {
+      "regionCode": 77,
+      "userId": "3",
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": false,
+      "shopNumber": 3
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "userId",
+          "message": "This value should be of type int."
+        }
+      ]
+    }
+  ],
+  "Empty shopNumber on pick up": [
+    {
+      "regionCode": 77,
+      "userId": 3,
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": false
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "shopNumber",
+          "message": "Required if isDelivery is false."
+        }
+      ]
+    }
+  ],
+  "Wrong shopNumber type": [
+    {
+      "regionCode": 77,
+      "userId": 3,
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": false,
+      "shopNumber": "3"
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "shopNumber",
+          "message": "This value should be of type int|null."
+        }
+      ]
+    }
+  ],
+  "Empty slotNumber if is delivery": [
+    {
+      "regionCode": 77,
+      "userId": 3,
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": true,
+      "distance": "30.000",
+      "longDuration": false
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "slotNumber",
+          "message": "Slot number is required for delivery orders."
+        }
+      ]
+    }
+  ],
+  "Wrong slotNumber type": [
+    {
+      "regionCode": 77,
+      "userId": 3,
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": true,
+      "slotNumber": "10",
+      "distance": "30.000",
+      "longDuration": false
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "slotNumber",
+          "message": "This value should be of type int|null."
+        }
+      ]
+    }
+  ],
+  "Empty distance if is delivery": [
+    {
+      "regionCode": 77,
+      "userId": 3,
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": true,
+      "slotNumber": 10,
+      "longDuration": false
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "distance",
+          "message": "Distance parameter is required for delivery orders."
+        }
+      ]
+    }
+  ],
+  "Wrong distance type": [
+    {
+      "regionCode": 77,
+      "userId": 3,
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": true,
+      "slotNumber": 10,
+      "distance": 30.000,
+      "longDuration": false
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "distance",
+          "message": "This value should be of type null|string."
+        }
+      ]
+    }
+  ],
+  "Empty longDuration if is delivery": [
+    {
+      "regionCode": 77,
+      "userId": 3,
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": true,
+      "slotNumber": 10,
+      "distance": "30.000"
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "longDuration",
+          "message": "Long duration parameter is required for delivery orders."
+        }
+      ]
+    }
+  ],
+  "Wrong longDuration type": [
+    {
+      "regionCode": 77,
+      "userId": 3,
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": true,
+      "slotNumber": 10,
+      "distance": "30.000",
+      "longDuration": "false"
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "longDuration",
+          "message": "This value should be of type bool|null."
+        }
+      ]
+    }
+  ],
+  "Validation with several parameters: empty distance, longDuration": [
+    {
+      "regionCode": 77,
+      "userId": 3,
+      "orderDate": "2025-04-12T14:30:00+03:00",
+      "isDelivery": true,
+      "slotNumber": 10
+    },
+    {
+      "title": "Incorrect request data",
+      "errors": [
+        {
+          "name": "distance",
+          "message": "Distance parameter is required for delivery orders."
+        },
+        {
+          "name": "longDuration",
+          "message": "Long duration parameter is required for delivery orders."
+        }
+      ]
+    }
+  ]
+}

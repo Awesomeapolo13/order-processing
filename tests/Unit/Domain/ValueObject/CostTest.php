@@ -10,6 +10,9 @@ use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * ToDo: Add tests for operations between costs
+ */
 class CostTest extends KernelTestCase
 {
     private const string CREATE_SUCCESS_COST_FROM_CONSTRUCTOR_PROVIDER_FILE_NAME = 'create_success_cost_from_constructor_test_provider.json';

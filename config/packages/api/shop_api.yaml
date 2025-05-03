@@ -1,0 +1,9 @@
+parameters:
+  config_shop_api:
+    base_url: '%env(SHOP_API_URL)%'
+    timeout: 30
+    version: 'v1'
+    headers:
+      Content-Type: application/json
+    endpoints:
+      shop: '/shop'

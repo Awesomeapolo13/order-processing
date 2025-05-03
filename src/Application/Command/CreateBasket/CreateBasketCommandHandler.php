@@ -8,7 +8,7 @@ use App\Application\Command\CommandHandlerInterface;
 use App\Domain\Factory\BasketFactory;
 use App\Domain\Repository\BasketRepositoryInterface;
 
-class CreateBasketHandler implements CommandHandlerInterface
+class CreateBasketCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private readonly BasketFactory $basketFactory,

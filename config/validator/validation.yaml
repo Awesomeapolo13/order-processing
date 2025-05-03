@@ -1,0 +1,32 @@
+App\Application\Request\SetUpBasketRequest:
+  properties:
+    regionCode:
+      - Choice:
+          message: 'Unknown region {{ value }}.'
+          callback: [App\Domain\Enum\RegionCodeEnum, 'values']
+
+    orderDate:
+      - DateTime:
+          format: 'Y-m-d\TH:i:sP'
+          message: 'Incorrect date time format.'
+      - App\Infrastructure\Service\Validation\Constraint\OrderDate\OrderDateOnlyInFuture: ~
+
+    shopNumber:
+      - Expression:
+          expression: "(this.isDelivery === false & this.shopNumber !== null) | (this.isDelivery === true & (this.shopNumber === null | this.shopNumber !== null))"
+          message: 'Required if isDelivery is false.'
+
+    slotNumber:
+      - Expression:
+          expression: "(this.isDelivery === false & (this.slotNumber === null | this.slotNumber !== null)) | (this.isDelivery === true & this.slotNumber !== null)"
+          message: 'Slot number is required for delivery orders.'
+
+    distance:
+      - Expression:
+          expression: "(this.isDelivery === false & (this.distance === null | this.distance !== null)) | (this.isDelivery === true & this.distance !== null)"
+          message: 'Distance parameter is required for delivery orders.'
+
+    longDuration:
+      - Expression:
+          expression: "(this.isDelivery === false & (this.longDuration === null | this.longDuration !== null)) | (this.isDelivery === true & this.longDuration !== null)"
+          message: 'Long duration parameter is required for delivery orders.'

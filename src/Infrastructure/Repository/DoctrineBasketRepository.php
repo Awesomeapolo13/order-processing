@@ -60,6 +60,6 @@ class DoctrineBasketRepository extends ServiceEntityRepository implements Basket
     {
         $this->getEntityManager()->persist($basket);
         $this->getEntityManager()->flush();
-        $this->eventBus->execute($basket->releaseEvents());
+        $this->eventBus->execute(...$basket->releaseEvents());
     }
 }

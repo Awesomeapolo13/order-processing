@@ -7,8 +7,6 @@ namespace App\Application\Command\AddProductFromCatalog;
 use App\Application\Api\Product\FindProductDTO;
 use App\Application\Api\Product\ProductApiInterface;
 use App\Application\Command\CommandHandlerInterface;
-use App\Application\Event\EventBusInterface;
-use App\Domain\Event\ProductAddedToBasketFromCatalogEvent;
 use App\Domain\Exception\BasketNotFoundException;
 use App\Domain\Exception\ProductNotFoundException;
 use App\Domain\Factory\BasketItemFactory;
@@ -44,10 +42,7 @@ class AddProductFromCatalogHandler implements CommandHandlerInterface
         if ($product === null) {
             throw new ProductNotFoundException($command->supCode);
         }
-
-        $basketItem = $this->basketItemFactory->createByProductFromCatalog($product, $command->quantity, $command->weight, $command->isPack);
-        $basket->addBasketItem($basketItem);
-        $basket->updateTimestamps();
+        $basket->addProductFromCatalog($product, $command->quantity, $command->weight, $command->isPack, $this->basketItemFactory);
         $this->basketRepository->save($basket);
     }
 }

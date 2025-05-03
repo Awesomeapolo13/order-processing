@@ -6,13 +6,13 @@ namespace App\Domain\ValueObject;
 
 readonly class Distance
 {
-    private bool $longDistance;
+    public const int LONG_DISTANCE = 50;
 
-    public function __construct(
+    private function __construct(
         private string $distance,
         private bool $longDuration,
+        private bool $longDistance,
     ) {
-        $this->longDistance = (int)$this->distance > 50;
     }
 
     public function getDistance(): string
@@ -28,5 +28,14 @@ readonly class Distance
     public function isLongDistance(): bool
     {
         return $this->longDistance;
+    }
+
+    public static function create(string $distance, bool $longDuration): self
+    {
+        return new self(
+            distance: $distance,
+            longDuration: $longDuration,
+            longDistance: (int)$distance > self::LONG_DISTANCE
+        );
     }
 }

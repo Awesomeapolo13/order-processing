@@ -7,6 +7,7 @@ namespace App\Domain\Entity;
 use App\Domain\ValueObject\Cost;
 use App\Domain\ValueObject\Price;
 use App\Domain\ValueObject\ProductQuantity;
+use App\Domain\ValueObject\Weight;
 use DateTimeImmutable;
 
 class BasketItem
@@ -28,6 +29,7 @@ class BasketItem
         private bool $isAvailableForOrder,
         private readonly ?DateTimeImmutable $createdAt,
         private ?DateTimeImmutable $updatedAt,
+        private bool $isAlcohol,
     ) {
     }
 
@@ -142,6 +144,16 @@ class BasketItem
         return $this->quantity;
     }
 
+    public function getPieceQuantity(): ?int
+    {
+        return $this->quantity->getQuantity();
+    }
+
+    public function getWeight(): Weight
+    {
+        return $this->quantity->getWeight();
+    }
+
     public function setQuantity(ProductQuantity $quantity): BasketItem
     {
         $this->quantity = $quantity;
@@ -186,6 +198,18 @@ class BasketItem
     public function setUpdatedAt(?DateTimeImmutable $updatedAt): BasketItem
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function isAlcohol(): bool
+    {
+        return $this->isAlcohol;
+    }
+
+    public function setIsAlcohol(bool $isAlcohol): BasketItem
+    {
+        $this->isAlcohol = $isAlcohol;
 
         return $this;
     }

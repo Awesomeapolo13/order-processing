@@ -1,0 +1,11 @@
+parameters:
+  config_shop_api:
+    base_uri: '%env(SHOP_API_URL)%'
+    timeout: 30
+    headers:
+      Content-Type: application/json
+  config_delivery_slop_api:
+    base_uri: '%env(SHOP_API_URL)%'
+    timeout: 30
+    headers:
+      Content-Type: application/json

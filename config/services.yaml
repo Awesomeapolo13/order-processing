@@ -26,6 +26,14 @@ services:
             tags:
                 - { name: messenger.message_handler, bus: query.bus }
 
+    # Middlewares
+    App\Infrastructure\Middleware\ExceptionFormatterMiddleware:
+        arguments:
+            $env: '%kernel.environment%'
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
+    # Usecases
     App\Application\UseCase\GetFullBasketUseCase:
         arguments:
             $responseAssembler: '@App\Application\Assembler\Response\GetFullBasketResponseAssembler'
@@ -33,3 +41,16 @@ services:
     App\Application\Query\FindShortBasket\FindShortBasketQueryHandler:
         arguments:
             $shortBasketResponseAssembler: '@App\Application\Assembler\Response\ShortBasketResponseAssembler'
+
+    # HTTP API
+    App\Infrastructure\Http\Api\SymfonyClientShopApi:
+        class: App\Infrastructure\Http\Api\SymfonyClientShopApi
+        arguments:
+            $validStatuses: [ 200 ]
+            $options: '%config_shop_api%'
+
+    App\Infrastructure\Http\Api\SymfonyClientDeliverySlotApi:
+        class: App\Infrastructure\Http\Api\SymfonyClientDeliverySlotApi
+        arguments:
+            $validStatuses: [ 200 ]
+            $options: '%config_delivery_slop_api%'

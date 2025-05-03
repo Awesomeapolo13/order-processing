@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace App\Domain\Entity;
 
+use App\Domain\Command\BasketSetUpDomainData;
+use App\Domain\Event\BasketSettingsChangedEvent;
 use App\Domain\Event\EventInterface;
 use App\Domain\Event\ProductAddedToBasketFromCatalogEvent;
-use App\Domain\Exception\EmptyBasketSetupDataException;
+use App\Domain\Exception\WrongDeliveryBasketSetUpDataException;
+use App\Domain\Exception\WrongDeliverySetUpDataException;
+use App\Domain\Exception\WrongPickUpSetUpDataException;
+use App\Domain\Factory\BasketDeliveryFactory;
+use App\Domain\Factory\BasketItemFactory;
 use App\Domain\ValueObject\BasketType;
 use App\Domain\ValueObject\Cost;
+use App\Domain\ValueObject\ProductInterface;
 use App\Domain\ValueObject\Region;
 use App\Domain\ValueObject\Weight;
 use DateTimeImmutable;
@@ -43,7 +50,7 @@ class Basket
         private ?int $shopNum = null,
     ) {
         $this->basketItems = new ArrayCollection();
-        $this->domainEvents = new ArrayCollection();
+        $this->initializeDomainEvents();
     }
 
     public function getId(): ?int
@@ -225,8 +232,13 @@ class Basket
         return $this->basketItems;
     }
 
-    public function addBasketItem(BasketItem $basketItem): Basket
-    {
+    public function addProductFromCatalog(
+        ProductInterface $product,
+        ?int             $quantity,
+        ?string          $weight,
+        bool             $isPack,
+        BasketItemFactory $basketItemFactory,
+    ): void {
         if (
             $this->shopNum === null
             || $this->orderDate === null
@@ -240,32 +252,78 @@ class Basket
             ]);
         }
 
-        $supCode = $basketItem->getSupCode();
+        $supCode = $product->getSupCode();
         $isAlreadyExists = $this->basketItems->exists(
             function (BasketItem $basketItem) use ($supCode) {
                 return $basketItem->getSupCode() === $supCode;
             }
         );
 
-        if (!$isAlreadyExists || !$this->basketItems->contains($basketItem)) {
-            $this->basketItems->add($basketItem);
-            $basketItem->setBasket($this);
+        if ($isAlreadyExists) {
+            return;
         }
 
-        $this->domainEvents->add(
+        $basketItem = $basketItemFactory->createByProductFromCatalog($product, $quantity, $weight, $isPack);
+        $this->basketItems->add($basketItem);
+        $basketItem->setBasket($this);
+        $this->updateTimestamps();
+
+        $this->recordEvent(
             new ProductAddedToBasketFromCatalogEvent(
-                $this->userId,
-                $this->region->getRegionCode(),
-                $this->id,
-                $basketItem->getId(),
-                $basketItem->getSupCode(),
-                $basketItem->getQuantity()->getQuantity(),
-                $basketItem->getQuantity()->getWeight()->getWeight(),
-                $basketItem->getQuantity()->isPack()
+                userId: $this->userId,
+                region: $this->region->getRegionCode(),
+                basketId: $this->id,
+                basketItemId: $basketItem->getId(),
+                supCode: $basketItem->getSupCode(),
+                quantity: $basketItem->getPieceQuantity(),
+                weight: $basketItem->getWeight()->getWeight(),
+                isPack: $basketItem->getQuantity()->isPack()
             )
         );
+    }
 
-        return $this;
+    public function setUpBasket(BasketSetUpDomainData $setUpData, BasketDeliveryFactory $deliveryFactory): void
+    {
+        $isDelivery = $setUpData->isDelivery;
+        $slot = $setUpData->deliverySlot;
+        $shop = $setUpData->shop;
+
+        if ($isDelivery && ($slot === null || $setUpData->distance === null)) {
+            throw new WrongDeliverySetUpDataException(['isDelivery' => $isDelivery, 'slot' => $slot]);
+        }
+
+        if (!$isDelivery && $shop === null) {
+            throw new WrongPickUpSetUpDataException(['shop' => $shop]);
+        }
+
+        $hasAlcohol = !$isDelivery
+            && $this->basketItems->findFirst(static fn (BasketItem $basketItem) => $basketItem->isAlcohol()) !== null;
+
+        $type = BasketType::create($isDelivery, $hasAlcohol, $setUpData->orderDate->getOrderDate());
+        $this->shopNum = $shop?->getNumber();
+        $this->type = $type;
+//        ToDO: Replace orderDate to value object
+        $this->orderDate = $setUpData->orderDate->getOrderDate();
+
+        if ($isDelivery) {
+            $this->shopNum = null;
+            $this->setDelivery($deliveryFactory->create($this->totalDiscountCost, $slot, $setUpData->isFromUserShop, $setUpData->distance));
+        } else {
+            $delivery = $this->delivery;
+            if ($delivery !== null) {
+                $this->totalCost = $this->totalDiscountCost->subtract($delivery->getDeliveryCost());
+                $this->totalDiscountCost = $this->totalDiscountCost->subtract($delivery->getDeliveryDiscountCost());
+                $this->setDelivery(null);
+            }
+            $this->updateTimestamps();
+        }
+
+        $this->recordEvent(
+            new BasketSettingsChangedEvent(
+                $this->userId,
+                $this->region->getRegionCode(),
+            )
+        );
     }
 
     public function removeBasketItem(BasketItem $basketItem): Basket
@@ -298,6 +356,11 @@ class Basket
         $this->domainEvents->clear();
 
         return $events;
+    }
+
+    public function initializeDomainEvents(): void
+    {
+        $this->domainEvents = new ArrayCollection();
     }
 
     public function markAsDeleted(): void
