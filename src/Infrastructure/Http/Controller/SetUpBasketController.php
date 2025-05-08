@@ -20,7 +20,8 @@ final class SetUpBasketController extends AbstractController
     }
 
     public function __invoke(
-        #[MapRequestPayload] SetUpBasketRequest $request,
+        #[MapRequestPayload]
+        SetUpBasketRequest $request,
     ): Response {
         ($this->setUpBasketUseCase)($request);
 

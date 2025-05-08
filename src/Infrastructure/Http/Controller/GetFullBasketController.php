@@ -23,7 +23,8 @@ final class GetFullBasketController extends AbstractController
      * @throws \Throwable
      */
     public function __invoke(
-        #[MapQueryString] GetFullBasketRequest $request,
+        #[MapQueryString]
+        GetFullBasketRequest $request,
     ): Response {
         return $this->json(['basket' => ($this->getFullBasketUseCase)($request)]);
     }

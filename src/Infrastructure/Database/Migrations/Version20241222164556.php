@@ -17,7 +17,8 @@ final class Version20241222164556 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE SEQUENCE basket_item_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE basket_item (
+        $this->addSql(
+            'CREATE TABLE basket_item (
                                 id INT NOT NULL, 
                                 basket_id INT NOT NULL, 
                                 sup_code VARCHAR(255) NOT NULL, 
