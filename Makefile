@@ -49,6 +49,10 @@ com_r:
 	${DOCKER_EXEC_PHP} composer require
 test:
 	${DOCKER_EXEC_PHP} php bin/phpunit
+unit_test:
+	${DOCKER_EXEC_PHP} composer ut
+func_test:
+	${DOCKER_EXEC_PHP} composer ft
 cache:
 	${DOCKER_EXEC_PHP} php bin/console cache:clear
 m_run:
@@ -60,7 +64,7 @@ init:
 
 # Static analyzers
 
-cs-check:
-	${DOCKER_EXEC_PHP} vendor/bin/php-cs-fixer fix --dry-run --diff
-cs-fix:
-	${DOCKER_EXEC_PHP} vendor/bin/php-cs-fixer fix
+cs_check:
+	${DOCKER_EXEC_PHP} composer cs-check
+cs_fix:
+	${DOCKER_EXEC_PHP} composer cs-fix
