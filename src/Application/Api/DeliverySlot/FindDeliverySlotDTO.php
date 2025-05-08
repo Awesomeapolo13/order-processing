@@ -8,7 +8,7 @@ readonly class FindDeliverySlotDTO
 {
     public function __construct(
         public int $slotNumber,
-        public string $regionCode
+        public string $regionCode,
     ) {
     }
 }

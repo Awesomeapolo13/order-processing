@@ -13,7 +13,7 @@ readonly class Shop implements ShopInterface
         private int $shopNumber,
         private Region $region,
         private \DateTimeImmutable $openDateTime,
-        private \DateTimeImmutable $closeDateTime
+        private \DateTimeImmutable $closeDateTime,
     ) {
     }
 

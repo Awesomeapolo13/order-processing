@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Domain\ValueObject;
 
 use App\Domain\Enum\ProductType;
-use InvalidArgumentException;
 
 readonly class ProductQuantity
 {
@@ -70,19 +69,19 @@ readonly class ProductQuantity
         ProductInterface $product,
     ): self {
         if ($product->isPiece() && $quantity === null) {
-            throw new InvalidArgumentException('Quantity is required for piece products');
+            throw new \InvalidArgumentException('Quantity is required for piece products');
         }
 
         if ($product->isWeight() && $weight === null) {
-            throw new InvalidArgumentException('Weight is required for weight products');
+            throw new \InvalidArgumentException('Weight is required for weight products');
         }
 
         if ($product->isMixed() && ($quantity === null || $weight === null)) {
-            throw new InvalidArgumentException('Both quantity and weight are required for mixed products');
+            throw new \InvalidArgumentException('Both quantity and weight are required for mixed products');
         }
 
         if ($isPack && !$product->hasPackWeight()) {
-            throw new InvalidArgumentException('Product does not support pack purchase');
+            throw new \InvalidArgumentException('Product does not support pack purchase');
         }
 
         return match (true) {
@@ -151,37 +150,37 @@ readonly class ProductQuantity
     private function assertPieceTypeQuantity(): void
     {
         if ($this->quantity === null || $this->quantity < 1) {
-            throw new InvalidArgumentException('Piece product must be a positive integer');
+            throw new \InvalidArgumentException('Piece product must be a positive integer');
         }
 
         if (!$this->weight->isNull() && $this->isPack) {
-            throw new InvalidArgumentException('Piece product can not have weight unless it is pack');
+            throw new \InvalidArgumentException('Piece product can not have weight unless it is pack');
         }
 
         if ($this->isPack && $this->packWeight->isNull()) {
-            throw new InvalidArgumentException('Piece product with pack must have pack weight');
+            throw new \InvalidArgumentException('Piece product with pack must have pack weight');
         }
     }
 
     private function assertWeightTypeQuantity(): void
     {
         if ($this->weight->isNull()) {
-            throw new InvalidArgumentException('Weight product must have weight');
+            throw new \InvalidArgumentException('Weight product must have weight');
         }
 
         if ($this->quantity !== null) {
-            throw new InvalidArgumentException('Weight product cannot have quantity');
+            throw new \InvalidArgumentException('Weight product cannot have quantity');
         }
     }
 
     private function assertMixedTypeQuantity(): void
     {
         if ($this->quantity === null || $this->quantity <= 0) {
-            throw new InvalidArgumentException('Mixed product must have positive quantity');
+            throw new \InvalidArgumentException('Mixed product must have positive quantity');
         }
 
         if ($this->weight->isNull()) {
-            throw new InvalidArgumentException('Mixed product must have weight');
+            throw new \InvalidArgumentException('Mixed product must have weight');
         }
     }
 }

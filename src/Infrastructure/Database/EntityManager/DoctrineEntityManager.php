@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infrastructure\Database\EntityManager;
 
 use App\Application\Database\EntityManager\TransactionalEntityManagerInterface;
-use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface as DoctrineEntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 
@@ -24,7 +23,7 @@ class DoctrineEntityManager implements TransactionalEntityManagerInterface
     /**
      * @throws OptimisticLockException
      */
-    public function lock(object $entity, int $lockMode, DateTimeInterface|int|null $lockVersion = null): void
+    public function lock(object $entity, int $lockMode, \DateTimeInterface|int|null $lockVersion = null): void
     {
         $this->entityManager->lock($entity, $lockMode, $lockVersion);
     }

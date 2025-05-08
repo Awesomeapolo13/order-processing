@@ -67,6 +67,6 @@ class SymfonyHttpClient
      */
     protected function getResponse(string $url, string $method, array $data = []): ResponseInterface
     {
-        return  $this->httpClient->request($method, $url, $data);
+        return $this->httpClient->request($method, $url, $data);
     }
 }

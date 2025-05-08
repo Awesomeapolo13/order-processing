@@ -14,7 +14,6 @@ use App\Application\Request\GetFullBasketRequest;
 use App\Application\Response\GetFullBasketResponse;
 use App\Domain\ValueObject\Region;
 use Psr\Log\LoggerInterface;
-use Throwable;
 
 final class GetFullBasketUseCase
 {
@@ -27,7 +26,7 @@ final class GetFullBasketUseCase
     }
 
     /**
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function __invoke(GetFullBasketRequest $dto): GetFullBasketResponse
     {

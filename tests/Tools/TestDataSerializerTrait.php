@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Tools;
 
-use JsonException;
-use ReflectionException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 trait TestDataSerializerTrait
 {
     /**
-     * @throws ReflectionException
-     * @throws JsonException
+     * @throws \ReflectionException
+     * @throws \JsonException
      */
     private function deserializeJSONTestData(
         string $dataFile,
         ?string $inputClassName,
         ?string $expectedClassName,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
     ): array {
         $result = [];
         $data = $this->extractJSON($dataFile);
@@ -34,7 +32,7 @@ trait TestDataSerializerTrait
     }
 
     /**
-     * @throws JsonException
+     * @throws \JsonException
      */
     public function deserializeSimpleJSON(string $dataFile): array
     {
@@ -52,12 +50,12 @@ trait TestDataSerializerTrait
     }
 
     /**
-     * @throws JsonException
+     * @throws \JsonException
      */
     private function extractJSON(string $dataFile): array
     {
         $jsonContent = file_get_contents($dataFile);
 
-        return (array)json_decode($jsonContent, true, 512, JSON_THROW_ON_ERROR);
+        return (array) json_decode($jsonContent, true, 512, JSON_THROW_ON_ERROR);
     }
 }

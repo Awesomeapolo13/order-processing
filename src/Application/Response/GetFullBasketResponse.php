@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Application\Response;
 
-use DateTime;
-
 readonly class GetFullBasketResponse
 {
     // ToDo: Need to add an information about shop address and other
@@ -16,7 +14,7 @@ readonly class GetFullBasketResponse
         public int $id,
         public bool $isExpress,
         public bool $isDelivery,
-        public DateTime $orderDate,
+        public \DateTime $orderDate,
         public string $slicingCost,
         public string $totalCost,
         public string $totalDiscountCost,

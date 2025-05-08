@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Unit\Domain\ValueObject;
 
 use App\Domain\ValueObject\OrderDate;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -32,7 +31,7 @@ class OrderDateTest extends KernelTestCase
     #[DataProvider('wrongOrderDateProvider')]
     public function testWrongCreateOrderDate(string $orderDate): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Order date cannot be before current date ' . $orderDate);
 
         OrderDate::create(new \DateTimeImmutable($orderDate));

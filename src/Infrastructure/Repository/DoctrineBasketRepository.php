@@ -7,7 +7,6 @@ namespace App\Infrastructure\Repository;
 use App\Application\Event\EventBusInterface;
 use App\Domain\Entity\Basket;
 use App\Domain\Repository\BasketRepositoryInterface;
-use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,7 +17,7 @@ class DoctrineBasketRepository extends ServiceEntityRepository implements Basket
 {
     public function __construct(
         private readonly EventBusInterface $eventBus,
-        ManagerRegistry $registry
+        ManagerRegistry $registry,
     ) {
         parent::__construct($registry, Basket::class);
     }
@@ -50,8 +49,8 @@ class DoctrineBasketRepository extends ServiceEntityRepository implements Basket
                 . ' WHERE b.userId = :userId AND b.deletedAt IS NULL'
             )
             ->setParameters([
-                'now' => new DateTimeImmutable(),
-                'userId' => $userId
+                'now' => new \DateTimeImmutable(),
+                'userId' => $userId,
             ])
             ->execute();
     }

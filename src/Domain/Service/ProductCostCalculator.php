@@ -8,7 +8,6 @@ use App\Domain\ValueObject\Cost;
 use App\Domain\ValueObject\Price;
 use App\Domain\ValueObject\ProductQuantity;
 use App\Domain\ValueObject\Weight;
-use InvalidArgumentException;
 
 class ProductCostCalculator
 {
@@ -23,19 +22,17 @@ class ProductCostCalculator
         Price $priceByQuant,
         ProductQuantity $quantity,
         ?Weight $weightQuant,
-        ?Weight $averageWeight
+        ?Weight $averageWeight,
     ): Cost {
         if ($weightQuant === null && ($quantity->isWeight() || $quantity->isMixed())) {
-            throw new InvalidArgumentException('Weight of one quant of the product need to be provided for weight product');
+            throw new \InvalidArgumentException('Weight of one quant of the product need to be provided for weight product');
         }
 
         if ($averageWeight === null && $quantity->isMixed()) {
-            throw new InvalidArgumentException(
-                'Average weight must be provided for mixed type products'
-            );
+            throw new \InvalidArgumentException('Average weight must be provided for mixed type products');
         }
 
-        $result = match(true) {
+        $result = match (true) {
             // Для штучного товара: цена * количество
             $quantity->isPiece() => $this->calculateForPiece($priceByQuant, $quantity->getQuantity()),
             // Для весового товара: цена * количество квантов
@@ -54,7 +51,7 @@ class ProductCostCalculator
     {
         return bcmul(
             $priceByQuant->getPrice(),
-            (string)$totalQuantity,
+            (string) $totalQuantity,
             self::COST_CALC_SCALE
         );
     }
@@ -79,7 +76,7 @@ class ProductCostCalculator
     {
         return bcmul(
             bcmul(
-                (string)$totalQuantity,
+                (string) $totalQuantity,
                 $averageWeight->getWeight(),
                 self::COST_CALC_SCALE
             ),

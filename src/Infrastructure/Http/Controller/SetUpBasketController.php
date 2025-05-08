@@ -7,7 +7,6 @@ namespace App\Infrastructure\Http\Controller;
 use App\Application\Request\SetUpBasketRequest;
 use App\Application\UseCase\SetUpBasketUseCase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
@@ -21,7 +20,7 @@ final class SetUpBasketController extends AbstractController
     }
 
     public function __invoke(
-        #[MapRequestPayload] SetUpBasketRequest $request
+        #[MapRequestPayload] SetUpBasketRequest $request,
     ): Response {
         ($this->setUpBasketUseCase)($request);
 

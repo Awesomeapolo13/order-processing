@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
-use Throwable;
 
 #[Route(path: '/api/v1/basket', name: 'app.basket.full')]
 final class GetFullBasketController extends AbstractController
@@ -21,7 +20,7 @@ final class GetFullBasketController extends AbstractController
     }
 
     /**
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function __invoke(
         #[MapQueryString] GetFullBasketRequest $request,

@@ -10,6 +10,7 @@ return (new PhpCsFixer\Config())
         '@Symfony' => true,
 
         'yoda_style' => false,
+        'concat_space' => ['spacing' => 'one'],
     ])
     ->setFinder($finder)
 ;

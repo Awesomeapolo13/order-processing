@@ -16,8 +16,8 @@ class DoctrineBasketReadRepository extends AbstractDBALReadRepository implements
 {
     public function __construct(
         private readonly ShortBasketHydrator $shortBasketHydrator,
-        EntityManagerInterface $entityManager
-    ){
+        EntityManagerInterface $entityManager,
+    ) {
         parent::__construct($entityManager);
     }
 

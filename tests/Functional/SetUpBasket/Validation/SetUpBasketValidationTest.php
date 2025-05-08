@@ -13,13 +13,12 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class SetUpBasketValidationTest extends WebTestCase
 {
+    use TestDataSerializerTrait;
     private const string HTTP_METHOD = 'POST';
     private const string URL = '/api/v1/basket/setup';
     private const string PROVIDER_FILE_NAME = 'set_up_basket_request_validation_test_provider.json';
     protected AbstractBrowser $client;
     private SerializerInterface $serializer;
-
-    use TestDataSerializerTrait;
 
     protected function setUp(): void
     {

@@ -25,16 +25,16 @@ class ShortBasketHydrator
         foreach ($data as $item) {
             if ($this->isBasketItemsDataExists($item)) {
                 $basketItems[] = new ShortBasketItemReadModel(
-                    (int)$item['basket_item_id'],
+                    (int) $item['basket_item_id'],
                     $item['sup_code'],
                     Cost::fromString($item['total_cost']),
                     Cost::fromString($item['total_discount_cost']),
                 );
             }
         }
-        
+
         return new ShortBasketReadModel(
-            (int)$data[0]['basket_id'],
+            (int) $data[0]['basket_id'],
             new BasketType($data[0]['is_express'], $data[0]['is_delivery'], $data[0]['has_alco']),
             new \DateTimeImmutable($data[0]['order_date']),
             Cost::fromString($data[0]['total_discount_cost']),

@@ -6,15 +6,15 @@ namespace Unit\Domain\ValueObject;
 
 use App\Domain\ValueObject\Cost;
 use App\Tests\Tools\TestDataSerializerTrait;
-use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * ToDo: Add tests for operations between costs
+ * ToDo: Add tests for operations between costs.
  */
 class CostTest extends KernelTestCase
 {
+    use TestDataSerializerTrait;
     private const string CREATE_SUCCESS_COST_FROM_CONSTRUCTOR_PROVIDER_FILE_NAME = 'create_success_cost_from_constructor_test_provider.json';
     private const string CREATE_SUCCESS_COST_FROM_STRING_PROVIDER_FILE_NAME = 'create_success_cost_from_string.json';
     private const string ZERO_COST_VALUE = '0.00';
@@ -22,7 +22,6 @@ class CostTest extends KernelTestCase
 
     private SerializerInterface $serializer;
 
-    use TestDataSerializerTrait;
     protected function setUp(): void
     {
         parent::setUp();
@@ -52,7 +51,7 @@ class CostTest extends KernelTestCase
     public function testWrongCostCreationFromConstructor(): void
     {
         foreach (self::WRONG_CONSTRUCTOR_INPUT_DATA as $value) {
-            $this->expectException(InvalidArgumentException::class);
+            $this->expectException(\InvalidArgumentException::class);
             $this->expectExceptionMessage('Cost must be in format "0.00", got: ' . $value);
 
             new Cost($value);

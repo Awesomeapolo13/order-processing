@@ -12,6 +12,7 @@ interface ResponseAssemblerInterface
 {
     /**
      * @param TEntity $entity
+     *
      * @return TResponse
      */
     public function createResponse(object $entity): object;

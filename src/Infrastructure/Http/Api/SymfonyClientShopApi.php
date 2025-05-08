@@ -17,21 +17,21 @@ class SymfonyClientShopApi extends SymfonyHttpClient implements ShopApiInterface
 
     public function __construct(
         private readonly ShopAssembler $shopAssembler,
-        HttpClientInterface            $httpClient,
-        array                          $options = [],
-        array                          $validStatuses = []
+        HttpClientInterface $httpClient,
+        array $options = [],
+        array $validStatuses = [],
     ) {
         parent::__construct($httpClient, $options, $validStatuses);
     }
 
     public function findShop(FindShopDTO $dto): ?ShopInterface
     {
-       $data = [
-           'shopNumber' => $dto->shopNumber,
-           'regionCode' => $dto->regionCode,
-       ];
-       $result = $this->sendRequest(self::FIND_SHOP_API_ENDPOINT, self::METHOD_GET, $data)['data'];
+        $data = [
+            'shopNumber' => $dto->shopNumber,
+            'regionCode' => $dto->regionCode,
+        ];
+        $result = $this->sendRequest(self::FIND_SHOP_API_ENDPOINT, self::METHOD_GET, $data)['data'];
 
-       return $result !== [] ? $this->shopAssembler->createShopFromArray($result) : null;
+        return $result !== [] ? $this->shopAssembler->createShopFromArray($result) : null;
     }
 }

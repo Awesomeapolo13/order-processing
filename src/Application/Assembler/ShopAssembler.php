@@ -19,7 +19,7 @@ class ShopAssembler
 
         try {
             return new Shop(
-                (int)$data['shopNumber'],
+                (int) $data['shopNumber'],
                 new Region($data['region']),
                 new \DateTimeImmutable($data['openTime']),
                 new \DateTimeImmutable($data['closeTime'])

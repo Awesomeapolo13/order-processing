@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Exception;
 
-use RuntimeException;
-use Throwable;
-
-class BasketConcurrentModificationException extends RuntimeException
+class BasketConcurrentModificationException extends \RuntimeException
 {
-    public function __construct(int $userId, int $code = 0, ?Throwable $previous = null)
+    public function __construct(int $userId, int $code = 0, ?\Throwable $previous = null)
     {
         parent::__construct(
             sprintf(
