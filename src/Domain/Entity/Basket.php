@@ -246,9 +246,7 @@ class Basket
 
         $supCode = $product->getSupCode();
         $isAlreadyExists = $this->basketItems->exists(
-            function (BasketItem $basketItem) use ($supCode) {
-                return $basketItem->getSupCode() === $supCode;
-            }
+            fn (BasketItem $basketItem) => $basketItem->getSupCode() === $supCode
         );
 
         if ($isAlreadyExists) {
