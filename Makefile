@@ -3,7 +3,7 @@
 ##################
 
 DOCKER_COMPOSE = docker compose -f ./.deployment/docker/docker-compose.yml --env-file ./.deployment/docker/.env
-DOCKER_EXEC_PHP = docker exec -it php-fpm
+DOCKER_EXEC_PHP = docker exec -it order-proc-fpm
 
 ##################
 # Docker compose
@@ -57,3 +57,10 @@ fx_load:
 	${DOCKER_EXEC_PHP} php bin/console doctrine:fixtures:load
 init:
 	make com_i m_run fx_load
+
+# Static analyzers
+
+cs-check:
+	${DOCKER_EXEC_PHP} vendor/bin/php-cs-fixer fix --dry-run --diff
+cs-fix:
+	${DOCKER_EXEC_PHP} vendor/bin/php-cs-fixer fix
