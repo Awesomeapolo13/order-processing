@@ -66,13 +66,6 @@ class SetUpBasketValidationTest extends WebTestCase
         self::assertSame($expectedResponse, json_decode($response->getContent(), true));
     }
 
-    protected function sendRequestAndGetResponse(string $method, string $url, ?array $body = null): Response
-    {
-        $this->client->request($method, $url, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($body));
-
-        return $this->client->getResponse();
-    }
-
     /**
      * @throws \DateMalformedStringException
      */
@@ -153,5 +146,12 @@ class SetUpBasketValidationTest extends WebTestCase
                 ],
             ],
         ];
+    }
+
+    private function sendRequestAndGetResponse(string $method, string $url, ?array $body = null): Response
+    {
+        $this->client->request($method, $url, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($body));
+
+        return $this->client->getResponse();
     }
 }

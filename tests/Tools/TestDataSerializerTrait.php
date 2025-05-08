@@ -34,7 +34,7 @@ trait TestDataSerializerTrait
     /**
      * @throws \JsonException
      */
-    public function deserializeSimpleJSON(string $dataFile): array
+    private function deserializeSimpleJSON(string $dataFile): array
     {
         $result = [];
         $data = $this->extractJSON($dataFile);
