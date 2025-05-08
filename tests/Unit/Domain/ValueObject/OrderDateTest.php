@@ -21,7 +21,7 @@ class OrderDateTest extends KernelTestCase
         static::assertLessThan(
             $orderDate->getOrderDate(),
             new \DateTimeImmutable($currentDate),
-            'Order date can not be in the past. Order date: ' . $orderDate->getOrderDate()->format(\DateTimeInterface::RFC3339) . ', current date: ' . $currentDate
+            'Order date can not be in the past. Order date: ' . $orderDate->getOrderDate()->format(\DateTimeInterface::RFC3339) . ', current date: ' . $currentDate,
         );
     }
 

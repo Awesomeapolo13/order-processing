@@ -30,7 +30,7 @@ final class SetUpBasketUseCase
                 $request->slotNumber,
                 $request->distance,
                 $request->longDuration,
-            )
+            ),
         );
     }
 }

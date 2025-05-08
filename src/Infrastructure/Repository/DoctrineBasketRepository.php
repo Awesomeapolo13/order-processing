@@ -36,7 +36,8 @@ class DoctrineBasketRepository extends ServiceEntityRepository implements Basket
             ->andWhere('b.deletedAt IS NULL')
             ->setParameter('userId', $userId)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     public function setBasketDeleted(int $userId): void
@@ -46,13 +47,14 @@ class DoctrineBasketRepository extends ServiceEntityRepository implements Basket
             ->createQuery(
                 'UPDATE App\Domain\Entity\Basket b'
                 . ' SET b.deletedAt = :now'
-                . ' WHERE b.userId = :userId AND b.deletedAt IS NULL'
+                . ' WHERE b.userId = :userId AND b.deletedAt IS NULL',
             )
             ->setParameters([
                 'now' => new \DateTimeImmutable(),
                 'userId' => $userId,
             ])
-            ->execute();
+            ->execute()
+        ;
     }
 
     public function save(Basket $basket): void

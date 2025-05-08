@@ -43,7 +43,7 @@ class RegionTest extends KernelTestCase
             static::assertSame(
                 $result,
                 $expectedResult,
-                'Expected region code is ' . $expectedResult . '. Got ' . $result
+                'Expected region code is ' . $expectedResult . '. Got ' . $result,
             );
         }
     }
@@ -67,7 +67,7 @@ class RegionTest extends KernelTestCase
             __DIR__ . '/data/' . self::COMPARE_REGION_PROVIDER_FILE_NAME,
             Region::class,
             null,
-            $this->serializer
+            $this->serializer,
         );
 
         foreach ($testData as $test) {

@@ -27,7 +27,7 @@ final class Version20241219094447 extends AbstractMigration
                                 long_duration BOOLEAN NOT NULL,
                                 delivery_cost NUMERIC(10, 2) NOT NULL,
                                 delivery_discount_cost NUMERIC(10, 2) NOT NULL,
-                                PRIMARY KEY(id))'
+                                PRIMARY KEY(id));',
         );
         $this->addSql('ALTER TABLE basket ADD delivery_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE basket ADD CONSTRAINT FK_2246507B12136921 FOREIGN KEY (delivery_id) REFERENCES basket_delivery (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');

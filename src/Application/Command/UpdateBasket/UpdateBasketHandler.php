@@ -112,18 +112,18 @@ class UpdateBasketHandler implements CommandHandlerInterface
         $oldTotalDiscountCost = $basket->getTotalCost();
         $supCodes = array_map(
             static fn (BasketItem $basketItem) => $basketItem->getSupCode(),
-            $basket->getBasketItems()->toArray()
+            $basket->getBasketItems()->toArray(),
         );
         $products = $this->productApi->findProducts(
             new FindProductsDTO(
                 $basket->getShopNum(),
                 $basket->getRegion(),
-                $supCodes
-            )
+                $supCodes,
+            ),
         );
         $products = array_combine(
             array_map(static fn (Product $product) => $product->getSupCode(), $products),
-            $products
+            $products,
         );
         $basketTotalCost = Cost::zero();
         $basketTotalDiscountCost = Cost::zero();
@@ -175,7 +175,8 @@ class UpdateBasketHandler implements CommandHandlerInterface
                     ->setTotalCost($totalCost)
                     ->setTotalDiscountCost($totalDiscountCost)
                     ->setSlicing($isSlicing)
-                    ->setSlicingCost($slicingCost);
+                    ->setSlicingCost($slicingCost)
+                ;
 
                 if ($isSlicing) {
                     $slicingCost = $this->slicingCostCalculator->calculateCost($product->getSlicingPrice(), $product->getCutCount());
@@ -184,13 +185,15 @@ class UpdateBasketHandler implements CommandHandlerInterface
 
                 $basketTotalCost = $basketTotalCost
                     ->add($totalCost)
-                    ->add($slicingCost);
+                    ->add($slicingCost)
+                ;
                 $basketTotalDiscountCost = $basketTotalDiscountCost
                     ->add($totalDiscountCost)
-                    ->add($slicingCost);
+                    ->add($slicingCost)
+                ;
 
                 return true;
-            }
+            },
         );
 
         if (!$basket->getTotalCost()->equals($oldTotalCost)) {

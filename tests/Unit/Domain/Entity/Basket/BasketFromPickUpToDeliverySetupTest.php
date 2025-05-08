@@ -70,7 +70,7 @@ class BasketFromPickUpToDeliverySetupTest extends TestCase
             isFromUserShop: true,
             distance: $distance,
             deliveryCost: Cost::fromString('200.00'),
-            deliveryDiscountCost: Cost::fromString('200.00')
+            deliveryDiscountCost: Cost::fromString('200.00'),
         );
 
         $domainData = new BasketSetUpDomainData(
@@ -85,7 +85,8 @@ class BasketFromPickUpToDeliverySetupTest extends TestCase
         $this->basketDeliveryFactory
             ->expects($this->once())
             ->method('create')
-            ->willReturn($delivery);
+            ->willReturn($delivery)
+        ;
 
         $basket = $this->basket;
         $this->basket->setUpBasket($domainData, $this->basketDeliveryFactory);

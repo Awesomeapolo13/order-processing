@@ -37,7 +37,7 @@ class SetUpBasketValidationTest extends WebTestCase
             __DIR__ . '/data/' . self::PROVIDER_FILE_NAME,
             null,
             null,
-            $this->serializer
+            $this->serializer,
         );
 
         foreach ($testData as $key => $responseTestData) {
@@ -49,7 +49,7 @@ class SetUpBasketValidationTest extends WebTestCase
 
             self::assertResponseStatusCodeSame(
                 Response::HTTP_BAD_REQUEST,
-                'Expected HTTP response code 400 got ' . $response->getStatusCode() . '. ' . $key
+                'Expected HTTP response code 400 got ' . $response->getStatusCode() . '. ' . $key,
             );
             self::assertSame($expectedResult, json_decode($response->getContent(), true), $key);
         }
@@ -61,7 +61,7 @@ class SetUpBasketValidationTest extends WebTestCase
         $response = $this->sendRequestAndGetResponse(self::HTTP_METHOD, self::URL, $requestBody);
         self::assertResponseStatusCodeSame(
             Response::HTTP_BAD_REQUEST,
-            'Expected HTTP response code 400 got ' . $response->getStatusCode()
+            'Expected HTTP response code 400 got ' . $response->getStatusCode(),
         );
         self::assertSame($expectedResponse, json_decode($response->getContent(), true));
     }

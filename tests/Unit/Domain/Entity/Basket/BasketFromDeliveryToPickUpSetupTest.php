@@ -48,7 +48,7 @@ class BasketFromDeliveryToPickUpSetupTest extends TestCase
             isFromUserShop: true,
             distance: $distance,
             deliveryCost: Cost::fromString('200.00'),
-            deliveryDiscountCost: Cost::fromString('200.00')
+            deliveryDiscountCost: Cost::fromString('200.00'),
         );
         $this->basket = new Basket(
             userId: 10,
@@ -77,7 +77,7 @@ class BasketFromDeliveryToPickUpSetupTest extends TestCase
                 shopNumber: 12,
                 region: $this->basket->getRegion(),
                 openDateTime: new \DateTimeImmutable('8:00'),
-                closeDateTime: new \DateTimeImmutable('22:00')
+                closeDateTime: new \DateTimeImmutable('22:00'),
             ),
             distance: null,
             deliverySlot: null,

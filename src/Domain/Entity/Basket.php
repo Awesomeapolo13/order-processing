@@ -246,7 +246,7 @@ class Basket
 
         $supCode = $product->getSupCode();
         $isAlreadyExists = $this->basketItems->exists(
-            fn (BasketItem $basketItem) => $basketItem->getSupCode() === $supCode
+            fn (BasketItem $basketItem) => $basketItem->getSupCode() === $supCode,
         );
 
         if ($isAlreadyExists) {
@@ -267,8 +267,8 @@ class Basket
                 supCode: $basketItem->getSupCode(),
                 quantity: $basketItem->getPieceQuantity(),
                 weight: $basketItem->getWeight()->getWeight(),
-                isPack: $basketItem->getQuantity()->isPack()
-            )
+                isPack: $basketItem->getQuantity()->isPack(),
+            ),
         );
     }
 
@@ -312,7 +312,7 @@ class Basket
             new BasketSettingsChangedEvent(
                 $this->userId,
                 $this->region->getRegionCode(),
-            )
+            ),
         );
     }
 

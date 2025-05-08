@@ -31,6 +31,7 @@ class SymfonyHttpClient
     {
         $data = $method === self::METHOD_GET ? ['query' => $data] : ['data' => $data];
         $data = array_merge($this->options, $data);
+
         try {
             $response = $this->getResponse($url, $method, $data);
 

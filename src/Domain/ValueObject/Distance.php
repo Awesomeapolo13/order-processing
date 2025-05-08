@@ -35,7 +35,7 @@ readonly class Distance
         return new self(
             distance: $distance,
             longDuration: $longDuration,
-            longDistance: (int) $distance > self::LONG_DISTANCE
+            longDistance: (int) $distance > self::LONG_DISTANCE,
         );
     }
 }

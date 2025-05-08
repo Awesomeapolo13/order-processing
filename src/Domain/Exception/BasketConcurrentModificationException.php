@@ -11,7 +11,7 @@ class BasketConcurrentModificationException extends \RuntimeException
         parent::__construct(
             sprintf(
                 'Basket for user %d was modified concurrently. Please try again.',
-                $userId
+                $userId,
             ),
             $code,
             $previous,

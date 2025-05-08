@@ -24,7 +24,7 @@ readonly class ProductQuantity
             quantity: $quantity,
             weight: Weight::fromStringNullable(null),
             isPack: $isPack,
-            packWeight: $packWeight
+            packWeight: $packWeight,
         );
 
         $productQuantity->assertQuantity();
@@ -93,7 +93,7 @@ readonly class ProductQuantity
             $product->isWeight() => self::weight(Weight::fromStringNullable($weight)),
             default => self::mixed(
                 quantity: $quantity,
-                weight: Weight::fromStringNullable($weight)
+                weight: Weight::fromStringNullable($weight),
             ),
         };
     }

@@ -36,6 +36,15 @@ return (new PhpCsFixer\Config())
             ],
         ],
 
+        'phpdoc_to_property_type' => true,
+        'phpdoc_to_return_type' => true,
+        'void_return' => true,
+        'fully_qualified_strict_types' => true,
+
+        'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments', 'parameters']],
+        'multiline_whitespace_before_semicolons' => ['strategy' => 'new_line_for_chained_calls'],
+        'blank_line_before_statement' => ['statements' => ['return', 'throw', 'try']],
+
         'yoda_style' => false,
         'concat_space' => ['spacing' => 'one'],
 

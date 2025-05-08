@@ -59,7 +59,7 @@ class DoctrineBasketReadRepository extends AbstractDBALReadRepository implements
             [
                 'userId' => ParameterType::INTEGER,
                 'region' => ParameterType::INTEGER,
-            ]
+            ],
         );
 
         return $this->shortBasketHydrator->hydrate($result);

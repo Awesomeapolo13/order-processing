@@ -41,7 +41,7 @@ class GetFullBasketResponseAssemblerTest extends KernelTestCase
             __DIR__ . '/data/' . self::PROVIDER_FILE_NAME,
             Basket::class,
             GetFullBasketResponse::class,
-            $this->serializer
+            $this->serializer,
         );
 
         foreach ($testData as $unitTestData) {

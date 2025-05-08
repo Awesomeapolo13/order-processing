@@ -27,21 +27,21 @@ class BasketItemFactory
             quantity: $quantity,
             weight: $weight,
             isPack: $isPack,
-            product: $product
+            product: $product,
         );
 
         $totalCost = $this->costCalculator->calculateCost(
             $product->getPrice(),
             $productQuantity,
             $product->getMinimumWeight(),
-            $product->getAverageWeight()
+            $product->getAverageWeight(),
         );
 
         $totalDiscountCost = $this->costCalculator->calculateCost(
             $product->getDiscountPrice(),
             $productQuantity,
             $product->getMinimumWeight(),
-            $product->getAverageWeight()
+            $product->getAverageWeight(),
         );
 
         $createdAt = new \DateTimeImmutable();

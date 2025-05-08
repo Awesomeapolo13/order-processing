@@ -22,8 +22,8 @@ class ProductAddedToBasketFromCatalogEventHandler implements EventHandlerInterfa
         $this->commandBus->execute(
             new UpdateBasketCommand(
                 userId: $event->userId,
-                region: new Region($event->region)
-            )
+                region: new Region($event->region),
+            ),
         );
     }
 }

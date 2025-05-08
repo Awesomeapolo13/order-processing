@@ -43,7 +43,7 @@ class CostTest extends KernelTestCase
             static::assertSame(
                 $result,
                 $expectedResult,
-                'Expected cost is ' . $expectedResult . '. Got ' . $result
+                'Expected cost is ' . $expectedResult . '. Got ' . $result,
             );
         }
     }
@@ -79,7 +79,7 @@ class CostTest extends KernelTestCase
             static::assertSame(
                 $result,
                 $expectedResult,
-                'Expected cost is ' . $expectedResult . '. Got ' . $result
+                'Expected cost is ' . $expectedResult . '. Got ' . $result,
             );
         }
     }

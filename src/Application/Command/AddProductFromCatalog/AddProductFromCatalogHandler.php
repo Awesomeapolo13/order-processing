@@ -33,7 +33,7 @@ class AddProductFromCatalogHandler implements CommandHandlerInterface
                 shopNumber: $basket->getShopNum(),
                 region: $basket->getRegion(),
                 supCode: $command->supCode,
-            )
+            ),
         );
 
         if ($product === null) {

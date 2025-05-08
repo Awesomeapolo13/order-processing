@@ -33,14 +33,14 @@ final class AddNewProductFromCatalogUseCase
                 (int) $request->quantity,
                 $request->weight,
                 $request->isPack,
-            )
+            ),
         );
 
         $shortBasket = $this->queryBus->execute(
             new FindShortBasketQuery(
                 $request->userId,
                 $request->regionCode,
-            )
+            ),
         );
 
         if ($shortBasket === null) {

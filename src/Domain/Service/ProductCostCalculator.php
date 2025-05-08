@@ -52,7 +52,7 @@ class ProductCostCalculator
         return bcmul(
             $priceByQuant->getPrice(),
             (string) $totalQuantity,
-            self::COST_CALC_SCALE
+            self::COST_CALC_SCALE,
         );
     }
 
@@ -63,7 +63,7 @@ class ProductCostCalculator
         return bcmul(
             $priceByQuant->getPrice(),
             $quantity,
-            self::COST_CALC_SCALE
+            self::COST_CALC_SCALE,
         );
     }
 
@@ -78,10 +78,10 @@ class ProductCostCalculator
             bcmul(
                 (string) $totalQuantity,
                 $averageWeight->getWeight(),
-                self::COST_CALC_SCALE
+                self::COST_CALC_SCALE,
             ),
             $priceByQuant->getPrice(),
-            self::COST_CALC_SCALE
+            self::COST_CALC_SCALE,
         );
     }
 }

@@ -50,7 +50,7 @@ class SetUpBasketCommandHandler implements CommandHandlerInterface
             shop: $shop,
             deliverySlot: $deliverySLot,
             distance: $distance,
-            isFromUserShop: false
+            isFromUserShop: false,
         );
         $basket->setUpBasket($setUpData, $this->basketDeliveryFactory);
     }
