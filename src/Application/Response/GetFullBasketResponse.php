@@ -14,7 +14,7 @@ readonly class GetFullBasketResponse
         public int $id,
         public bool $isExpress,
         public bool $isDelivery,
-        public \DateTime $orderDate,
+        public \DateTimeInterface $orderDate,
         public string $slicingCost,
         public string $totalCost,
         public string $totalDiscountCost,

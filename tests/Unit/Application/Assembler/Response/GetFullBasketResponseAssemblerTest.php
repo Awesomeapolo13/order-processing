@@ -15,8 +15,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 class GetFullBasketResponseAssemblerTest extends KernelTestCase
 {
     use TestDataSerializerTrait;
-    private const string PROVIDER_FILE_NAME = 'get_full_basket_unit_test_provider.json';
 
+    private const string PROVIDER_FILE_NAME = 'get_full_basket_unit_test_provider.json';
     private ResponseAssemblerInterface $responseAssembler;
     private SerializerInterface $serializer;
 
@@ -34,21 +34,21 @@ class GetFullBasketResponseAssemblerTest extends KernelTestCase
      */
     public function testResponseAccordingEntity(): void
     {
-        $this->markTestSkipped(
+        static::markTestSkipped(
             'Troubles with private constructors with symfony serialization',
         );
-        $testData = $this->deserializeJSONTestData(
-            __DIR__ . '/data/' . self::PROVIDER_FILE_NAME,
-            Basket::class,
-            GetFullBasketResponse::class,
-            $this->serializer,
-        );
-
-        foreach ($testData as $unitTestData) {
-            [$input, $expectedResult] = $unitTestData;
-
-            $result = $this->responseAssembler->createResponse($input);
-            static::assertEquals($expectedResult, $result, 'Wrong assembling result');
-        }
+        //        $testData = $this->deserializeJSONTestData(
+        //            __DIR__ . '/data/' . self::PROVIDER_FILE_NAME,
+        //            Basket::class,
+        //            GetFullBasketResponse::class,
+        //            $this->serializer,
+        //        );
+        //
+        //        foreach ($testData as $unitTestData) {
+        //            [$input, $expectedResult] = $unitTestData;
+        //
+        //            $result = $this->responseAssembler->createResponse($input);
+        //            static::assertEquals($expectedResult, $result, 'Wrong assembling result');
+        //        }
     }
 }

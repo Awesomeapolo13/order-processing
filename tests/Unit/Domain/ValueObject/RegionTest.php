@@ -72,13 +72,14 @@ class RegionTest extends KernelTestCase
 
         foreach ($testData as $test) {
             [$input, $expectedResult] = $test;
+            $expectedResult = (bool) $expectedResult;
 
             $region = new Region(RegionCodeEnum::NIZHNY_NOVGOROD->value);
             $result = $input->isSame($region);
             static::assertSame(
                 $result,
                 $expectedResult,
-                'Expected regions are same as ' . $expectedResult ? 'true' : 'false. Got ' . $result,
+                'Expected regions are same as ' . $expectedResult . '. Got ' . $result,
             );
         }
     }

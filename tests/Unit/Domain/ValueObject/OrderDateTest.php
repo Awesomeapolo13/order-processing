@@ -47,11 +47,11 @@ class OrderDateTest extends KernelTestCase
 
         return [
             'Tomorrow at the same time' => [
-                (clone $orderDate)->modify('+1 day')?->format(\DateTimeInterface::RFC3339),
+                (clone $orderDate)->modify('+1 day')->format(\DateTimeInterface::RFC3339),
                 $currentDate->format(\DateTimeInterface::RFC3339),
             ],
             'Today after two hours' => [
-                (clone $orderDate)->modify('+2 hours')?->format(\DateTimeInterface::RFC3339),
+                (clone $orderDate)->modify('+2 hours')->format(\DateTimeInterface::RFC3339),
                 $currentDate->format(\DateTimeInterface::RFC3339),
             ],
         ];
@@ -66,13 +66,13 @@ class OrderDateTest extends KernelTestCase
 
         return [
             'Today at the same time' => [
-                (clone $orderDate)?->format(\DateTimeInterface::RFC3339),
+                (clone $orderDate)->format(\DateTimeInterface::RFC3339),
             ],
             'Today after two hours' => [
-                (clone $orderDate)->modify('-2 hours')?->format(\DateTimeInterface::RFC3339),
+                (clone $orderDate)->modify('-2 hours')->format(\DateTimeInterface::RFC3339),
             ],
             'Yesterday at the same time' => [
-                (clone $orderDate)->modify('-1 day')?->format(\DateTimeInterface::RFC3339),
+                (clone $orderDate)->modify('-1 day')->format(\DateTimeInterface::RFC3339),
             ],
         ];
     }
