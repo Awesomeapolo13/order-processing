@@ -81,6 +81,9 @@
         ],
         "stan": [
             "vendor/bin/phpstan analyse -c phpstan.neon"
+        ],
+        "deptrac": [
+            "vendor/bin/deptrac analyse"
         ]
     },
     "conflict": {
@@ -93,6 +96,7 @@
         }
     },
     "require-dev": {
+        "deptrac/deptrac": "^3.0",
         "friendsofphp/php-cs-fixer": "^3.66",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1",
