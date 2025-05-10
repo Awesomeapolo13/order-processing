@@ -1,0 +1,97 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(App\\Domain\\ValueObject\\ProductInterface\)\: mixed\)\|null, Closure\(App\\Application\\Api\\Product\\Product\)\: string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Application/Command/UpdateBasket/UpdateBasketHandler.php
+
+		-
+			message: '#^Parameter \#1 \$p of method Doctrine\\Common\\Collections\\ReadableCollection\<\(int\|string\),mixed\>\:\:forAll\(\) expects Closure\(int\|string, mixed\)\: bool, Closure\(App\\Domain\\Entity\\BasketItem\)\: \(App\\Domain\\Entity\\BasketItem\|true\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Application/Command/UpdateBasket/UpdateBasketHandler.php
+
+		-
+			message: '#^Parameter \#1 \$entity of method App\\Application\\Assembler\\ResponseAssemblerInterface\<object,object\>\:\:createResponse\(\) expects object, null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Application/Query/FindShortBasket/FindShortBasketQueryHandler.php
+
+		-
+			message: '#^Instantiated class App\\Domain\\Entity\\EmptyBasketSetupDataException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Domain/Entity/Basket.php
+
+		-
+			message: '#^Parameter \#1 \$p of method Doctrine\\Common\\Collections\\ReadableCollection\<\(int\|string\),mixed\>\:\:exists\(\) expects Closure\(int\|string, mixed\)\: bool, Closure\(App\\Domain\\Entity\\BasketItem\)\: bool given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Domain/Entity/Basket.php
+
+		-
+			message: '#^Parameter \#1 \$p of method Doctrine\\Common\\Collections\\ReadableCollection\<\(int\|string\),mixed\>\:\:findFirst\(\) expects Closure\(int\|string, mixed\)\: bool, Closure\(App\\Domain\\Entity\\BasketItem\)\: bool given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Domain/Entity/Basket.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between DateTimeInterface and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/Domain/Entity/Basket.php
+
+		-
+			message: '#^Throwing object of an unknown class App\\Domain\\Entity\\EmptyBasketSetupDataException\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Domain/Entity/Basket.php
+
+		-
+			message: '#^Missing parameter \$isAlcohol \(bool\) in call to App\\Domain\\Entity\\BasketItem constructor\.$#'
+			identifier: argument.missing
+			count: 1
+			path: src/Domain/Factory/BasketItemFactory.php
+
+		-
+			message: '#^Match expression does not handle remaining value\: true$#'
+			identifier: match.unhandled
+			count: 1
+			path: src/Domain/Service/ProductCostCalculator.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between bool and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/Domain/ValueObject/Weight.php
+
+		-
+			message: '#^Parameter \#2 \$lockMode of method Doctrine\\ORM\\EntityManagerInterface\:\:lock\(\) expects 0\|1\|2\|4\|Doctrine\\DBAL\\LockMode, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Infrastructure/Database/EntityManager/DoctrineEntityManager.php
+
+		-
+			message: '#^Parameter \#12 \$averageWeight of class App\\Application\\Api\\Product\\Product constructor expects App\\Domain\\ValueObject\\Weight\|null, true given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Infrastructure/Http/Api/SymfonyClientProductApi.php
+
+		-
+			message: '#^Parameter \#7 \$stockQuantity of class App\\Application\\Api\\Product\\Product constructor expects int, null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Infrastructure/Http/Api/SymfonyClientProductApi.php
+
+		-
+			message: '#^Parameter \#8 \$stockWeight of class App\\Application\\Api\\Product\\Product constructor expects App\\Domain\\ValueObject\\Weight\|null, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Infrastructure/Http/Api/SymfonyClientProductApi.php
+
+		-
+			message: '#^Property App\\Infrastructure\\Http\\Api\\SymfonyClientProductApi\:\:\$client is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Infrastructure/Http/Api/SymfonyClientProductApi.php
