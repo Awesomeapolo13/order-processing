@@ -1,0 +1,22 @@
+parameters:
+    domainCheck:
+        paths:
+            - src/Domain
+        forbiddenFunctions:
+            - dump
+            - var_dump
+            - print_r
+            - echo
+            - exit
+            - die
+        rules:
+            - PHPStan\Rules\Classes\RequireParentConstructCallRule
+            - PHPStan\Rules\Namespaces\NoInvalidJumpOutsideForeachRule
+            - PHPStan\Rules\Functions\CallToFunctionParametersRule
+
+    checkImmutability:
+            enabled: true
+            paths:
+                - src/Domain/ValueObject
+includes:
+    - phpstan.neon
