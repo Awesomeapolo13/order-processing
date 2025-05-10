@@ -81,9 +81,6 @@
         ],
         "stan": [
             "vendor/bin/phpstan analyse -c phpstan.neon"
-        ],
-        "stan_ddd": [
-            "vendor/bin/phpstan analyse -c phpstan-ddd.neon"
         ]
     },
     "conflict": {
