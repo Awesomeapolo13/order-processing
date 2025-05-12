@@ -9,6 +9,7 @@ use App\Application\Api\Product\Product;
 use App\Application\Api\Product\ProductApiInterface;
 use App\Application\Command\CommandHandlerInterface;
 use App\Application\Database\EntityManager\TransactionalEntityManagerInterface;
+use App\Application\Database\Enum\LockModeEnum;
 use App\Domain\Entity\Basket;
 use App\Domain\Entity\BasketItem;
 use App\Domain\Exception\BasketConcurrentModificationException;
@@ -19,7 +20,6 @@ use App\Domain\Service\ProductCostCalculator;
 use App\Domain\Service\SlicingCostCalculator;
 use App\Domain\ValueObject\Cost;
 use App\Domain\ValueObject\Region;
-use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\OptimisticLockException;
 use Psr\Log\LoggerInterface;
 
@@ -60,7 +60,7 @@ class UpdateBasketHandler implements CommandHandlerInterface
                 throw new BasketForUpdatingNotFoundException();
             }
 
-            $this->entityManager->lock($basket, LockMode::OPTIMISTIC, $basket->getVersion());
+            $this->entityManager->lock($basket, LockModeEnum::OPTIMISTIC->value, $basket->getVersion());
 
             if (!$basket->getRegion()->isSame($region)) {
                 $this->logger->info('Region mismatch, recreating basket', [
