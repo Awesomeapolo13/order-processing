@@ -19,9 +19,7 @@ parameters:
     - name: Framework
       collectors:
         - type: classLike
-          value: .^Symfony\\.*
-        - type: classLike
-          value: .^Doctrine\\.*
+          value: (Symfony|Doctrine)\\.*
 
   ruleset:
     Domain:
@@ -31,3 +29,8 @@ parameters:
       - Domain
       - Application
       - Framework
+
+  skip_violations:
+    App\Domain\Entity\Basket:
+      - Doctrine\Common\Collections\Collection
+      - Doctrine\Common\Collections\ArrayCollection

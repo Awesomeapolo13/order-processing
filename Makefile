@@ -70,3 +70,5 @@ cs_fix:
 	${DOCKER_EXEC_PHP} composer cs-fix
 stan:
 	${DOCKER_EXEC_PHP} composer stan
+deptrac:
+	${DOCKER_EXEC_PHP} composer deptrac
