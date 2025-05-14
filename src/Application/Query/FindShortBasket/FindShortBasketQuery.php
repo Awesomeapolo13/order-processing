@@ -10,7 +10,7 @@ readonly class FindShortBasketQuery implements QueryInterface
 {
     public function __construct(
         public int $userId,
-        public int $regionCode
+        public int $regionCode,
     ) {
     }
 }

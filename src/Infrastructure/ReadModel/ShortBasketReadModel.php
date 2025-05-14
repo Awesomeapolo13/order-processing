@@ -8,7 +8,6 @@ use App\Domain\ReadModel\ShortBasketItemReadModelInterface;
 use App\Domain\ReadModel\ShortBasketReadModelInterface;
 use App\Domain\ValueObject\BasketType;
 use App\Domain\ValueObject\Cost;
-use DateTimeImmutable;
 
 readonly class ShortBasketReadModel implements ShortBasketReadModelInterface
 {
@@ -18,7 +17,7 @@ readonly class ShortBasketReadModel implements ShortBasketReadModelInterface
     public function __construct(
         private int $id,
         private BasketType $basketType,
-        private DateTimeImmutable $orderDate,
+        private \DateTimeImmutable $orderDate,
         private Cost $totalDiscountCost,
         private array $basketItems,
     ) {
@@ -34,7 +33,7 @@ readonly class ShortBasketReadModel implements ShortBasketReadModelInterface
         return $this->basketType;
     }
 
-    public function getOrderDate(): DateTimeImmutable
+    public function getOrderDate(): \DateTimeImmutable
     {
         return $this->orderDate;
     }

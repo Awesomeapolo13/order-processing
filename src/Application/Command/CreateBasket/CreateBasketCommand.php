@@ -11,7 +11,7 @@ readonly class CreateBasketCommand implements CommandInterface
 {
     public function __construct(
         public int $userId,
-        public Region $region
+        public Region $region,
     ) {
     }
 }

@@ -8,7 +8,6 @@ use App\Domain\ValueObject\Cost;
 use App\Domain\ValueObject\Price;
 use App\Domain\ValueObject\ProductQuantity;
 use App\Domain\ValueObject\Weight;
-use DateTimeImmutable;
 
 class BasketItem
 {
@@ -27,8 +26,8 @@ class BasketItem
         private ProductQuantity $quantity,
         private int $addedBonus,
         private bool $isAvailableForOrder,
-        private readonly ?DateTimeImmutable $createdAt,
-        private ?DateTimeImmutable $updatedAt,
+        private readonly ?\DateTimeImmutable $createdAt,
+        private ?\DateTimeImmutable $updatedAt,
         private bool $isAlcohol,
     ) {
     }
@@ -185,17 +184,17 @@ class BasketItem
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): ?DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?DateTimeImmutable $updatedAt): BasketItem
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): BasketItem
     {
         $this->updatedAt = $updatedAt;
 

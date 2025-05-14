@@ -20,7 +20,8 @@ final class AddNewProductFromCatalogController extends AbstractController
     }
 
     public function __invoke(
-        #[MapRequestPayload] AddNewProductFromCatalogRequest $request,
+        #[MapRequestPayload]
+        AddNewProductFromCatalogRequest $request,
     ): Response {
         return $this->json(['basket' => ($this->addNewProductToBasketUseCase)($request)]);
     }

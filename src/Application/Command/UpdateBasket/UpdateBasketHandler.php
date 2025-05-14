@@ -9,6 +9,7 @@ use App\Application\Api\Product\Product;
 use App\Application\Api\Product\ProductApiInterface;
 use App\Application\Command\CommandHandlerInterface;
 use App\Application\Database\EntityManager\TransactionalEntityManagerInterface;
+use App\Application\Database\Enum\LockModeEnum;
 use App\Domain\Entity\Basket;
 use App\Domain\Entity\BasketItem;
 use App\Domain\Exception\BasketConcurrentModificationException;
@@ -19,10 +20,8 @@ use App\Domain\Service\ProductCostCalculator;
 use App\Domain\Service\SlicingCostCalculator;
 use App\Domain\ValueObject\Cost;
 use App\Domain\ValueObject\Region;
-use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\OptimisticLockException;
 use Psr\Log\LoggerInterface;
-use Throwable;
 
 class UpdateBasketHandler implements CommandHandlerInterface
 {
@@ -40,7 +39,7 @@ class UpdateBasketHandler implements CommandHandlerInterface
     /**
      * @return int - basket ID
      *
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function __invoke(UpdateBasketCommand $command): int
     {
@@ -61,7 +60,7 @@ class UpdateBasketHandler implements CommandHandlerInterface
                 throw new BasketForUpdatingNotFoundException();
             }
 
-            $this->entityManager->lock($basket, LockMode::OPTIMISTIC, $basket->getVersion());
+            $this->entityManager->lock($basket, LockModeEnum::OPTIMISTIC->value, $basket->getVersion());
 
             if (!$basket->getRegion()->isSame($region)) {
                 $this->logger->info('Region mismatch, recreating basket', [
@@ -83,15 +82,15 @@ class UpdateBasketHandler implements CommandHandlerInterface
         } catch (OptimisticLockException $exception) {
             $this->logger->error('Concurrent modification detected', [
                 'user_id' => $userId,
-                'exception' => $exception->getMessage()
+                'exception' => $exception->getMessage(),
             ]);
 
             throw new BasketConcurrentModificationException($userId, previous: $exception);
-        } catch (Throwable $exception) {
+        } catch (\Throwable $exception) {
             $this->entityManager->rollback();
             $this->logger->error('Unexpected error during basket processing', [
                 'user_id' => $userId,
-                'exception' => $exception->getMessage()
+                'exception' => $exception->getMessage(),
             ]);
 
             throw $exception;
@@ -113,24 +112,24 @@ class UpdateBasketHandler implements CommandHandlerInterface
         $oldTotalDiscountCost = $basket->getTotalCost();
         $supCodes = array_map(
             static fn (BasketItem $basketItem) => $basketItem->getSupCode(),
-            $basket->getBasketItems()->toArray()
+            $basket->getBasketItems()->toArray(),
         );
         $products = $this->productApi->findProducts(
             new FindProductsDTO(
                 $basket->getShopNum(),
                 $basket->getRegion(),
-                $supCodes
-            )
+                $supCodes,
+            ),
         );
         $products = array_combine(
-            array_map(static fn(Product $product) => $product->getSupCode(), $products),
-            $products
+            array_map(static fn (Product $product) => $product->getSupCode(), $products),
+            $products,
         );
         $basketTotalCost = Cost::zero();
         $basketTotalDiscountCost = Cost::zero();
 
         $basket->getBasketItems()->forAll(
-            function (BasketItem $basketItem) use ($products,  &$basketTotalCost,  &$basketTotalDiscountCost) {
+            function (BasketItem $basketItem) use ($products, &$basketTotalCost, &$basketTotalDiscountCost) {
                 $product = $products[$basketItem->getSupCode()] ?? null;
                 if (!isset($product) || !$product->isAvailableForOrder()) {
                     $basketItem->setAvailableForOrder(false);
@@ -159,7 +158,7 @@ class UpdateBasketHandler implements CommandHandlerInterface
                         'basket_id' => $basketItem->getBasket()?->getId(),
                         'item_id' => $basketItem->getId(),
                         'old_cost' => $basketItem->getTotalCost()->getCost(),
-                        'new_cost' => $totalCost->getCost()
+                        'new_cost' => $totalCost->getCost(),
                     ]);
                 }
                 if (!$basketItem->getTotalDiscountCost()->equals($totalDiscountCost)) {
@@ -167,7 +166,7 @@ class UpdateBasketHandler implements CommandHandlerInterface
                         'basket_id' => $basketItem->getBasket()?->getId(),
                         'item_id' => $basketItem->getId(),
                         'old_cost' => $basketItem->getTotalDiscountCost()->getCost(),
-                        'new_cost' => $totalDiscountCost->getCost()
+                        'new_cost' => $totalDiscountCost->getCost(),
                     ]);
                 }
 
@@ -176,7 +175,8 @@ class UpdateBasketHandler implements CommandHandlerInterface
                     ->setTotalCost($totalCost)
                     ->setTotalDiscountCost($totalDiscountCost)
                     ->setSlicing($isSlicing)
-                    ->setSlicingCost($slicingCost);
+                    ->setSlicingCost($slicingCost)
+                ;
 
                 if ($isSlicing) {
                     $slicingCost = $this->slicingCostCalculator->calculateCost($product->getSlicingPrice(), $product->getCutCount());
@@ -185,27 +185,29 @@ class UpdateBasketHandler implements CommandHandlerInterface
 
                 $basketTotalCost = $basketTotalCost
                     ->add($totalCost)
-                    ->add($slicingCost);
+                    ->add($slicingCost)
+                ;
                 $basketTotalDiscountCost = $basketTotalDiscountCost
                     ->add($totalDiscountCost)
-                    ->add($slicingCost);
+                    ->add($slicingCost)
+                ;
 
                 return true;
-            }
+            },
         );
 
         if (!$basket->getTotalCost()->equals($oldTotalCost)) {
             $this->logger->info('Basket total cost updated', [
                 'basket_id' => $basket->getId(),
                 'old_cost' => $oldTotalCost->getCost(),
-                'new_cost' => $basket->getTotalCost()->getCost()
+                'new_cost' => $basket->getTotalCost()->getCost(),
             ]);
         }
         if (!$basket->getTotalDiscountCost()->equals($oldTotalDiscountCost)) {
             $this->logger->info('Basket total discount cost updated', [
                 'basket_id' => $basket->getId(),
                 'old_cost' => $oldTotalDiscountCost->getCost(),
-                'new_cost' => $basket->getTotalDiscountCost()->getCost()
+                'new_cost' => $basket->getTotalDiscountCost()->getCost(),
             ]);
         }
 

@@ -30,17 +30,17 @@ final class AddNewProductFromCatalogUseCase
                 $request->userId,
                 new Region($request->regionCode),
                 $request->supCode,
-                (int)$request->quantity,
+                (int) $request->quantity,
                 $request->weight,
                 $request->isPack,
-            )
+            ),
         );
 
         $shortBasket = $this->queryBus->execute(
             new FindShortBasketQuery(
                 $request->userId,
                 $request->regionCode,
-            )
+            ),
         );
 
         if ($shortBasket === null) {
@@ -50,10 +50,7 @@ final class AddNewProductFromCatalogUseCase
                 'supCode' => $request->supCode,
             ]);
 
-            throw new BasketNotFoundException($request->userId, [
-                'userId' => $request->userId,
-                'regionCode' => $request->regionCode,
-            ]);
+            throw new BasketNotFoundException($request->userId, ['userId' => $request->userId, 'regionCode' => $request->regionCode]);
         }
 
         return $shortBasket;

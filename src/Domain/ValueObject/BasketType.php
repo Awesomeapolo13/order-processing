@@ -60,7 +60,7 @@ readonly class BasketType
 
     public static function create(bool $isDelivery, bool $hasAlcohol, \DateTimeInterface $orderDate): self
     {
-        $isExpress = $orderDate <= (new \DateTime('tomorrow'))->setTime(15,0);
+        $isExpress = $orderDate <= (new \DateTime('tomorrow'))->setTime(15, 0);
 
         return new BasketType($isDelivery, $isExpress, $hasAlcohol);
     }

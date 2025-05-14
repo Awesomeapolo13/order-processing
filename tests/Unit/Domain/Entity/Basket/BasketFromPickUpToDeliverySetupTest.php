@@ -17,7 +17,6 @@ use App\Domain\ValueObject\Distance;
 use App\Domain\ValueObject\OrderDate;
 use App\Domain\ValueObject\Region;
 use App\Domain\ValueObject\Weight;
-use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -33,8 +32,8 @@ class BasketFromPickUpToDeliverySetupTest extends TestCase
      */
     protected function setUp(): void
     {
-        $orderDate = new DateTimeImmutable('now +5 hours');
-        $createdAt = new DateTimeImmutable();
+        $orderDate = new \DateTimeImmutable('now +5 hours');
+        $createdAt = new \DateTimeImmutable();
         $updatedAt = $createdAt;
         $slicingCost = Cost::zero();
         $totalCost = Cost::fromString('100.00');
@@ -50,7 +49,7 @@ class BasketFromPickUpToDeliverySetupTest extends TestCase
             updatedAt: $updatedAt,
             slicingCost: $slicingCost,
             totalCost: $totalCost,
-            totalDiscountCost:  $totalDiscountCost,
+            totalDiscountCost: $totalDiscountCost,
             weight: $weight,
         );
 
@@ -71,23 +70,23 @@ class BasketFromPickUpToDeliverySetupTest extends TestCase
             isFromUserShop: true,
             distance: $distance,
             deliveryCost: Cost::fromString('200.00'),
-            deliveryDiscountCost: Cost::fromString('200.00')
+            deliveryDiscountCost: Cost::fromString('200.00'),
         );
 
         $domainData = new BasketSetUpDomainData(
             isDelivery: true,
-            orderDate: OrderDate::create(new DateTimeImmutable('now +6 hours')),
+            orderDate: OrderDate::create(new \DateTimeImmutable('now +6 hours')),
             shop: null,
             distance: $distance,
             deliverySlot: $slot,
-            isFromUserShop:  true,
+            isFromUserShop: true,
         );
 
         $this->basketDeliveryFactory
             ->expects($this->once())
             ->method('create')
-            ->willReturn($delivery);
-
+            ->willReturn($delivery)
+        ;
 
         $basket = $this->basket;
         $this->basket->setUpBasket($domainData, $this->basketDeliveryFactory);
@@ -107,11 +106,11 @@ class BasketFromPickUpToDeliverySetupTest extends TestCase
     {
         $domainData = new BasketSetUpDomainData(
             isDelivery: true,
-            orderDate: OrderDate::create(new DateTimeImmutable('now +6 hours')),
+            orderDate: OrderDate::create(new \DateTimeImmutable('now +6 hours')),
             shop: null,
             distance: null,
             deliverySlot: null,
-            isFromUserShop:  true,
+            isFromUserShop: true,
         );
 
         $this->expectException(WrongDeliverySetUpDataException::class);
@@ -125,11 +124,11 @@ class BasketFromPickUpToDeliverySetupTest extends TestCase
         $distance = Distance::create('20.000', false);
         $domainData = new BasketSetUpDomainData(
             isDelivery: true,
-            orderDate: OrderDate::create(new DateTimeImmutable('now +6 hours')),
+            orderDate: OrderDate::create(new \DateTimeImmutable('now +6 hours')),
             shop: null,
             distance: $distance,
             deliverySlot: null,
-            isFromUserShop:  true,
+            isFromUserShop: true,
         );
 
         $this->expectException(WrongDeliverySetUpDataException::class);
@@ -143,11 +142,11 @@ class BasketFromPickUpToDeliverySetupTest extends TestCase
         $slot = new DeliverySlot(11);
         $domainData = new BasketSetUpDomainData(
             isDelivery: true,
-            orderDate: OrderDate::create(new DateTimeImmutable('now +6 hours')),
+            orderDate: OrderDate::create(new \DateTimeImmutable('now +6 hours')),
             shop: null,
             distance: null,
             deliverySlot: $slot,
-            isFromUserShop:  true,
+            isFromUserShop: true,
         );
 
         $this->expectException(WrongDeliverySetUpDataException::class);

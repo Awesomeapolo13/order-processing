@@ -3,7 +3,7 @@
 ##################
 
 DOCKER_COMPOSE = docker compose -f ./.deployment/docker/docker-compose.yml --env-file ./.deployment/docker/.env
-DOCKER_EXEC_PHP = docker exec -it php-fpm
+DOCKER_EXEC_PHP = docker exec -it order-proc-fpm
 
 ##################
 # Docker compose
@@ -49,6 +49,10 @@ com_r:
 	${DOCKER_EXEC_PHP} composer require
 test:
 	${DOCKER_EXEC_PHP} php bin/phpunit
+unit_test:
+	${DOCKER_EXEC_PHP} composer ut
+func_test:
+	${DOCKER_EXEC_PHP} composer ft
 cache:
 	${DOCKER_EXEC_PHP} php bin/console cache:clear
 m_run:
@@ -57,3 +61,14 @@ fx_load:
 	${DOCKER_EXEC_PHP} php bin/console doctrine:fixtures:load
 init:
 	make com_i m_run fx_load
+
+# Static analyzers
+
+cs_check:
+	${DOCKER_EXEC_PHP} composer cs-check
+cs_fix:
+	${DOCKER_EXEC_PHP} composer cs-fix
+stan:
+	${DOCKER_EXEC_PHP} composer stan
+deptrac:
+	${DOCKER_EXEC_PHP} composer deptrac

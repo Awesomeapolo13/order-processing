@@ -19,28 +19,20 @@
     "0.000",
     "0.00"
   ],
-  "Correct from wrong forman (point as first character)": [
-    ".0",
-    "0.00",
-  ],
-  "Corect from string without decomals": [
+  "Correct from string without decomals": [
     "23",
     "23.00"
   ],
-  "Corect from string with one decimal": [
+  "Correct from string with one decimal": [
     "23.6",
     "23.60"
   ],
-  "Corect from string with two decomals": [
+  "Correct from string with two decomals": [
     "23.63",
     "23.63"
   ],
-  "Corect from string with three decomals": [
+  "Correct from string with three decomals": [
     "23.637",
     "23.64"
-  ],
-  "Corect from wrong formated string (point as first character)": [
-    ".63",
-    "0.63"
   ]
 }

@@ -9,19 +9,17 @@ use App\Domain\ValueObject\BasketType;
 use App\Domain\ValueObject\Cost;
 use App\Domain\ValueObject\Region;
 use App\Domain\ValueObject\Weight;
-use DateTime;
-use DateTimeImmutable;
 
 class BasketFactory
 {
     public function createDefaultAuthorized(int $userId, Region $region): Basket
     {
-        $createdAt = new DateTimeImmutable();
+        $createdAt = new \DateTimeImmutable();
 
         return new Basket(
             region: $region,
             type: BasketType::default(),
-            orderDate: new DateTime(),
+            orderDate: new \DateTime(),
             createdAt: $createdAt,
             updatedAt: $createdAt,
             slicingCost: Cost::zero(),

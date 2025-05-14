@@ -17,7 +17,7 @@ readonly class BasketSetUpDomainData
         public ?ShopInterface $shop = null,
         public ?DeliverySlot $deliverySlot = null,
         public ?Distance $distance = null,
-        public bool $isFromUserShop = false
+        public bool $isFromUserShop = false,
     ) {
     }
 }

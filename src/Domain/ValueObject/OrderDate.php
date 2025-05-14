@@ -7,7 +7,7 @@ namespace App\Domain\ValueObject;
 readonly class OrderDate
 {
     private function __construct(
-        private \DateTimeImmutable $orderDate
+        private \DateTimeImmutable $orderDate,
     ) {
     }
 

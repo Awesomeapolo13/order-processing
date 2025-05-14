@@ -40,7 +40,7 @@ class ShortBasketResponseAssembler implements ResponseAssemblerInterface
             $basketItem->getId(),
             $basketItem->getSupCode(),
             $basketItem->getTotalCost()->getCost(),
-            $basketItem->getTotalDiscountCost()->getCost()
+            $basketItem->getTotalDiscountCost()->getCost(),
         );
     }
 }

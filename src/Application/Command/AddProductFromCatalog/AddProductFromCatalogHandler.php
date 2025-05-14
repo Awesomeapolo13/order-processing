@@ -25,10 +25,7 @@ class AddProductFromCatalogHandler implements CommandHandlerInterface
     {
         $basket = $this->basketRepository->findActiveBasketByUserId($command->userId);
         if ($basket === null) {
-            throw new BasketNotFoundException($command->userId, [
-                'userId' => $command->userId,
-                'region' => $command->region->getRegionCode(),
-            ]);
+            throw new BasketNotFoundException($command->userId, ['userId' => $command->userId, 'region' => $command->region->getRegionCode()]);
         }
 
         $product = $this->productApi->findProduct(
@@ -36,7 +33,7 @@ class AddProductFromCatalogHandler implements CommandHandlerInterface
                 shopNumber: $basket->getShopNum(),
                 region: $basket->getRegion(),
                 supCode: $command->supCode,
-            )
+            ),
         );
 
         if ($product === null) {

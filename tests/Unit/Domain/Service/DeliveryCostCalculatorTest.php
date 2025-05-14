@@ -29,7 +29,7 @@ class DeliveryCostCalculatorTest extends KernelTestCase
         self::assertSame(
             $expectedCost->getCost(),
             $deliveryCost->getCost(),
-            'Delivery cost result ' . $deliveryCost->getCost() . ' does not equal the expected ' . $expectedCost->getCost()
+            'Delivery cost result ' . $deliveryCost->getCost() . ' does not equal the expected ' . $expectedCost->getCost(),
         );
     }
 
