@@ -34,3 +34,5 @@ parameters:
     App\Domain\Entity\Basket:
       - Doctrine\Common\Collections\Collection
       - Doctrine\Common\Collections\ArrayCollection
+    App\Application\Command\UpdateBasket\UpdateBasketHandler:
+      - Doctrine\ORM\OptimisticLockException
