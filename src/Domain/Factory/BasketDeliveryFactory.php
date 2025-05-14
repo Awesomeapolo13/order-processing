@@ -23,7 +23,7 @@ class BasketDeliveryFactory
         bool $isFromUserShop,
         Distance $distance,
     ): BasketDelivery {
-        return  new BasketDelivery(
+        return new BasketDelivery(
             slot: $slot,
             isFromUserShop: $isFromUserShop,
             distance: $distance,

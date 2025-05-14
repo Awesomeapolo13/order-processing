@@ -13,13 +13,12 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class SetUpBasketValidationTest extends WebTestCase
 {
+    use TestDataSerializerTrait;
     private const string HTTP_METHOD = 'POST';
     private const string URL = '/api/v1/basket/setup';
     private const string PROVIDER_FILE_NAME = 'set_up_basket_request_validation_test_provider.json';
     protected AbstractBrowser $client;
     private SerializerInterface $serializer;
-
-    use TestDataSerializerTrait;
 
     protected function setUp(): void
     {
@@ -38,7 +37,7 @@ class SetUpBasketValidationTest extends WebTestCase
             __DIR__ . '/data/' . self::PROVIDER_FILE_NAME,
             null,
             null,
-            $this->serializer
+            $this->serializer,
         );
 
         foreach ($testData as $key => $responseTestData) {
@@ -50,7 +49,7 @@ class SetUpBasketValidationTest extends WebTestCase
 
             self::assertResponseStatusCodeSame(
                 Response::HTTP_BAD_REQUEST,
-                'Expected HTTP response code 400 got ' . $response->getStatusCode() . '. ' . $key
+                'Expected HTTP response code 400 got ' . $response->getStatusCode() . '. ' . $key,
             );
             self::assertSame($expectedResult, json_decode($response->getContent(), true), $key);
         }
@@ -62,16 +61,9 @@ class SetUpBasketValidationTest extends WebTestCase
         $response = $this->sendRequestAndGetResponse(self::HTTP_METHOD, self::URL, $requestBody);
         self::assertResponseStatusCodeSame(
             Response::HTTP_BAD_REQUEST,
-            'Expected HTTP response code 400 got ' . $response->getStatusCode()
+            'Expected HTTP response code 400 got ' . $response->getStatusCode(),
         );
         self::assertSame($expectedResponse, json_decode($response->getContent(), true));
-    }
-
-    protected function sendRequestAndGetResponse(string $method, string $url, ?array $body = null): Response
-    {
-        $this->client->request($method, $url, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($body));
-
-        return $this->client->getResponse();
     }
 
     /**
@@ -154,5 +146,12 @@ class SetUpBasketValidationTest extends WebTestCase
                 ],
             ],
         ];
+    }
+
+    private function sendRequestAndGetResponse(string $method, string $url, ?array $body = null): Response
+    {
+        $this->client->request($method, $url, [], [], ['CONTENT_TYPE' => 'application/json'], json_encode($body));
+
+        return $this->client->getResponse();
     }
 }

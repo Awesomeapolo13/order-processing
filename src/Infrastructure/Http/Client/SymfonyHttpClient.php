@@ -31,6 +31,7 @@ class SymfonyHttpClient
     {
         $data = $method === self::METHOD_GET ? ['query' => $data] : ['data' => $data];
         $data = array_merge($this->options, $data);
+
         try {
             $response = $this->getResponse($url, $method, $data);
 
@@ -67,6 +68,6 @@ class SymfonyHttpClient
      */
     protected function getResponse(string $url, string $method, array $data = []): ResponseInterface
     {
-        return  $this->httpClient->request($method, $url, $data);
+        return $this->httpClient->request($method, $url, $data);
     }
 }

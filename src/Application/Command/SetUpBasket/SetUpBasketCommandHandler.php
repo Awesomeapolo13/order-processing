@@ -41,10 +41,7 @@ class SetUpBasketCommandHandler implements CommandHandlerInterface
         $basket = $this->basketRepository->findActiveBasketByUserId($command->userId);
 
         if ($basket === null) {
-            throw new BasketNotFoundException($command->userId, [
-                'userId' => $command->userId,
-                'region' => $region->getRegionCode(),
-            ]);
+            throw new BasketNotFoundException($command->userId, ['userId' => $command->userId, 'region' => $region->getRegionCode()]);
         }
 
         $setUpData = new BasketSetUpDomainData(
@@ -53,7 +50,7 @@ class SetUpBasketCommandHandler implements CommandHandlerInterface
             shop: $shop,
             deliverySlot: $deliverySLot,
             distance: $distance,
-            isFromUserShop: false
+            isFromUserShop: false,
         );
         $basket->setUpBasket($setUpData, $this->basketDeliveryFactory);
     }
@@ -61,14 +58,14 @@ class SetUpBasketCommandHandler implements CommandHandlerInterface
     private function findSlot(?int $slotNumber, int $regionCode): ?DeliverySlot
     {
         return isset($slotNumber)
-            ? $this->deliverySlotApi->findSlot(new FindDeliverySlotDTO($slotNumber, (string)$regionCode))
+            ? $this->deliverySlotApi->findSlot(new FindDeliverySlotDTO($slotNumber, (string) $regionCode))
             : null;
     }
 
     private function findShop(?int $shopNumber, int $regionCode): ?ShopInterface
     {
         return isset($shopNumber)
-            ? $this->shopApi->findShop(new FindShopDTO($shopNumber, (string)$regionCode))
+            ? $this->shopApi->findShop(new FindShopDTO($shopNumber, (string) $regionCode))
             : null;
     }
 }

@@ -7,21 +7,18 @@ namespace App\Tests\Unit\Domain\ValueObject;
 use App\Domain\Enum\RegionCodeEnum;
 use App\Domain\ValueObject\Region;
 use App\Tests\Tools\TestDataSerializerTrait;
-use InvalidArgumentException;
-use JsonException;
-use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class RegionTest extends KernelTestCase
 {
+    use TestDataSerializerTrait;
     private const string CREATE_REGION_PROVIDER_FILE_NAME = 'create_region_test_provider.json';
     private const string COMPARE_REGION_PROVIDER_FILE_NAME = 'compare_region_test_provider.json';
     private const int NON_EXISTED_REGION_CODE = 8888;
 
     private SerializerInterface $serializer;
 
-    use TestDataSerializerTrait;
     protected function setUp(): void
     {
         parent::setUp();
@@ -30,7 +27,7 @@ class RegionTest extends KernelTestCase
     }
 
     /**
-     * @throws JsonException
+     * @throws \JsonException
      */
     public function testRegionCreating(): void
     {
@@ -46,7 +43,7 @@ class RegionTest extends KernelTestCase
             static::assertSame(
                 $result,
                 $expectedResult,
-                'Expected region code is '. $expectedResult .'. Got '. $result
+                'Expected region code is ' . $expectedResult . '. Got ' . $result,
             );
         }
     }
@@ -54,15 +51,15 @@ class RegionTest extends KernelTestCase
     public function testWrongRegionCode(): void
     {
         $unsupportedRegion = self::NON_EXISTED_REGION_CODE;
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Unsupported region ' . $unsupportedRegion);
 
         new Region($unsupportedRegion);
     }
 
     /**
-     * @throws JsonException
-     * @throws ReflectionException
+     * @throws \JsonException
+     * @throws \ReflectionException
      */
     public function testRegionComparing(): void
     {
@@ -70,18 +67,19 @@ class RegionTest extends KernelTestCase
             __DIR__ . '/data/' . self::COMPARE_REGION_PROVIDER_FILE_NAME,
             Region::class,
             null,
-            $this->serializer
+            $this->serializer,
         );
 
         foreach ($testData as $test) {
             [$input, $expectedResult] = $test;
+            $expectedResult = (bool) $expectedResult;
 
             $region = new Region(RegionCodeEnum::NIZHNY_NOVGOROD->value);
             $result = $input->isSame($region);
             static::assertSame(
                 $result,
                 $expectedResult,
-                'Expected regions are same as ' . $expectedResult ? 'true' : 'false' . '. Got '. $result,
+                'Expected regions are same as ' . $expectedResult . '. Got ' . $result,
             );
         }
     }

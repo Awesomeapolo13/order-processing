@@ -19,7 +19,7 @@ final class Version20250105181426 extends AbstractMigration
         $this->addSql(
             'CREATE UNIQUE INDEX UNIQ_ACTIVE_BASKET_IDX
                     ON basket (user_id)
-                    WHERE deleted_at IS NULL;'
+                    WHERE deleted_at IS NULL;',
         );
     }
 

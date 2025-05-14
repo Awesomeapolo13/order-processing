@@ -16,8 +16,8 @@ class DoctrineBasketReadRepository extends AbstractDBALReadRepository implements
 {
     public function __construct(
         private readonly ShortBasketHydrator $shortBasketHydrator,
-        EntityManagerInterface $entityManager
-    ){
+        EntityManagerInterface $entityManager,
+    ) {
         parent::__construct($entityManager);
     }
 
@@ -59,7 +59,7 @@ class DoctrineBasketReadRepository extends AbstractDBALReadRepository implements
             [
                 'userId' => ParameterType::INTEGER,
                 'region' => ParameterType::INTEGER,
-            ]
+            ],
         );
 
         return $this->shortBasketHydrator->hydrate($result);

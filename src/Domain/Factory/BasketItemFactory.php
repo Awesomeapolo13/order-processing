@@ -9,7 +9,6 @@ use App\Domain\Service\ProductCostCalculator;
 use App\Domain\ValueObject\Cost;
 use App\Domain\ValueObject\ProductInterface;
 use App\Domain\ValueObject\ProductQuantity;
-use DateTimeImmutable;
 
 class BasketItemFactory
 {
@@ -22,30 +21,30 @@ class BasketItemFactory
         ProductInterface $product,
         ?int $quantity,
         ?string $weight,
-        bool $isPack
+        bool $isPack,
     ): BasketItem {
         $productQuantity = ProductQuantity::fromProduct(
             quantity: $quantity,
             weight: $weight,
             isPack: $isPack,
-            product: $product
+            product: $product,
         );
 
         $totalCost = $this->costCalculator->calculateCost(
             $product->getPrice(),
             $productQuantity,
             $product->getMinimumWeight(),
-            $product->getAverageWeight()
+            $product->getAverageWeight(),
         );
 
         $totalDiscountCost = $this->costCalculator->calculateCost(
             $product->getDiscountPrice(),
             $productQuantity,
             $product->getMinimumWeight(),
-            $product->getAverageWeight()
+            $product->getAverageWeight(),
         );
 
-        $createdAt = new DateTimeImmutable();
+        $createdAt = new \DateTimeImmutable();
 
         return new BasketItem(
             supCode: $product->getSupCode(),

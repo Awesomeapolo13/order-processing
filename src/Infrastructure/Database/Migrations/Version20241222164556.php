@@ -17,7 +17,8 @@ final class Version20241222164556 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE SEQUENCE basket_item_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE basket_item (
+        $this->addSql(
+            'CREATE TABLE basket_item (
                                 id INT NOT NULL, 
                                 basket_id INT NOT NULL, 
                                 sup_code VARCHAR(255) NOT NULL, 
@@ -34,7 +35,7 @@ final class Version20241222164556 extends AbstractMigration
                                 total_discount_cost NUMERIC(10, 2) NOT NULL,
                                 weight NUMERIC(10, 3) NOT NULL,
                                 PRIMARY KEY(id)
-                         )'
+                         )',
         );
         $this->addSql('CREATE INDEX IDX_D4943C2B1BE1FB52 ON basket_item (basket_id)');
         $this->addSql('ALTER TABLE basket_item ADD CONSTRAINT FK_D4943C2B1BE1FB52 FOREIGN KEY (basket_id) REFERENCES basket (id) NOT DEFERRABLE INITIALLY IMMEDIATE');

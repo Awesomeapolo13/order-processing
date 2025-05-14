@@ -69,7 +69,7 @@ class DeliveryCostCalculator
 
     private function getRemainingLongDistanceCost(Distance $distance): Cost
     {
-        $remainingDistance = bcsub($distance->getDistance(), (string)Distance::LONG_DISTANCE, 0);
+        $remainingDistance = bcsub($distance->getDistance(), (string) Distance::LONG_DISTANCE, 0);
 
         return Cost::fromString(bcmul($remainingDistance, self::LONG_DISTANCE_PER_KM_COST));
     }

@@ -22,7 +22,8 @@ class OrderDateOnlyInFutureValidator extends ConstraintValidator
         if ($date < $now) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $this->formatValue($value))
-                ->addViolation();
+                ->addViolation()
+            ;
         }
     }
 }

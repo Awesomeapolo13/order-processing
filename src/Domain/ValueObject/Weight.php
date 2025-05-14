@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject;
 
-use InvalidArgumentException;
-
 readonly class Weight
 {
     public function __construct(
@@ -47,9 +45,7 @@ readonly class Weight
     private function assertWeight(): void
     {
         if ($this->weight !== null && !preg_match('/^\d+\.\d{3}$/', $this->weight)) {
-            throw new InvalidArgumentException(
-                'Weight must be in format "0.000", got: ' . $this->weight
-            );
+            throw new \InvalidArgumentException('Weight must be in format "0.000", got: ' . $this->weight);
         }
     }
 }

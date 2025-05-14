@@ -8,7 +8,7 @@ readonly class FindShopDTO
 {
     public function __construct(
         public int $shopNumber,
-        public string $regionCode
+        public string $regionCode,
     ) {
     }
 }

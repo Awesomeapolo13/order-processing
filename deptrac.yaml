@@ -1,0 +1,38 @@
+parameters:
+  paths:
+    - ./src
+  exclude_files:
+    - '#.*test.*#'
+  layers:
+    - name: Domain
+      collectors:
+        - type: directory
+          value: src/Domain/.*
+    - name: Application
+      collectors:
+        - type: directory
+          value: src/Application/.*
+    - name: Infrastructure
+      collectors:
+        - type: directory
+          value: src/Infrastructure/.*
+    - name: Framework
+      collectors:
+        - type: classLike
+          value: (Symfony|Doctrine)\\.*
+
+  ruleset:
+    Domain:
+    Application:
+      - Domain
+    Infrastructure:
+      - Domain
+      - Application
+      - Framework
+
+  skip_violations:
+    App\Domain\Entity\Basket:
+      - Doctrine\Common\Collections\Collection
+      - Doctrine\Common\Collections\ArrayCollection
+    App\Application\Command\UpdateBasket\UpdateBasketHandler:
+      - Doctrine\ORM\OptimisticLockException

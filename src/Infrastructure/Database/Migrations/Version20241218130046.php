@@ -34,7 +34,7 @@ final class Version20241218130046 extends AbstractMigration
                                 total_cost NUMERIC(10, 2) NOT NULL,
                                 total_discount_cost NUMERIC(10, 2) NOT NULL,
                                 weight NUMERIC(10, 3) NOT NULL, 
-                                PRIMARY KEY(id))'
+                                PRIMARY KEY(id));',
         );
     }
 

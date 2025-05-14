@@ -8,7 +8,6 @@ use App\Domain\Command\BasketSetUpDomainData;
 use App\Domain\Event\BasketSettingsChangedEvent;
 use App\Domain\Event\EventInterface;
 use App\Domain\Event\ProductAddedToBasketFromCatalogEvent;
-use App\Domain\Exception\WrongDeliveryBasketSetUpDataException;
 use App\Domain\Exception\WrongDeliverySetUpDataException;
 use App\Domain\Exception\WrongPickUpSetUpDataException;
 use App\Domain\Factory\BasketDeliveryFactory;
@@ -18,8 +17,6 @@ use App\Domain\ValueObject\Cost;
 use App\Domain\ValueObject\ProductInterface;
 use App\Domain\ValueObject\Region;
 use App\Domain\ValueObject\Weight;
-use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -27,7 +24,7 @@ class Basket
 {
     private ?int $id = null;
     private int $version = 1;
-    private ?DateTimeImmutable $deletedAt = null;
+    private ?\DateTimeImmutable $deletedAt = null;
     private ?BasketDelivery $delivery = null;
     /**
      * @var Collection<BasketItem>
@@ -38,9 +35,9 @@ class Basket
     public function __construct(
         private Region $region,
         private BasketType $type,
-        private DateTimeInterface $orderDate,
-        private readonly ?DateTimeImmutable $createdAt,
-        private ?DateTimeImmutable $updatedAt,
+        private \DateTimeInterface $orderDate,
+        private readonly ?\DateTimeImmutable $createdAt,
+        private ?\DateTimeImmutable $updatedAt,
         private Cost $slicingCost,
         private Cost $totalCost,
         private Cost $totalDiscountCost,
@@ -111,29 +108,29 @@ class Basket
         return $this;
     }
 
-    public function getOrderDate(): DateTimeInterface
+    public function getOrderDate(): \DateTimeInterface
     {
         return $this->orderDate;
     }
 
-    public function setOrderDate(DateTimeInterface $orderDate): Basket
+    public function setOrderDate(\DateTimeInterface $orderDate): Basket
     {
         $this->orderDate = $orderDate;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): ?DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?DateTimeImmutable $updatedAt): Basket
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): Basket
     {
         $this->updatedAt = $updatedAt;
 
@@ -225,7 +222,7 @@ class Basket
     }
 
     /**
-     * @return  Collection<BasketItem>
+     * @return Collection<BasketItem>
      */
     public function getBasketItems(): Collection
     {
@@ -234,9 +231,9 @@ class Basket
 
     public function addProductFromCatalog(
         ProductInterface $product,
-        ?int             $quantity,
-        ?string          $weight,
-        bool             $isPack,
+        ?int $quantity,
+        ?string $weight,
+        bool $isPack,
         BasketItemFactory $basketItemFactory,
     ): void {
         if (
@@ -244,19 +241,12 @@ class Basket
             || $this->orderDate === null
             || ($this->type->isDelivery() && $this->delivery?->getSlot() === null)
         ) {
-            throw new EmptyBasketSetupDataException([
-                'id' => $this->id,
-                'isDelivery' => $this->type->isDelivery(),
-                'shopNum' => $this->shopNum,
-                'orderDate' => $this->orderDate->format(DateTimeInterface::RFC3339),
-            ]);
+            throw new EmptyBasketSetupDataException(['id' => $this->id, 'isDelivery' => $this->type->isDelivery(), 'shopNum' => $this->shopNum, 'orderDate' => $this->orderDate->format(\DateTimeInterface::RFC3339)]);
         }
 
         $supCode = $product->getSupCode();
         $isAlreadyExists = $this->basketItems->exists(
-            function (BasketItem $basketItem) use ($supCode) {
-                return $basketItem->getSupCode() === $supCode;
-            }
+            fn (BasketItem $basketItem) => $basketItem->getSupCode() === $supCode,
         );
 
         if ($isAlreadyExists) {
@@ -277,8 +267,8 @@ class Basket
                 supCode: $basketItem->getSupCode(),
                 quantity: $basketItem->getPieceQuantity(),
                 weight: $basketItem->getWeight()->getWeight(),
-                isPack: $basketItem->getQuantity()->isPack()
-            )
+                isPack: $basketItem->getQuantity()->isPack(),
+            ),
         );
     }
 
@@ -302,7 +292,7 @@ class Basket
         $type = BasketType::create($isDelivery, $hasAlcohol, $setUpData->orderDate->getOrderDate());
         $this->shopNum = $shop?->getNumber();
         $this->type = $type;
-//        ToDO: Replace orderDate to value object
+        //        ToDO: Replace orderDate to value object
         $this->orderDate = $setUpData->orderDate->getOrderDate();
 
         if ($isDelivery) {
@@ -322,7 +312,7 @@ class Basket
             new BasketSettingsChangedEvent(
                 $this->userId,
                 $this->region->getRegionCode(),
-            )
+            ),
         );
     }
 
@@ -335,12 +325,12 @@ class Basket
         return $this;
     }
 
-    public function getDeletedAt(): ?DateTimeImmutable
+    public function getDeletedAt(): ?\DateTimeImmutable
     {
         return $this->deletedAt;
     }
 
-    public function setDeletedAt(?DateTimeImmutable $deletedAt): Basket
+    public function setDeletedAt(?\DateTimeImmutable $deletedAt): Basket
     {
         $this->deletedAt = $deletedAt;
 
@@ -365,7 +355,7 @@ class Basket
 
     public function markAsDeleted(): void
     {
-        $this->deletedAt = new DateTimeImmutable();
+        $this->deletedAt = new \DateTimeImmutable();
     }
 
     public function isDeleted(): bool
@@ -375,7 +365,7 @@ class Basket
 
     public function updateTimestamps(): void
     {
-        $this->updatedAt = new DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     protected function recordEvent(EventInterface $event): void

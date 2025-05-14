@@ -49,7 +49,7 @@ final class ExceptionFormatterMiddleware
                 'title' => 'Incorrect request data',
                 'errors' => $errors,
             ],
-            Response::HTTP_BAD_REQUEST
+            Response::HTTP_BAD_REQUEST,
         );
     }
 
@@ -59,7 +59,7 @@ final class ExceptionFormatterMiddleware
             [
                 'message' => $throwable->getMessage(),
             ],
-            Response::HTTP_BAD_REQUEST
+            Response::HTTP_BAD_REQUEST,
         );
     }
 }

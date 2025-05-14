@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\Domain\ValueObject;
 
 use App\Domain\Enum\RegionCodeEnum;
-use InvalidArgumentException;
 
 readonly class Region
 {
     private int $regionCode;
 
     public function __construct(
-        int $regionCode
+        int $regionCode,
     ) {
         $this->assertRegionCode($regionCode);
         $this->regionCode = $regionCode;
@@ -31,7 +30,7 @@ readonly class Region
     private function assertRegionCode(int $regionCode): void
     {
         if (RegionCodeEnum::tryFrom($regionCode) === null) {
-            throw new InvalidArgumentException('Unsupported region ' . $regionCode);
+            throw new \InvalidArgumentException('Unsupported region ' . $regionCode);
         }
     }
 }
