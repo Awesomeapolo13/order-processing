@@ -4,6 +4,25 @@ networks:
     driver: bridge
 
 services:
+  order-proc-cli:
+    container_name: order-proc-cli
+    networks:
+      - order-processing
+    build:
+      context: ../../
+      dockerfile: ./.deployment/docker/php-cli/Dockerfile
+      args:
+        PUID: ${PUID}
+        PGID: ${PGID}
+        INSTALL_XDEBUG: ${INSTALL_XDEBUG}
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+    volumes:
+      - ./../../:/var/www/order-processing
+
   order-proc-fpm:
     container_name: order-proc-fpm
     networks:

@@ -3,7 +3,7 @@
 ##################
 
 DOCKER_COMPOSE = docker compose -f ./.deployment/docker/docker-compose.yml --env-file ./.deployment/docker/.env
-DOCKER_EXEC_PHP = docker exec -it order-proc-fpm
+DOCKER_EXEC_PHP = docker exec -it order-proc-cli
 
 ##################
 # Docker compose
