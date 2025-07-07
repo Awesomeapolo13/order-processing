@@ -3,7 +3,7 @@
 ##################
 
 DOCKER_COMPOSE = docker compose -f ./.deployment/docker/docker-compose.yml --env-file ./.deployment/docker/.env
-DOCKER_EXEC_PHP = docker exec -it order-proc-fpm
+DOCKER_EXEC_PHP = docker exec -it order-proc-cli
 
 ##################
 # Docker compose
@@ -22,6 +22,9 @@ dc_up:
 	${DOCKER_COMPOSE} up -d
 
 dc_up_build:
+	@if ! grep -q "BUILD_TARGET=" ./.deployment/docker/.env; then \
+		echo "BUILD_TARGET=development" >> ./.deployment/docker/.env; \
+	fi
 	${DOCKER_COMPOSE} up -d --build
 
 dc_ps:
@@ -36,6 +39,31 @@ dc_down:
 dc_restart:
 	make dc_stop dc_start
 
+##################
+# Environment switching
+##################
+
+dc_dev:
+	@echo "Switching to development environment..."
+	@if grep -q "BUILD_TARGET=" ./.deployment/docker/.env; then \
+		sed -i 's/BUILD_TARGET=.*/BUILD_TARGET=development/' ./.deployment/docker/.env; \
+	else \
+		echo "BUILD_TARGET=development" >> ./.deployment/docker/.env; \
+	fi
+	${DOCKER_COMPOSE} up -d --build
+
+dc_prod:
+	@echo "Switching to production environment..."
+	@if grep -q "BUILD_TARGET=" ./.deployment/docker/.env; then \
+		sed -i 's/BUILD_TARGET=.*/BUILD_TARGET=production/' ./.deployment/docker/.env; \
+	else \
+		echo "BUILD_TARGET=production" >> ./.deployment/docker/.env; \
+	fi
+	${DOCKER_COMPOSE} up -d --build
+
+dc_env:
+	@echo "Current environment:"
+	@grep "BUILD_TARGET=" ./.deployment/docker/.env 2>/dev/null || echo "BUILD_TARGET=development (default)"
 
 ##################
 # App
